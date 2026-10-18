@@ -1,0 +1,1391 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Mexanik</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#2A313A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800&family=Rubik:wght@500;600;700;800&family=Share+Tech+Mono&display=swap">
+<style>
+/* Layout: one-column phone app shell (max 520px). Home = gunmetal instrument-panel hero with a riveted tech-passport plate (teacher name) and gear mascot, LED level bar, dark metal game plates, chapter cards, then the full numbered question list with hex-nut numbers. */
+:root{
+  --bg:#E8EBEE; --card:#FFFFFF; --ink:#14181D; --muted:#59636E; --line:#CDD4DB;
+  --water:#C81E36; --water2:#3D4652; --onwater:#EEF1F4;
+  --field:#2F9E44; --clay:#F08C00; --soil:#DDE2E7; --sun:#FFB000; --onsun:#1A1300;
+  --good:#22924A; --okbg:#E2F4E8; --bad:#D6283F; --badbg:#FCE7EA;
+  --c0:#C81E36; --c1:#E67700; --c2:#5C677D; --c3:#1971C2; --c4:#2B8A3E; --c5:#0C8599; --c6:#7048E8; --c7:#A61E4D;
+  --tg:#229ED9; --gold:#F4C430; --silver:#C5CDD5; --bronze:#E0A06A;
+  --plate:#2A313A; --plate2:#171B20; --led:#FFB000; --rivet:#9AA4AE;
+  --shadow:0 1px 0 rgba(20,24,29,.12), 0 8px 20px rgba(20,24,29,.10);
+  --f-display:"Saira Condensed", "Rubik", system-ui, sans-serif;
+  --f-body:"Rubik", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono:"Share Tech Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0F1216; --card:#1A1F25; --ink:#E8EBEE; --muted:#8E99A5; --line:#2B333C;
+  --water:#E5394F; --water2:#8E99A5; --onwater:#EEF1F4;
+  --field:#51CF66; --clay:#FFA94D; --soil:#232A31; --sun:#FFB000; --onsun:#1A1300;
+  --good:#40C070; --okbg:#10301C; --bad:#FF6B7D; --badbg:#3A1820;
+  --c0:#FF6B7D; --c1:#FFA94D; --c2:#A5B0C2; --c3:#74C0FC; --c4:#69DB7C; --c5:#3BC9DB; --c6:#B197FC; --c7:#F783AC;
+  --tg:#2AABEE; --gold:#E9BE3A; --silver:#A9B3BD; --bronze:#D08E5A;
+  --plate:#232A32; --plate2:#12161A; --led:#FFB000; --rivet:#6C7682;
+  --shadow:0 1px 0 rgba(0,0,0,.5), 0 8px 20px rgba(0,0,0,.35);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0F1216; --card:#1A1F25; --ink:#E8EBEE; --muted:#8E99A5; --line:#2B333C;
+  --water:#E5394F; --water2:#8E99A5; --onwater:#EEF1F4;
+  --field:#51CF66; --clay:#FFA94D; --soil:#232A31; --sun:#FFB000; --onsun:#1A1300;
+  --good:#40C070; --okbg:#10301C; --bad:#FF6B7D; --badbg:#3A1820;
+  --c0:#FF6B7D; --c1:#FFA94D; --c2:#A5B0C2; --c3:#74C0FC; --c4:#69DB7C; --c5:#3BC9DB; --c6:#B197FC; --c7:#F783AC;
+  --tg:#2AABEE; --gold:#E9BE3A; --silver:#A9B3BD; --bronze:#D08E5A;
+  --plate:#232A32; --plate2:#12161A; --led:#FFB000; --rivet:#6C7682;
+  --shadow:0 1px 0 rgba(0,0,0,.5), 0 8px 20px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+:root{color-scheme:light}
+body{margin:0}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);line-height:1.1;margin:0;text-wrap:balance}
+.app{max-width:520px;margin:0 auto;padding-bottom:28px}
+.pad{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.mark{background:linear-gradient(transparent 10%, var(--sun) 10%, var(--sun) 90%, transparent 90%);color:var(--onsun);-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 .18em;border-radius:3px}
+
+/* ---------- mascot ---------- */
+.drop{display:block;overflow:visible}
+.drop .m{display:none}
+.drop.idle .m-idle,.drop.happy .m-happy,.drop.sad .m-sad{display:inline}
+.drop.happy{animation:hop .5s ease}
+.drop.sad{animation:wob .45s ease}
+.bob{animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes hop{30%{transform:translateY(-12px) scale(1.05)}60%{transform:translateY(0) scale(.97)}}
+@keyframes wob{25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;background:linear-gradient(165deg,var(--water2),var(--water));color:var(--onwater);padding-block:18px 46px;overflow:hidden}
+.hero .wave{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:34px;display:block}
+.hero .wave path{fill:var(--bg)}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;flex-direction:column}
+.brand h1{font-size:30px;font-weight:800;letter-spacing:.2px}
+.brand small{font-weight:700;opacity:.85;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+.icon-btn{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.18);display:grid;place-items:center;color:var(--onwater)}
+.icon-btn svg{width:22px;height:22px}
+.hero-main{display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:end;margin-top:14px}
+.bubble{background:var(--card);color:var(--ink);border-radius:18px 18px 18px 4px;padding:10px 14px;font-weight:700;font-size:15px;box-shadow:var(--shadow);min-width:0}
+.lvl{margin-top:16px;background:rgba(255,255,255,.14);border-radius:var(--r);padding:12px 14px}
+.lvl-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:800}
+.lvl-name{font-family:var(--f-display);font-size:21px}
+.lvl-xp{font-variant-numeric:tabular-nums;font-size:14px;opacity:.9}
+.lvl-bar{height:12px;border-radius:99px;background:rgba(0,0,0,.18);margin-top:8px;overflow:hidden}
+.lvl-bar i{display:block;height:100%;background:var(--sun);border-radius:99px;transition:width .6s ease}
+.lvl-next{font-size:12.5px;margin-top:6px;opacity:.9;font-weight:700}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.chip{background:rgba(255,255,255,.14);border-radius:14px;padding:8px 10px;display:flex;flex-direction:column}
+.chip b{font-family:var(--f-display);font-size:22px;line-height:1;font-variant-numeric:tabular-nums}
+.chip span{font-size:11.5px;font-weight:700;opacity:.9;margin-top:3px}
+
+/* ---------- sections ---------- */
+.sec{margin-top:22px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sec-h h2{font-size:22px;font-weight:800}
+.sec-h span{color:var(--muted);font-weight:700;font-size:13px}
+
+.games{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.game{position:relative;text-align:left;border-radius:22px;padding:14px;min-height:128px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;box-shadow:var(--shadow);overflow:hidden;transition:transform .15s ease}
+.game:active{transform:scale(.97)}
+.game h3{font-size:20px;font-weight:800}
+.game p{margin:2px 0 0;font-size:12.5px;font-weight:700;opacity:.92;line-height:1.3}
+.game .gi{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.22);display:grid;place-items:center}
+.game .gi svg{width:26px;height:26px}
+.g-quiz{background:linear-gradient(150deg,#2F8FD6,#1A5FA8)}
+.g-cards{background:linear-gradient(150deg,#F0913F,#C95A1E)}
+.g-blitz{background:linear-gradient(150deg,#3DB46A,#1F7F44)}
+.g-fix{background:linear-gradient(150deg,#E2557A,#A8304F)}
+.badge{position:absolute;top:12px;right:12px;background:var(--sun);color:var(--onsun);font-weight:800;font-size:13px;border-radius:99px;padding:2px 9px;font-variant-numeric:tabular-nums}
+
+.chs{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;margin-right:calc(-1 * max(16px, env(safe-area-inset-right, 0px)))}
+.chs::-webkit-scrollbar{display:none}
+.ch{flex:0 0 150px;scroll-snap-align:start;background:var(--card);border-radius:20px;padding:12px;text-align:left;box-shadow:var(--shadow);border-top:6px solid var(--cc);display:flex;flex-direction:column;gap:8px}
+.ch:last-child{margin-right:16px}
+.ch-top{display:flex;justify-content:space-between;align-items:center}
+.ch-ico{width:36px;height:36px;border-radius:12px;background:color-mix(in srgb, var(--cc) 16%, transparent);color:var(--cc);display:grid;place-items:center}
+.ch-ico svg{width:22px;height:22px}
+.ring{width:40px;height:40px}
+.ring circle{fill:none;stroke-width:5}
+.ring .bgc{stroke:var(--line)}
+.ring .fgc{stroke:var(--cc);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .6s}
+.ring text{font:800 11px var(--f-body);fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.ch h3{font-size:16px;font-weight:800;color:var(--ink)}
+.ch small{color:var(--muted);font-weight:700;font-size:12px;font-variant-numeric:tabular-nums}
+
+.search{display:flex;align-items:center;gap:8px;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:0 12px;height:48px}
+.search svg{width:20px;height:20px;color:var(--muted);flex:none}
+.search input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:700 16px var(--f-body);outline:none;height:100%}
+.filters{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
+.filters::-webkit-scrollbar{display:none}
+.fbtn{flex:none;border:2px solid var(--line);background:var(--card);border-radius:99px;padding:6px 12px;font-weight:800;font-size:13px;color:var(--muted)}
+.fbtn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;color:var(--muted);font-size:12.5px;font-weight:700}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+
+.qlist{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.qrow{display:grid;grid-template-columns:44px 1fr 14px;gap:10px;align-items:center;text-align:left;background:var(--card);border-radius:16px;padding:10px 12px 10px 10px;box-shadow:0 1px 0 var(--line)}
+.qrow:active{transform:scale(.99)}
+.qnum{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font:800 17px var(--f-display);color:#fff;background:var(--cc);font-variant-numeric:tabular-nums}
+.qtxt{min-width:0;font-weight:700;font-size:14.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dot.seen{background:var(--water2)}
+.dot.mastered{background:var(--good)}
+.dot.mistake{background:var(--bad)}
+.empty{color:var(--muted);font-weight:700;text-align:center;padding:24px 8px}
+
+/* ---------- game screens ---------- */
+.gbar{position:sticky;top:env(safe-area-inset-top, 0px);z-index:5;background:var(--bg);display:flex;align-items:center;gap:12px;padding-block:12px}
+.xbtn{width:42px;height:42px;border-radius:14px;background:var(--card);display:grid;place-items:center;box-shadow:0 1px 0 var(--line);flex:none}
+.xbtn svg{width:20px;height:20px}
+.canal{flex:1;height:20px;border-radius:99px;background:var(--soil);position:relative;overflow:hidden;box-shadow:inset 0 2px 0 rgba(0,0,0,.08)}
+.canal i{position:absolute;inset:0 auto 0 0;width:0;border-radius:99px;transition:width .5s ease;
+  background:repeating-linear-gradient(110deg,var(--water2) 0 14px,var(--water) 14px 28px);background-size:56px 100%;animation:flow 1.2s linear infinite}
+@keyframes flow{to{background-position:56px 0}}
+.gcount{font:800 16px var(--f-display);font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:12.5px;color:var(--cc);background:color-mix(in srgb, var(--cc) 14%, transparent);border-radius:99px;padding:4px 10px}
+.combo{font:800 15px var(--f-display);color:var(--clay);opacity:0;transform:scale(.8);transition:.2s}
+.combo.on{opacity:1;transform:scale(1)}
+.qhead{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:end;margin-top:14px}
+.qcard{background:var(--card);border-radius:20px 20px 20px 6px;padding:14px 16px;box-shadow:var(--shadow);min-width:0}
+.qcard .n{font:800 13px var(--f-body);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.qcard p{margin:4px 0 0;font:700 19px/1.35 var(--f-body)}
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:18px;padding-bottom:150px}
+.opt{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:center;text-align:left;background:var(--card);border:2.5px solid var(--line);border-bottom-width:5px;border-radius:18px;padding:12px;font-weight:700;font-size:16px;line-height:1.3;transition:transform .12s, border-color .2s, background .2s}
+.opt:active{transform:translateY(2px)}
+.opt .L{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:800 18px var(--f-display);background:var(--bg);color:var(--muted)}
+.opt span:last-child{min-width:0}
+.opt.ok{border-color:var(--good);background:var(--okbg)}
+.opt.ok .L{background:var(--good);color:#fff}
+.opt.bad{border-color:var(--bad);background:var(--badbg);animation:shake .4s}
+.opt.bad .L{background:var(--bad);color:#fff}
+.opt.dim{opacity:.5}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+.fb{position:fixed;left:0;right:0;bottom:0;z-index:20;transform:translateY(110%);transition:transform .28s ease;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-top:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom, 0px));background:var(--okbg);border-top:3px solid var(--good)}
+.fb.show{transform:none}
+.fb.badfb{background:var(--badbg);border-top-color:var(--bad)}
+.fb-in{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.fb h3{font-size:22px;color:var(--good)}
+.fb.badfb h3{color:var(--bad)}
+.fb p{margin:0;font-weight:700;font-size:15px}
+.big{width:100%;height:54px;border-radius:16px;font:800 18px var(--f-display);color:#fff;background:var(--good);box-shadow:0 4px 0 color-mix(in srgb, var(--good) 60%, #000)}
+.big:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb, var(--good) 60%, #000)}
+.big.blue{background:var(--water);box-shadow:0 4px 0 color-mix(in srgb, var(--water) 60%, #000)}
+.big.red{background:var(--bad);box-shadow:0 4px 0 color-mix(in srgb, var(--bad) 60%, #000)}
+.big.ghost{background:var(--card);color:var(--ink);box-shadow:0 4px 0 var(--line)}
+.fb .big.red{background:var(--bad)}
+
+/* flashcards */
+.cardwrap{perspective:1200px;margin-top:18px}
+.flip{position:relative;height:min(62vh,430px);transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.8,.2,1);cursor:pointer}
+.flip.on{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:26px;padding:22px;display:flex;flex-direction:column;box-shadow:var(--shadow);overflow:auto}
+.front{background:var(--card);border:3px solid var(--cc)}
+.back{background:var(--card);border:3px solid var(--good);transform:rotateY(180deg)}
+.face .n{font:800 13px var(--f-body);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.face .qq{font:700 21px/1.35 var(--f-body);margin-top:10px}
+.face .ans{font:800 24px/1.35 var(--f-display);margin-top:auto;margin-bottom:auto}
+.face .hint{margin-top:auto;color:var(--muted);font-weight:800;font-size:13px;display:flex;align-items:center;gap:6px}
+.face .small-q{color:var(--muted);font-weight:700;font-size:14px;margin-top:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+
+/* blitz */
+.timer{flex:1;height:20px;border-radius:99px;background:var(--line);overflow:hidden}
+.timer i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--field),var(--sun));transform-origin:left;border-radius:99px}
+.bcard{margin-top:16px;background:var(--card);border-radius:24px;padding:18px;box-shadow:var(--shadow);min-height:250px;display:flex;flex-direction:column;gap:12px}
+.bcard .q{font:700 18px/1.35 var(--f-body)}
+.bcard .claim{border-top:2px dashed var(--line);padding-top:12px}
+.bcard .claim small{display:block;font-weight:800;color:var(--muted);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+.bcard .claim b{font:800 21px/1.3 var(--f-display)}
+.bcard.flash-ok{outline:4px solid var(--good)}
+.bcard.flash-bad{outline:4px solid var(--bad)}
+.bscore{font:800 34px var(--f-display);font-variant-numeric:tabular-nums}
+.tf{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.tf .big{height:68px;font-size:22px}
+.toast{margin-top:12px;font-weight:700;font-size:14.5px;min-height:44px;color:var(--muted)}
+.center{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding-block:24px}
+.center p{margin:0;color:var(--muted);font-weight:700;max-width:34ch}
+
+/* result */
+.stars{display:flex;gap:6px;justify-content:center}
+.stars svg{width:54px;height:54px}
+.stars .s{fill:var(--line)}
+.stars .s.on{fill:var(--sun);animation:pop .45s backwards}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.25)}}
+.rstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%}
+.rstat{background:var(--card);border-radius:16px;padding:10px;box-shadow:0 1px 0 var(--line)}
+.rstat b{display:block;font:800 26px var(--f-display);font-variant-numeric:tabular-nums}
+.rstat span{font-size:12px;font-weight:700;color:var(--muted)}
+.review{width:100%;text-align:left;display:flex;flex-direction:column;gap:10px}
+.rv{background:var(--card);border-radius:16px;padding:12px 14px;box-shadow:0 1px 0 var(--line)}
+.rv .n{font-weight:800;font-size:12.5px;color:var(--muted)}
+.rv p{margin:4px 0 6px;font-weight:700}
+.btns{display:flex;flex-direction:column;gap:12px;width:100%;margin-top:6px}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(5,15,25,.5);z-index:30;display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:520px;max-height:88vh;overflow:auto;background:var(--bg);border-radius:26px 26px 0 0;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-top:10px;padding-bottom:calc(20px + env(safe-area-inset-bottom, 0px));animation:up .25s ease}
+@keyframes up{from{transform:translateY(40%);opacity:.4}}
+.grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 12px}
+.sheet h2{font-size:24px;font-weight:800}
+.sheet .sub{color:var(--muted);font-weight:700;font-size:14px;margin:4px 0 12px}
+.pick{display:flex;flex-direction:column;gap:8px}
+.pick button{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;text-align:left;background:var(--card);border:2.5px solid var(--line);border-radius:16px;padding:10px 12px;font-weight:800}
+.pick button[aria-pressed="true"]{border-color:var(--water);background:color-mix(in srgb, var(--water) 10%, var(--card))}
+.pick .ch-ico{width:36px;height:36px}
+.pick small{color:var(--muted);font-weight:700;font-variant-numeric:tabular-nums}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.seg button{height:44px;border-radius:14px;background:var(--card);border:2.5px solid var(--line);font-weight:800}
+.seg button[aria-pressed="true"]{border-color:var(--water);color:var(--water)}
+.dopts{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.dopt{display:grid;grid-template-columns:30px 1fr 22px;gap:10px;align-items:center;background:var(--card);border-radius:14px;padding:10px 12px;font-weight:700;border:2px solid var(--line)}
+.dopt.right{border-color:var(--good)}
+.dopt .L{width:30px;height:30px;border-radius:10px;background:var(--bg);display:grid;place-items:center;font:800 15px var(--f-display);color:var(--muted)}
+.dopt.right .L{background:var(--good);color:#fff}
+.dopt svg{width:22px;height:22px;color:var(--good)}
+.dq{font:700 20px/1.35 var(--f-body);margin-top:6px}
+.navrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.statusline{margin-top:12px;font-weight:700;font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
+
+/* ---------- bellashuv + suratdan topish ---------- */
+.g-duel{background:linear-gradient(150deg,#7B5CF0,#4A2EA8)}
+.g-scan{background:linear-gradient(150deg,#22A3B8,#10606F)}
+.gtitle{font-size:22px;font-weight:800;flex:1;min-width:0}
+.stack{display:flex;flex-direction:column;gap:14px;padding-bottom:36px}
+.stack0{display:flex;flex-direction:column;gap:10px}
+.dcard{background:var(--card);border-radius:22px;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+.eyebrow{font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.codebig{font:800 40px/1 var(--f-display);letter-spacing:.12em;font-variant-numeric:tabular-nums;color:var(--ink);user-select:all;word-break:break-all}
+.dchips{display:flex;flex-wrap:wrap;gap:8px}
+.dchip{background:var(--bg);border-radius:99px;padding:5px 11px;font-weight:800;font-size:13px;color:var(--ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lnk{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;text-align:center;line-height:1.1;padding:0 10px;cursor:pointer}
+.lnk [data-ico]{display:inline-flex;flex:none}
+.lnk svg{width:20px;height:20px}
+.big.tg{background:var(--tg);color:#fff;box-shadow:0 4px 0 color-mix(in srgb, var(--tg) 60%, #000)}
+.big.ghost.lnk{color:var(--ink)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:800;font-size:13.5px;color:var(--muted)}
+.input{width:100%;min-width:0;height:52px;border-radius:14px;border:2.5px solid var(--line);background:var(--card);color:var(--ink);font:800 17px var(--f-body);padding:0 14px}
+.input:focus{outline:none;border-color:var(--clay)}
+textarea.input{height:auto;min-height:104px;padding:12px 14px;font:600 15px/1.45 var(--f-body);resize:vertical}
+.joinrow{display:grid;grid-template-columns:1fr auto;gap:8px}
+.joinrow .big{width:auto;padding:0 18px;height:52px;font-size:16px}
+.hint{margin:0;color:var(--muted);font-weight:700;font-size:13.5px;line-height:1.4}
+.hint.err{color:var(--bad)}
+.hint:empty{display:none}
+.note{background:color-mix(in srgb, var(--sun) 26%, var(--card));border-radius:14px;padding:10px 12px;font-weight:700;font-size:14px;line-height:1.4}
+.lead{margin:0;font-weight:700;font-size:15.5px;line-height:1.45}
+.seg.seg5{grid-template-columns:repeat(5,1fr)}
+.rules{background:var(--card);border-radius:18px;padding:12px 16px;box-shadow:0 1px 0 var(--line)}
+.rules h3{font-size:17px}
+.rules ul{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-weight:600;font-size:14px;line-height:1.4}
+.resline{font:700 13.5px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;background:var(--bg);border-radius:12px;padding:10px 12px;word-break:break-word;user-select:all}
+.bignums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bignums div{background:var(--bg);border-radius:14px;padding:10px 6px;text-align:center;min-width:0}
+.bignums b{display:block;font:800 25px var(--f-display);font-variant-numeric:tabular-nums}
+.bignums span{font-size:12px;font-weight:700;color:var(--muted)}
+.lb{display:flex;flex-direction:column;gap:6px}
+.lbrow{display:grid;grid-template-columns:32px 1fr auto auto;gap:10px;align-items:center;background:var(--card);border-radius:14px;padding:10px 12px;box-shadow:0 1px 0 var(--line);font-variant-numeric:tabular-nums}
+.lbrow.me{box-shadow:inset 0 0 0 2.5px var(--clay)}
+.lbrank{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:800 15px var(--f-display);background:var(--bg);color:var(--muted)}
+.lbrow:nth-child(1) .lbrank{background:var(--gold);color:#3B2A00}
+.lbrow:nth-child(2) .lbrank{background:var(--silver);color:#22303C}
+.lbrow:nth-child(3) .lbrank{background:var(--bronze);color:#3A1E08}
+.lbname{min-width:0;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lbname small{display:block;color:var(--muted);font-weight:700;font-size:12px}
+.lbname em{font-style:normal;color:var(--clay);font-size:12px;margin-left:4px}
+.lbpts{font:800 18px var(--f-display)}
+.lbtime{color:var(--muted);font-weight:800;font-size:13px;min-width:38px;text-align:right}
+.dscore{font:800 18px var(--f-display);font-variant-numeric:tabular-nums}
+.timer i.low{background:var(--bad)}
+.countdown{position:fixed;inset:0;z-index:25;display:grid;place-items:center;background:color-mix(in srgb, var(--bg) 84%, transparent)}
+.countdown b{font:800 120px/1 var(--f-display);color:var(--clay);animation:pop .6s ease}
+.pts{position:fixed;left:50%;top:38%;z-index:30;pointer-events:none;font:800 34px var(--f-display);color:var(--good);text-shadow:0 2px 0 var(--card);animation:floatup .9s ease forwards;white-space:nowrap}
+.pts.bad{color:var(--bad);font-size:26px}
+@keyframes floatup{from{opacity:1;transform:translate(-50%,-20%)}to{opacity:0;transform:translate(-50%,-140%)}}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;opacity:0}
+.scanst{display:flex;gap:12px;align-items:center;background:var(--card);border-radius:18px;padding:10px;box-shadow:0 1px 0 var(--line)}
+.scanst img{width:76px;height:76px;object-fit:cover;border-radius:12px;flex:none;background:var(--bg)}
+.scanst .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.scanst .hint:empty{display:block;min-height:1em}
+.prog{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--field);border-radius:99px;transition:width .3s}
+.hits{display:flex;flex-direction:column;gap:10px}
+.hits:empty{display:none}
+.hits h3{font-size:18px}
+.hit{display:flex;flex-direction:column;gap:8px;text-align:left;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:var(--shadow);border-left:6px solid var(--cc)}
+.hit-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hit .qn{font:800 15px var(--f-display);color:var(--cc);min-width:0}
+.hit .pct{font-weight:800;font-size:12.5px;color:var(--muted);flex:none}
+.hit p{margin:0;font-weight:700;font-size:15px;line-height:1.35}
+.hit .ans{font-weight:800;font-size:16px;line-height:1.4}
+
+/* ---- Mexanik: ustaxona asboblar paneli uslubi ---- */
+.hero{background:linear-gradient(90deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px),linear-gradient(170deg,#343C46,#14181C);background-size:3px 100%,100% 100%;color:var(--onwater);padding-block:18px 26px}
+.hero .wave{display:none}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:7px;background:repeating-linear-gradient(90deg,var(--led) 0 18px,#14181C 18px 22px);opacity:.95}
+.brand h1{font-size:40px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;line-height:1}
+.brand small{font-family:var(--f-mono);color:var(--led);letter-spacing:.12em;opacity:1}
+.icon-btn{background:#0D1013;border:1px solid #3B444E;border-radius:8px}
+.plate{position:relative;margin-top:16px;padding:14px 18px;border-radius:8px;border:1px solid #57616C;background:linear-gradient(180deg,#C9D0D6,#9FA8B1);color:#14181D;box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 6px 18px rgba(0,0,0,.35);
+  background-image:radial-gradient(circle at 10px 10px,#5E6872 0 3px,#E9EDF0 3.5px 4.5px,transparent 5px),radial-gradient(circle at calc(100% - 10px) 10px,#5E6872 0 3px,#E9EDF0 3.5px 4.5px,transparent 5px),radial-gradient(circle at 10px calc(100% - 10px),#5E6872 0 3px,#E9EDF0 3.5px 4.5px,transparent 5px),radial-gradient(circle at calc(100% - 10px) calc(100% - 10px),#5E6872 0 3px,#E9EDF0 3.5px 4.5px,transparent 5px),repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 1px,transparent 1px 4px),linear-gradient(180deg,#CDD3D9,#A3ACB5)}
+.plate .ptitle{display:flex;justify-content:space-between;align-items:center;font:700 11px var(--f-mono);letter-spacing:.16em;color:#3B444E;border-bottom:1.5px solid rgba(20,24,29,.35);padding-bottom:6px;margin:0 6px}
+.plate .prow{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:baseline;margin:8px 6px 0}
+.plate .prow span{font:700 11px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:#4A535D}
+.plate .prow b{font:800 26px/1.05 var(--f-display);letter-spacing:.03em;text-transform:uppercase}
+.plate .prow i{font-style:normal;font:600 13px/1.3 var(--f-body)}
+.plate .ledbox{display:inline-block;margin:10px 6px 0;background:#0D1013;color:var(--led);font:16px var(--f-mono);letter-spacing:.08em;padding:4px 10px;border-radius:4px;box-shadow:inset 0 0 0 1px #2B323A,0 0 12px rgba(255,176,0,.15)}
+.bubble{border-radius:4px 12px 12px 12px;border-left:5px solid var(--water)}
+.lvl{background:#0D1013;border:1px solid #39424C;border-radius:10px;box-shadow:inset 0 2px 10px rgba(0,0,0,.6)}
+.lvl-name{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.06em;color:var(--led)}
+.lvl-xp,.chip b,.qnum,.gcount,.codebig,.lbpts,.bscore,.dscore,.ring text{font-family:var(--f-mono)!important}
+.lvl-bar{height:14px;border-radius:3px;background:#1E2328;padding:2px}
+.lvl-bar i{border-radius:2px;background:repeating-linear-gradient(90deg,var(--led) 0 9px,transparent 9px 12px)}
+.chip{background:#14181C;border:1px solid #333B44;border-radius:8px}
+.chip b{color:var(--led);font-weight:400}
+.sec-h h2{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.07em;font-size:24px}
+.sec-h h2::before{content:"";display:inline-block;width:14px;height:14px;margin-right:8px;vertical-align:-1px;background:var(--water);clip-path:polygon(25% 5%,75% 5%,100% 50%,75% 95%,25% 95%,0 50%)}
+.game{border-radius:10px;color:#F1F3F5;background-image:radial-gradient(circle at 9px 9px,#7C8692 0 2.5px,transparent 3px),radial-gradient(circle at calc(100% - 9px) calc(100% - 9px),#7C8692 0 2.5px,transparent 3px),linear-gradient(165deg,#3A434E,#1B2026)!important;border-top:5px solid var(--tc);box-shadow:var(--shadow)}
+.game .gi{background:transparent;border:2px solid var(--tc);color:var(--tc);border-radius:8px}
+.game h3{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.02em;font-size:19px;overflow-wrap:anywhere}
+.g-quiz{--tc:#FF4D63}.g-cards{--tc:#FFB000}.g-blitz{--tc:#51CF66}.g-fix{--tc:#FF8787}.g-duel{--tc:#B197FC}.g-scan{--tc:#3BC9DB}
+.badge{background:var(--led);color:#1A1300;border-radius:4px;font-family:var(--f-mono);font-weight:400}
+.ch{border-radius:10px;border-top:0;border-left:6px solid var(--cc)}
+.ch-ico{border-radius:8px}
+.ch h3{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.03em;font-size:17px}
+.qrow{border-radius:10px;border:1px solid var(--line)}
+.qnum{clip-path:polygon(25% 3%,75% 3%,100% 50%,75% 97%,25% 97%,0 50%);border-radius:0;width:46px;font-size:17px;font-weight:400}
+.search,.fbtn,.opt,.xbtn,.qcard,.face,.big,.icon-btn{border-radius:10px!important}
+.fbtn[aria-pressed="true"]{background:var(--water);border-color:var(--water);color:#fff}
+.canal{border-radius:3px;height:18px;background:var(--soil);padding:2px;box-shadow:none}
+.canal i{border-radius:2px;inset:2px auto 2px 2px;background:repeating-linear-gradient(90deg,var(--water) 0 10px,transparent 10px 13px);animation:none}
+.opt{border-width:2px;border-bottom-width:4px}
+.opt .L{clip-path:polygon(25% 3%,75% 3%,100% 50%,75% 97%,25% 97%,0 50%);border-radius:0;font-family:var(--f-mono);font-weight:400}
+.qcard{border-left:5px solid var(--cc)}
+.big{font-family:var(--f-display);text-transform:uppercase;letter-spacing:.08em}
+
+#fx{position:fixed;inset:0;pointer-events:none;z-index:40;width:100%;height:100%}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="app" id="app">
+  <!-- HOME -->
+  <section id="home">
+    <div class="hero">
+      <div class="pad">
+        <div class="hero-top">
+          <div class="brand"><small>YAKUNIY NAZORAT · 147 SAVOL</small><h1>Mexanik</h1></div>
+          <button class="icon-btn" id="soundBtn" aria-label="Ovozni yoqish yoki o'chirish"></button>
+        </div>
+        <div class="plate" aria-label="Texnik pasport">
+          <div class="ptitle"><span>TEXPASPORT</span><span>№ 147</span></div>
+          <div class="prow"><span>Fan o'qituvchisi</span><b>Zafar</b><span>Fan</span><i>Mashinalar ishonchliligi va ta'mirlash</i></div>
+          <span class="ledbox">147 SAVOL · 8 BO'LIM</span>
+        </div>
+        <div class="hero-main">
+          <div id="heroDrop" class="bob"></div>
+          <div class="bubble" id="heroBubble">Salom, mexanik! Bugun qaysi agregatni tiklaymiz?</div>
+        </div>
+        <div class="lvl">
+          <div class="lvl-row"><span class="lvl-name" id="lvlName">Shogird</span><span class="lvl-xp" id="lvlXp">0 XP</span></div>
+          <div class="lvl-bar"><i id="lvlBar" style="width:0%"></i></div>
+          <div class="lvl-next" id="lvlNext"></div>
+          <div class="chips">
+            <div class="chip"><b id="stMastered">0</b><span>yodlangan / 147</span></div>
+            <div class="chip"><b id="stMistakes">0</b><span>xato savol</span></div>
+            <div class="chip"><b id="stStreak">0</b><span>kunlik seriya</span></div>
+          </div>
+        </div>
+      </div>
+      <svg class="wave" viewBox="0 0 400 34" preserveAspectRatio="none" aria-hidden="true"><path d="M0 20 C 50 4, 100 4, 150 18 S 250 34, 300 18 S 380 6, 400 14 L400 34 L0 34Z"/></svg>
+    </div>
+
+    <div class="pad">
+      <div class="sec">
+        <div class="sec-h"><h2>O'yinlar</h2><span>tanlang va boshlang</span></div>
+        <div class="games">
+          <button class="game g-quiz" id="gQuiz"><div class="gi" data-ico="quiz"></div><div><h3>Viktorina</h3><p>4 variantdan to'g'risini toping, kombo yig'ing</p></div></button>
+          <button class="game g-cards" id="gCards"><div class="gi" data-ico="cards"></div><div><h3>Kartochkalar</h3><p>Aylantiring, javobni eslab qoling</p></div></button>
+          <button class="game g-blitz" id="gBlitz"><div class="gi" data-ico="bolt"></div><div><h3>Rostmi?</h3><p>60 soniya: rost yoki yolg'on</p></div></button>
+          <button class="game g-fix" id="gFix"><span class="badge" id="fixBadge" hidden>0</span><div class="gi" data-ico="wrench"></div><div><h3>Xatolar ustida</h3><p>Adashgan savollarni qayta yeching</p></div></button>
+          <button class="game g-duel" id="gDuel"><div class="gi" data-ico="trophy"></div><div><h3>Bellashuv</h3><p>Do'stlar bilan bir xil savollar: kim tez va to'g'ri?</p></div></button>
+          <button class="game g-scan" id="gScan"><div class="gi" data-ico="camera"></div><div><h3>Suratdan topish</h3><p>Qog'ozdagi savolni suratga oling, javobini topamiz</p></div></button>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-h"><h2>Boblar</h2><span>bosib, shu bobdan o'ynang</span></div>
+        <div class="chs" id="chs"></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-h"><h2>Barcha savollar</h2><span id="listCount">147 ta</span></div>
+        <label class="search" for="q"><span data-ico="search"></span><input id="q" type="search" placeholder="Savol yoki javob bo'yicha qidiring" autocomplete="off"></label>
+        <div class="filters" id="filters"></div>
+        <div class="legend">
+          <span><i class="dot"></i>yangi</span><span><i class="dot seen"></i>ko'rilgan</span><span><i class="dot mastered"></i>yodlangan</span><span><i class="dot mistake"></i>xato</span>
+        </div>
+        <div class="qlist" id="qlist"></div>
+        <div class="empty" id="listEmpty" hidden>Bunday savol topilmadi.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" data-exit aria-label="Bosh menyuga qaytish" data-ico="x"></button><div class="canal"><i id="qProg"></i></div><div class="gcount" id="qCount">1/10</div></div>
+    <div class="meta"><span class="tag" id="qTag"></span><span class="combo" id="qCombo">x2 kombo</span></div>
+    <div class="qhead"><div id="qDrop"></div><div class="qcard"><div class="n" id="qNum"></div><p id="qText"></p></div></div>
+    <div class="opts" id="qOpts"></div>
+  </section>
+
+  <!-- CARDS -->
+  <section id="cards" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" data-exit aria-label="Bosh menyuga qaytish" data-ico="x"></button><div class="canal"><i id="cProg"></i></div><div class="gcount" id="cCount">1/10</div></div>
+    <div class="cardwrap"><div class="flip" id="flip" role="button" tabindex="0" aria-label="Kartani aylantirish">
+      <div class="face front" id="cFront"></div>
+      <div class="face back" id="cBack"></div>
+    </div></div>
+    <div class="two"><button class="big red" id="cAgain">Yana ko'raman</button><button class="big" id="cKnow">Bilaman</button></div>
+  </section>
+
+  <!-- BLITZ -->
+  <section id="blitz" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" data-exit aria-label="Bosh menyuga qaytish" data-ico="x"></button><div class="timer"><i id="bTime"></i></div><div class="gcount" id="bSec">60</div></div>
+    <div id="bIntro" class="center">
+      <div id="bDrop"></div>
+      <h2>Rostmi yoki yolg'onmi?</h2>
+      <p>Savol va bitta javob chiqadi. Javob to'g'ri bo'lsa "Rost", noto'g'ri bo'lsa "Yolg'on" ni bosing. 60 soniyada iloji boricha ko'p toping.</p>
+      <p id="bBest"></p>
+      <div class="btns"><button class="big blue" id="bStart">Boshlash</button></div>
+    </div>
+    <div id="bPlay" hidden>
+      <div class="meta"><span class="bscore" id="bScore">0</span><span class="combo" id="bCombo">x2</span></div>
+      <div class="bcard" id="bCard"><span class="tag" id="bTag"></span><div class="q" id="bQ"></div><div class="claim"><small>Javob</small><b id="bA"></b></div></div>
+      <div class="tf"><button class="big red" id="bNo">Yolg'on</button><button class="big" id="bYes">Rost</button></div>
+      <div class="toast" id="bToast"></div>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result" class="pad" hidden>
+    <div class="center">
+      <div id="rDrop"></div>
+      <div class="stars" id="rStars"></div>
+      <h2 id="rTitle">Ajoyib!</h2>
+      <p id="rSub"></p>
+      <div class="rstats" id="rStats"></div>
+      <div class="review" id="rReview"></div>
+      <div class="btns"><button class="big blue" id="rAgain">Yana o'ynash</button><button class="big ghost" data-exit>Bosh menyu</button></div>
+    </div>
+  </section>
+
+  <!-- BELLASHUV: LOBBY -->
+  <section id="duel" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" data-exit aria-label="Bosh menyuga qaytish" data-ico="x"></button><h2 class="gtitle">Bellashuv</h2></div>
+    <div class="stack">
+      <div class="dcard">
+        <span class="eyebrow">Bellashuv kodi</span>
+        <div class="codebig" id="dCode"></div>
+        <div class="dchips" id="dInfo"></div>
+      </div>
+      <div class="row2">
+        <a class="big tg lnk" id="dShareTg" href="https://t.me/share/url" target="_blank" rel="noopener"><span data-ico="send"></span>Telegram'da ulashish</a>
+        <button class="big ghost lnk" id="dCopy"><span data-ico="copy"></span>Havolani nusxalash</button>
+      </div>
+      <p class="hint" id="dCopyMsg" aria-live="polite"></p>
+      <div class="note" id="dFileNote" hidden>Ilova telefondagi fayldan ochilgan. Do'stlaringizga shu HTML faylni Telegram'da yuboring va kodni ayting: ular faylni ochib, Bellashuv → "Kod bilan qo'shilish" orqali shu bellashuvga kiradi.</div>
+      <div class="field">
+        <label for="dName">Ismingiz (natijada ko'rinadi)</label>
+        <input class="input" id="dName" maxlength="24" autocomplete="nickname" placeholder="Ismingizni yozing">
+        <p class="hint err" id="dNameErr" aria-live="polite"></p>
+      </div>
+      <div class="note" id="dPlayed" hidden></div>
+      <button class="big blue" id="dStart">Boshlash</button>
+      <button class="big ghost" id="dBoard" hidden>Natijalar jadvali</button>
+      <div class="rules">
+        <h3>Qoidalar</h3>
+        <ul>
+          <li>Hamma bir xil savollarni bir xil tartibda oladi.</li>
+          <li>Har savolga vaqt beriladi. Vaqt tugasa, savol 0 ball.</li>
+          <li>To'g'ri javob 500 ball, tez javob uchun yana 500 ballgacha qo'shiladi.</li>
+          <li>Tugatgach natijangizni guruhga yuboring. Guruhdagi natijalarni "Natijalar" sahifasiga joylasangiz, reyting tuziladi.</li>
+          <li>Faqat birinchi urinish hisoblanadi.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- BELLASHUV: O'YIN -->
+  <section id="duelplay" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" id="dpExit" aria-label="Bellashuvni to'xtatish" data-ico="x"></button><div class="timer"><i id="dpTime"></i></div><div class="gcount" id="dpSec"></div></div>
+    <div class="meta"><span class="tag" id="dpCount"></span><span class="dscore" id="dpScore">0 ball</span></div>
+    <div class="qcard" style="margin-top:14px"><div class="n" id="dpNum"></div><p id="dpText"></p></div>
+    <div class="opts" id="dpOpts"></div>
+    <div class="countdown" id="dpCd" hidden><b id="dpCdN">3</b></div>
+  </section>
+
+  <!-- BELLASHUV: NATIJALAR -->
+  <section id="duelres" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" data-exit aria-label="Bosh menyuga qaytish" data-ico="x"></button><h2 class="gtitle">Natijalar · <span id="drCode"></span></h2></div>
+    <div class="stack">
+      <div class="dcard" id="drMine">
+        <span class="eyebrow">Sizning natijangiz</span>
+        <div class="bignums" id="drNums"></div>
+        <div class="note" id="drPractice" hidden>Bu mashq natijasi — reytingga kirmaydi.</div>
+        <div class="stack0" id="drShareBox">
+          <div class="resline" id="drLine"></div>
+          <div class="row2">
+            <a class="big tg lnk" id="drShareTg" href="https://t.me/share/url" target="_blank" rel="noopener"><span data-ico="send"></span>Guruhga yuborish</a>
+            <button class="big ghost lnk" id="drCopy"><span data-ico="copy"></span>Nusxalash</button>
+          </div>
+          <p class="hint" id="drCopyMsg" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="sec-h" style="margin:4px 0 0"><h2>Reyting</h2><span id="drCount"></span></div>
+      <div class="lb" id="drBoard"></div>
+      <div class="field">
+        <label for="drPaste">Guruhdagi natijalarni shu yerga joylang</label>
+        <textarea class="input" id="drPaste" rows="4" placeholder="Telegram'da natija xabarlarini belgilab nusxalang va shu yerga joylang"></textarea>
+      </div>
+      <button class="big blue" id="drAdd">Reytingga qo'shish</button>
+      <p class="hint" id="drMsg" aria-live="polite"></p>
+      <div class="review" id="drReview"></div>
+      <button class="big ghost" id="drLobby">Bellashuv sahifasi</button>
+    </div>
+  </section>
+
+  <!-- SURATDAN TOPISH -->
+  <section id="scan" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" data-exit aria-label="Bosh menyuga qaytish" data-ico="x"></button><h2 class="gtitle">Suratdan topish</h2></div>
+    <div class="stack">
+      <p class="lead">Qog'ozdagi savolni suratga oling. Ilova matnni telefonning o'zida o'qiydi, savolni bazadan topadi va to'g'ri javobini ko'rsatadi.</p>
+      <div class="row2">
+        <label class="big blue lnk" for="scCam"><span data-ico="camera"></span>Suratga olish</label>
+        <label class="big ghost lnk" for="scGal"><span data-ico="image"></span>Galereyadan</label>
+      </div>
+      <input class="vh" type="file" id="scCam" accept="image/*" capture="environment" tabindex="-1">
+      <input class="vh" type="file" id="scGal" accept="image/*" tabindex="-1">
+      <div class="scanst" id="scState" hidden>
+        <img id="scImg" alt="Tanlangan surat">
+        <div class="col"><p class="hint" id="scMsg" aria-live="polite"></p><div class="prog"><i id="scBar"></i></div></div>
+      </div>
+      <div class="hits" id="scHits"></div>
+      <div class="field">
+        <label for="scText">Matn — suratdan o'qilgan yoki o'zingiz yozing</label>
+        <textarea class="input" id="scText" rows="4" placeholder="Masalan: buldozer surgichining kesish burchagi"></textarea>
+      </div>
+      <button class="big ghost" id="scFind">Matn bo'yicha qidirish</button>
+      <p class="hint">Yaxshi natija uchun: yorug' joyda, telefonni qog'ozga parallel ushlang va kadrga faqat kerakli savol(lar)ni oling. Birinchi marta ishlatilganda internetdan taxminan 7 MB yuklanadi, keyin tezroq ishlaydi.</p>
+    </div>
+  </section>
+</div>
+
+<div class="fb" id="fb" aria-live="polite"><div class="fb-in"><h3 id="fbTitle"></h3><p id="fbText"></p><button class="big" id="fbNext">Davom etish</button></div></div>
+<div id="scrimHost"></div>
+<canvas id="fx"></canvas>
+
+<script>
+const Q = [{"q": "Mashinalar ishonchliligi va ta’mirlash fanining asosiy maqsadi nimadan iborat?", "o": ["Yangi rusumdagi traktor va avtomobillar dizaynini yaratish va ularni sinovdan o‘tkazish", "Mashinalarni sotish hajmini oshirish hamda ularning bozor narxlarini doimiy ravishda belgilash", "Qishloq xo‘jalik mahsulotlarini yetishtirish hajmini oshirish usullarini ishlab chiqish", "Detallarning yeyilishi va shikastlanish sabablarini aniqlash hamda tiklash usullarini o‘rgatish"], "a": 3}, {"q": "Qaysi xususiyat mashina-traktor parkini ishga yaroqli holda tutishning asosiy vazifasiga kiradi?", "o": ["Nosozlik yuz bergandan so‘ng mashinani ustaxonaga olib borish va ko‘rikdan o‘tkazish", "Eski mashinalarni zudlik bilan hisobdan chiqarib yangilarini sotib olishni rejalashtirish", "Ta’mirlash va texnik xizmat ko‘rsatish tadbirlarini o‘z vaqtida hamda sifatli o‘tkazish", "Mashinalarni ishlatmasdan doimiy ravishda yopiq omborxonalarda saqlashni tashkil qilish"], "a": 2}, {"q": "Mashinalar ishonchliligi va ta’mirlash fanini o‘rganishda qaysi umummuhandislik fani bilimlari talab etiladi?", "o": ["O‘simlikshunoslik, dehqonchilik hamda tuproqshunoslik fanlarining nazariy asoslari", "Meteorologiya, iqlimshunoslik hamda gidrologiya fanlarining amaliy ko‘rsatkichlari", "Geodeziya, xaritashunoslik hamda yer tuzish ishlarining umumiy qoidalari va usullari", "Materialshunoslik, materiallar qarshiligi va o‘zaro almashinuvchanlik fanlari bilimlari"], "a": 3}, {"q": "Mashina detallarining foydalanish jarayonida ishdan chiqishi qanday zaruriyat hisoblanadi?", "o": ["Sub’ektiv zaruriyat bo‘lib, haydovchining xatosi natijasida yuzaga keladigan hodisadir", "Tasodifiy holat bo‘lib, to‘g‘ri moylanganda mashina hech qachon yeyilishga uchramaydi", "Ob’ektiv zaruriyat bo‘lib, detallarning yeyilishi va yemirilishi muqarrar jarayondir", "Texnologik nuqson bo‘lib, tayyorlovchi zavodning aybi bilan sodir bo‘ladigan hodisadir"], "a": 2}, {"q": "Mashinalarning ishonchliligini ta’mirlash davrida oshirish uchun qanday infratuzilma rivojlantirilmoqda?", "o": ["Yirik shaharlarda joylashgan avtomobillarni yuvish va pardozlash shahobchalari", "Chet eldan tayyor ehtiyot qismlarni olib keluvchi xususiy savdo dokonlari tarmog‘i", "Yoqilg‘i va moylash materiallarini saqlashga mo‘ljallangan maxsus omborxona majmualari", "MTP larda va agrofirmalarda ta’mirlash ustaxonalari va texnik xizmat ko‘rsatish shoxobchalari"], "a": 3}, {"q": "Qishloq xo‘jalik texnikalariga oid ishonchlilikning umumiy tushunchalari qaysi davlat standarti bilan belgilanadi?", "o": ["GOST 12.001-90 standarti bilan belgilanadi va sinov ishlarida ishlatiladi", "GOST 15.005-85 standarti bilan belgilanadi va eksport uchun ishlatiladi", "GOST 23.002-78 standarti bilan belgilanadi va loyihalashda qo‘llaniladi", "GOST 27.002-83 standarti bilan belgilanadi va barcha texnik hujjatlarda qo‘llaniladi"], "a": 3}, {"q": "Ishonchlilik tushunchasi o‘z ichiga qanday kompleks xossalarni oladi?", "o": ["Tashqi korpusning chiroyliligi, shaffofligi hamda bo‘yoq qatlamining chidamliligini oladi", "Mustahkamlik, qattiqlik, qayishqoqlik va plastiklik kabi mexanik xossalarni oladi", "Buzilmasdan ishlash, chidamlilik, ta’mirboplik va saqlanuvchanlik xossalarini oladi", "Yoqilg‘i tejamkorligi, harakat tezligi hamda burilish radiusi kabi ko‘rsatkichlarni oladi"], "a": 2}, {"q": "Mashina ish unumdorligi pasayganda va yoqilg‘i sarfi ortganda qanday oqibat yuzaga keladi?", "o": ["Mashinaning bozor qiymati keskin oshadi va uning resursi doimiy ravishda tiklanadi", "Detallarning yeyilishi butunlay to‘xtaydi va moylash materiallari sarfi kamayadi", "Mashinani ishlatish xarajatlari ko‘payadi va ta’mirlashga bo‘lgan ehtiyoj ortadi", "Dvigatel quvvati avtomatik ravishda ortadi va ish unumdorligi tiklanib qoladi"], "a": 2}, {"q": "Mashinani har doim ishga yaroqli holda tutish va samarali foydalanish nima uchun davlat ahamiyatiga ega?", "o": ["Katta mashinalar parkini saqlash va ta’mirlashga har yili ko‘p mablag‘ sarflanishi sababli", "Mashinalarning harakat tezligini oshirish hamda musobaqalarda g‘olib chiqish uchun", "Chet eldan yangi mashinalarni xarid qilish hajmini oshirish va rivojlantirish uchun", "Ustaxonalardagi ishchilar sonini doimiy ravishda qisqartirish va optimallashtirish uchun"], "a": 0}, {"q": "Qaysi omil mashinalarning ishlatish ko‘rsatkichlari pasayishiga bevosita sabab bo‘ladi?", "o": ["Tajribali va yuqori malakali mutaxassislar tomonidan texnik qarov o‘tkazilishi", "Sifatli va standartlarga mos yoqilg‘i-moylash materiallaridan foydalanilishi", "Texnik xizmat ko‘rsatish hamda ta’mirlash ishlarining o‘z vaqtida va sifatli bajarilmasligi", "Mashinaning yangi va zamonaviy texnologik uskunalar bilan to‘liq jihozlanganligi"], "a": 2}, {"q": "Mashinaning biror vaqt ichida majburiy tanaffuslarsiz ishlash qobiliyatini saqlash xususiyati nima deyiladi?", "o": ["Ta’mirboplik xususiyati deb ataladi va nuqsonlarni bartaraf etish moslashuvchanligidir", "Chidamlilik xususiyati deb ataladi va oxirgi holatga yetgunga qadar davom etadi", "Saqlanuvchanlik xususiyati deb ataladi va saqlash muddatidagi ko‘rsatkichidir", "Buzilmasdan ishlash xususiyati deb ataladi va asosan ishlamay qolish bilan baholanadi"], "a": 3}, {"q": "Mashinaning ishlash qobiliyatining buzilishidan iborat bo‘lgan hodisa nima deb ataladi?", "o": ["Diagnostika hodisasi deb ataladi va nosozlik sabablarini bo‘laklamay aniqlaydi", "Tiklanish hodisasi deb ataladi va detal o‘lchamlarini avvalgi holatga keltirishdir", "Oxirgi holat hodisasi deb ataladi va mashinani hisobdan chiqarishga olib keladi", "Ishlamay qolish (otkaz) hodisasi deb ataladi va texnik holatni o‘zgartiradi"], "a": 3}, {"q": "Mashina, agregat yoki detalning o‘z ishlash qobiliyatini oxirgi holatgacha saqlash xususiyati nima deyiladi?", "o": ["Remontga yaroqlilik xususiyati deb ataladi va profilaktika ishlarini aks ettiradi", "Buzilmasdan ishlash xususiyati deb ataladi va qisqa muddatli ishonchlilikni bildiradi", "Chidamlilik (uzoq xizmat qilish) xususiyati deb ataladi hamda resurs bilan o‘lchanadi", "Saqlanuvchanlik xususiyati deb ataladi va transportda tashish davrini o‘z ichiga oladi"], "a": 2}, {"q": "Mashinani texnik xizmat ko‘rsatmasdan yoki ta’mirlamasdan foydalanish mumkin emasligi nima bilan belgilanadi?", "o": ["Haydovchining shaxsiy xohishi hamda kunlik ish smenasi davomiyligi bilan belgilanadi", "Yoqilg‘i bakidagi yoqilg‘i miqdori hamda moy darajasi ko‘rsatkichi bilan belgilanadi", "Dvigatelning nominal quvvati hamda aylanishlar chastotasi bilan belgilanadi", "Oxirgi holat bilan belgilanadi va texnik hujjatlarda aniq izohlab beriladi"], "a": 3}, {"q": "Mashinaning nuqsonlarini aniqlash, oldini olish va bartaraf etishga moslashganlik xususiyati nima deyiladi?", "o": ["Remontga yaroqlilik (ta’mirboplilik) xususiyati deb ataladi hamda mehnat sarfini kamaytiradi", "Chidamlilik xususiyati deb ataladi hamda texnik resursning umumiy miqdorini ko‘rsatadi", "Saqlanuvchanlik xususiyati deb ataladi va tashqi muhit ta’siriga bardoshlilikni bildiradi", "Buzilmasdan ishlash xususiyati deb ataladi va majburiy to‘xtashlar sonini ifodalaydi"], "a": 0}, {"q": "Buyumning saqlanish va tashish muddati davomida va undan keyin ham o‘z ko‘rsatkichlarini saqlash xususiyati nima deyiladi?", "o": ["Buzilmasdan ishlash xususiyati deb ataladi va smena davomidagi ko‘rsatkichdir", "Saqlanuvchanlik xususiyati deb ataladi va belgilangan standartlar bo‘yicha baholanadi", "Chidamlilik xususiyati deb ataladi va uzoq yillar davomida uzluksiz ishlashni bildiradi", "Ta’mirboplik xususiyati deb ataladi va ustaxonadagi jihozlar darajasiga bog‘liq bo‘ladi"], "a": 1}, {"q": "Ob’ektning ishlash davomiyligi yoki bajargan ish hajmi nima deb ataladi?", "o": ["Resurs deb ataladi va sotib olingan kundan boshlab kalendar kunlarda hisoblanadi", "Nosozlik deb ataladi va texnik hujjat talabiga mos kelmaydigan holatni ko‘rsatadi", "Xizmat muddati deb ataladi va kapital ta’mirlashlar orasidagi davrni bildiradi", "Bajargan ishi deb ataladi va vaqt, maydon, hajm yoki massa birliklarida o‘lchanadi"], "a": 3}, {"q": "Ta’mirlanadigan mashinaning ishlamay qolishlar oralig‘ida bajargan ishining o‘rtacha qiymati nima deyiladi?", "o": ["Belgilangan resurs deb ataladi hamda tayyorlovchi zavod tomonidan kafolatlanadi", "Nominal bajargan ish deb ataladi hamda bir smenadagi unumdorlikni ko‘rsatadi", "Ishlamay qolgunga qadar bajargan ishi deb ataladi va ishonchlilik mezonlaridan biridir", "Remontlararo xizmat muddati deb ataladi va joriy ta’mirlashda hisoblanadi"], "a": 2}, {"q": "Mashinaning texnik hujjatlardagi talablarning loaqal bittasiga mos kelmaydigan holati nima deyiladi?", "o": ["Tiklangan holat deb ataladi va detallarning barcha o‘lchamlari yangisiga tenglashadi", "Oxirgi holat deb ataladi va mashinani kapital ta’mirlashga yuborishni talab etadi", "Ishlamay qolish holati deb ataladi hamda mashinaning ishlashini butunlay to‘xtatadi", "Nosozlik holati deb ataladi va mashinaning ish unumdorligiga ta’sir ko‘rsatadi"], "a": 3}, {"q": "Mashinaning texnik hujjatlarda izohlangan oxirgi holatga qadar bajaradigan ishi nima deb ataladi?", "o": ["Resurs deb ataladi va birinchi remontgacha yoki remontlararo resurslarga bo‘linadi", "Xizmat muddati deb ataladi va kalendar yillar bilan o‘lchanadigan ko‘rsatkichdir", "Bajargan ish deb ataladi va bir kunda bajarilgan ish hajmini ifodalaydi", "Ishlash qobiliyati deb ataladi va berilgan parametrlarni saqlash xususiyatidir"], "a": 0}, {"q": "Mashina ishlatila boshlangandan to oxirgi holatga kelguncha kalendar ishlash davomiyligi nima deyiladi?", "o": ["Xizmat muddati deb ataladi va yil, oy yoki kunlar bilan o‘lchanadigan ko‘rsatkichdir", "Ishlamay qolish vaqti deb ataladi va nosozliklarni bartaraf etish davrini bildiradi", "Profilaktika davri deb ataladi va texnik xizmat ko‘rsatishlar oralig‘ini ko‘rsatadi", "Resurs deb ataladi va ishlab berilgan moto-soatlar soni bilan aniqlanadi"], "a": 0}, {"q": "Ta’mirlangan mashinaning navbatdagi oxirgi holatga kelgunga qadar bajargan ishi nima deyiladi?", "o": ["Remontlararo resurs (xizmat muddati) deb ataladi va ta’mir sifatiga bog‘liq bo‘ladi", "Kafolatli resurs deb ataladi va sotuvchi tashkilot tomonidan javobgarlikni bildiradi", "Belgilangan resurs deb ataladi va texnik hujjatda qat’iy belgilab qo‘yilgan bo‘ladi", "Birinchi remontgacha bo‘lgan resurs deb ataladi va yangi mashinaga nisbatan hisoblanadi"], "a": 0}, {"q": "Mashina berilgan vazifalarni texnik hujjatlar talablariga mos parametrlar bo‘yicha bajara oladigan holati nima deyiladi?", "o": ["Remontga yaroqlilik deb ataladi va ustaxonada tez ta’mirlash imkoniyatini bildiradi", "Chidamlilik deb ataladi va detallarning yemirilishga bo‘lgan qarshiligini ko‘rsatadi", "Saqlanuvchanlik deb ataladi va uzoq vaqt saqlanganda buzilmaslik xususiyatidir", "Ishlash qobiliyati deb ataladi va mashinaning sozligini aks ettiruvchi ko‘rsatkichdir"], "a": 3}, {"q": "Ishlash qobiliyatini tiklash va mashinaning nuqsonlarini bartaraf etish ishlari majmui nima deyiladi?", "o": ["Diagnostika qilish deb ataladi va bo‘laklarga ajratmasdan holatni aniqlashdir", "Konservatsiyalash deb ataladi va mashinani uzoq muddatli saqlashga tayyorlashdir", "Remont (ta’mirlash) deb ataladi hamda joriy va kapital turlarga bo‘linadi", "Texnik xizmat ko‘rsatish deb ataladi va tozalash hamda moylash ishlaridan iborat"], "a": 2}, {"q": "Ayrim kam resursli agregatlar, uzellar va mexanizmlarni almashtirish hamda tiklash qaysi ta’mirlashga kiradi?", "o": ["Mavsumiy remontga kiradi hamda bahor va kuz oylarida amalga oshiriladi", "Joriy remontga kiradi hamda asosan agregat usulidan foydalanib bajariladi", "Kapital remontga kiradi hamda mashinani to‘liq bo‘laklarga ajratishni talab etadi", "Kafolatli remontga kiradi hamda tayyorlovchi zavod vakillari tomonidan bajariladi"], "a": 1}, {"q": "Kapital ta’mirlash vaqtida mashina texnik resursini tiklash uchun qanday ishlar bajariladi?", "o": ["Sirti yuviladi va rasxodniklar hamda moy almashtirib topshiriladi", "Dvigatel moyi almashtiriladi hamda tormoz tizimi soflab beriladi", "Mashina to‘liq bo‘laklarga ajratiladi, barcha agregat va uzellar tiklanadi va bo‘yaladi", "Kabinasi bo‘yaladi va g‘ildiraklari yangisiga almashtirilib sinovdan o‘tkaziladi"], "a": 2}, {"q": "Mashina detallarining ishlash jarayonida ishqalanuvchi sirtlarining nomaqbul o‘zgarishi nima deyiladi?", "o": ["Deformatsiyalanish deb ataladi va tashqi kuchlar ta’sirida shakl o‘zgarishidir", "Moslashish deb ataladi va dastlabki ishlash davrida yuzalarning silliqlanishidir", "Toblash deb ataladi va detallarning qattiqligini oshirish uchun qo‘llaniladi", "Yeyilish deb ataladi va ishqalanish kuchlari ta’siri natijasida sodir bo‘ladi"], "a": 3}, {"q": "GOST 23.002-78 bo‘yicha mashinalar detallari uchun yeyilishning nechta turi belgilangan?", "o": ["Ikkita turi belgilangan: fizika-kimyoviy va biologik omillar ta’siridagi yeyilishlar", "Besh ta turi belgilangan: abraziv, gidroabraziv, erozion, kavitatsion va freting yeyilishlar", "Uchta turi belgilangan: mexanik, korrozion-mexanik va elektr toki ta’sirida yeyilishlar", "To‘rtta turi belgilangan: issiqlik, bosim, tezlik va plastik deformatsiya yeyilishlari"], "a": 2}, {"q": "Mexanik ta’sirlar natijasida sodir bo‘ladigan yeyilish turiga qaysi ko‘rinishlar kiradi?", "o": ["Issiqlik ta’sirida erib ketish hamda sirtqi qatlamlarning kimyoviy birikmaga aylanishi", "Oksidlanib yeyilish hamda freting-korroziyadagi kimyoviy yemirilish ko‘rinishlari", "Abraziv, gidroabraziv, erozion, kavitatsion, freting, toliqib va qadalib yeyilishlar", "Elektro-erozion yeyilish hamda elektr razryadlari ta’sirida sodir bo‘ladigan yemirilishlar"], "a": 2}, {"q": "Material bilan muhit orasida kimyoviy yoki elektrokimyoviy ta’sirlanish tufayli qaysi yeyilish sodir bo‘ladi?", "o": ["Korrozion-mexanik yeyilish sodir bo‘ladi hamda oksidlanib yeyilishga bo‘linadi", "Elektro-erozion yeyilish sodir bo‘ladi hamda elektr tokining o‘tishi bilan bog‘liq", "Abraziv mexanik yeyilish sodir bo‘ladi va qattiq zarrachalarning ishqalanishidan kelib chiqadi", "Kavitatsion yeyilish sodir bo‘ladi va suyuqlikdagi pufakchalarning yorilishidan hosil bo‘ladi"], "a": 0}, {"q": "Elektr generatorlarining kollektorlari va qo‘zg‘aluvchan kontaktlarda qanday yeyilish kuzatiladi?", "o": ["Oksidlanib yeyilish kuzatiladi va havodagi kislorodning diffuziyalanishidan hosil bo‘ladi", "Elektro-erozion yeyilish kuzatiladi va elektr razryadlari ta’sirida sodir bo‘ladi", "Freting yeyilish kuzatiladi va kichik tebranishlar natijasida yuzaga keladi", "Gidroabraziv yeyilish kuzatiladi va suyuqlik oqimidagi abraziv zarrachalardan kelib chiqadi"], "a": 1}, {"q": "Prof. B.I.Kostetskiy taklifiga ko‘ra yeyilish qanday turlarga bo‘linadi?", "o": ["Ilashib, oksidlanib, issiqlik ta’sirida, abrazivdan va chechaksimon yeyilishlarga bo‘linadi", "Sirtqi, ichki, hajmiy hamda chegaraviy yeyilish shakllariga bo‘linadi", "Dastlabki, me’yoriy, jadallashtirilgan hamda halokatli yeyilish bosqichlariga bo‘linadi", "Mexanik, korrozion, elektrokimyoviy hamda kavitatsion yeyilish turlariga bo‘linadi"], "a": 0}, {"q": "Moy va oksid pardasi bo‘lmaganda po‘lat yuzalar kichik tezlikda ishqalanganda qanday yeyilish kuzatiladi?", "o": ["Ilashib yeyilish kuzatiladi va solishtirma bosim oquvchanlik chegarasidan oshganda sodir bo‘ladi", "Issiqlik ta’sirida yeyilish kuzatiladi va katta sirpanish tezliklarida yuzaga keladi", "Chechaksimon yeyilish kuzatiladi va sirtqi qatlamlarning uvalanib tushishidan hosil bo‘ladi", "Oksidlanib yeyilish kuzatiladi va kislorodning metallga diffuziyalanishi natijasida boradi"], "a": 0}, {"q": "Plastik deformatsiyalanish va havodagi kislorodning diffuziyalanishi bir vaqtda boradigan jarayon nima deyiladi?", "o": ["Ilashib yeyilish deb ataladi va metallarning bir-biriga payvandlanib qolishiga olib keladi", "Issiqlik ta’sirida yeyilish deb ataladi va haroratning keskin ko‘tarilishi bilan boradi", "Oksidlanib yeyilish deb ataladi va sirtqi qatlamlarda moziy pardalar hosil qiladi", "Abraziv yeyilish deb ataladi va qattiq zarrachalarning tirnash ta’sirida sodir bo‘ladi"], "a": 2}, {"q": "Katta sirpanish tezliklarida va katta solishtirma bosimlarda ajraladigan issiqlik natijasida qanday yeyilish yuzaga keladi?", "o": ["Gidroerozion yeyilish yuzaga keladi va suyuqlik oqimining urilishi natijasida boradi", "Freting korroziyasi yuzaga keladi va tebranish ta’sirida sirtning yemirilishidir", "Issiqlik ta’sirida yeyilish yuzaga keladi va sirtqi qatlamlar juda qizib ketadi", "Oksidlanib yeyilish yuzaga keladi va sirtda mustahkam oksid pardasi hosil qiladi"], "a": 2}, {"q": "Qurilish va melioratsiya mashinalarining qaysi detallari silindrik sirtlar yeyilishiga misol bo‘ladi?", "o": ["Tishli g‘ildiraklar tishlarining yon bag‘irlari hamda ilashish profillari", "Uzatma qutilari hamda reduktorlarning tekis birikish yuzalari", "Shponka va shlitsali birikmalarning yon ariqchalari va teshiklarining pazlari", "Vallar, o‘qlar, vtulkalar hamda porshen barmog‘ining tashqi va ichki sirtlari"], "a": 3}, {"q": "O‘zbekistonda va sobiq ittifoqda eng birinchi ta’mirlash ustaxonalari qanday stanoklar bilan jihozlangan edi?", "o": ["Zamonaviy sonli dastur bilan boshqariladigan avtomatlashtirilgan stanoklar bilan", "Oddiy tokarlik stanoklari va xorijdan olib kelingan «Krauze» rusumli stanoklar bilan", "Mahalliy hunarmandlar tomonidan yasalgan yog‘och va temirchilik dastgohlari bilan", "Yuqori unumdorlikka ega bo‘lgan ixtisoslashtirilgan silliqlash va frezerlash stanoklari bilan"], "a": 1}, {"q": "Ikkinchi jahon urushi oldidan ta’mirlash sohasida mutaxassislar tayyorlash uchun qanday kafedralar tashkil qilindi?", "o": ["Mashinalar remonti va Mashina-traktor parkidan foydalanish kafedralari tashkil etildi", "Qishloq xo‘jaligi iqtisodiyoti va Buxgalteriya hisobi kafedralari tashkil etildi", "Avtomobilsozlik va Traktorsozlik loyihalash kafedralari tashkil etildi", "Gidrotexnika inshootlari va Melioratsiya qurilishi kafedralari tashkil etildi"], "a": 0}, {"q": "1949-1953 yillarda RosNITI (GOSNITI) tomonidan mashinalarni ta’mirlash bo‘yicha qanday texnik hujjatlar nashr etildi?", "o": ["Traktor dvigatellarini ta’mirlashga mo‘ljallangan 5 ta qisqa yo‘riqnoma nashr etildi", "Namunali texnologiyaning 2200 bosma varaqdan iborat 35 ta albom va kitoblari nashr etildi", "Qishloq xo‘jalik mashinalari ehtiyot qismlarining narxlari ko‘rsatilgan katalog nashr etildi", "Avtomobillarga texnik xizmat ko‘rsatish bo‘yicha 100 sahifali bitta umumiy qoida nashr etildi"], "a": 1}, {"q": "Namunaviy (yagona) ta’mirlash texnologiyasi va normativlariga amal qilish qanday iqtisodiy samara berdi?", "o": ["Ustaxonalarni qayta jihozlash zarurati yo‘qoldi va qo‘l mehnati ulushi ortdi", "Ehtiyot qismlar sarfi keskin ortdi va ustaxonadagi ishchilar soni ko‘paytirildi", "Ta’mirlash xarajatlari ikki barobarga oshdi va mashinalarning resursi kamaydi", "Ta’mirlash vaqti va mehnat sarfi qisqardi, mehnat unumdorligi oshdi va sifat yaxshilandi"], "a": 3}, {"q": "1961 yilda qishloq xo‘jalik texnikasi ta’mirini tashkil etish va rahbarlik qilish uchun qaysi birlashma tashkil etildi?", "o": ["«QishloqXo‘jalikTa’minot» birlashmasi tashkil etildi va yoqilg‘i yetkazib berdi", "«O‘zbekqishloqmash» aksionerlik jamiyati tashkil etildi va ishlab chiqarishni boshqardi", "«Soyuzselxoztexnika» birlashmasi tashkil etildi va davlat miqyosida rahbarlik qildi", "«DavlatTexNazoratsiya» inspeksiyasi tashkil etildi va nazorat ishlarini olib bordi"], "a": 2}, {"q": "Detallarni yaroqli-yaroqsizga ajratish (defektatsiya) deb qanday jarayonga aytiladi?", "o": ["Detallarni payvandlash va ularning o‘lchamlarini stanokda yonib ishlov berish jarayoniga", "Detallarni yuvish va ularni zangdan toza moddalar bilan tozalash jarayoniga aytiladi", "Nuqsonlarni aniqlash va detallarni holatiga ko‘ra guruhlarga saralash jarayoniga aytiladi", "Detallarni komplektlash va uzellarga yig‘ishdan oldin o‘lchamlari bo‘yicha tanlash jarayoniga"], "a": 2}, {"q": "Defektatsiya jarayonida yaroqli detallar qaysi rangdagi bo‘yoq bilan belgilanadi?", "o": ["Qizil rang bilan belgilanadi va chiqindilar omboriga topshiriladi", "Yashil rang bilan belgilanadi va to‘g‘ridan-to‘g‘ri yig‘ishga yuboriladi", "Oq rang bilan belgilanadi va ustaxonada tiklanishi lozimligini ko‘rsatadi", "Sariq rang bilan belgilanadi va normal o‘lchamgacha tiklanganini bildiradi"], "a": 1}, {"q": "Yangi yoki normal o‘lchamgacha tiklangan detallar defektatsiyada qaysi rang bilan belgilanadi?", "o": ["Yashil rang bilan belgilanadi hamda eski holatida ishlataverishni bildiradi", "Sariq rang bilan belgilanadi va zudlik bilan komplektlashga yuboriladi", "Ko‘k rang bilan belgilanadi hamda zavodga jo‘natishni ko‘rsatadi", "Oq rang bilan belgilanadi hamda qayta ishlov berishni talab etadi"], "a": 1}, {"q": "Ustaxonada yoki ixtisoslashtirilgan korxonada tiklanishi lozim bo‘lgan detallar qaysi rang bilan belgilanadi?", "o": ["Ko‘k rang bilan belgilanadi va ixtisoslashgan korxonada tiklanadi", "Oq rang bilan belgilanadi va tegishli tiklash sexiga yuboriladi", "Qizil rang bilan belgilanadi va mutlaqo yaroqsiz detal hisoblanadi", "Yashil rang bilan belgilanadi va qo‘shimcha ishlov berishni talab etmaydi"], "a": 1}, {"q": "ixtisoslashtirilgan korxonada tiklanadigan detallar qaysi rangdagi bo‘yoq bilan belgilanadi?", "o": ["Yashil rang bilan belgilanadi va darhol mashinaga o‘rnatishga tayyor bo‘ladi", "Oq rang bilan belgilanadi va mahalliy ustaxonada tiklanishi mumkin", "Sariq rang bilan belgilanadi va yangi ehtiyot qism darajasida hisoblanadi", "Ko‘k rang bilan belgilanadi va ixtisoslashgan zavodlarga jo‘natiladi"], "a": 3}, {"q": "Yaroqsiz va tiklab bo‘lmaydigan detallar qaysi rang bilan belgilanadi va qayerga topshiriladi?", "o": ["Oq rang bilan belgilanadi hamda qayta ishlash uchun ustaxonada qoldiriladi", "Sariq rang bilan belgilanadi hamda ehtiyot qismlar omboriga saqlashga beriladi", "Qizil rang bilan belgilanadi hamda chiqindilar (lom) omboriga topshiriladi", "Ko‘k rang bilan belgilanadi hamda ixtisoslashgan korxonaga jo‘natiladi"], "a": 2}, {"q": "Qurilish va melioratsiya mashinalari detallarining aksariyat qismi (52% i) qanchagacha yeyilishi mumkin?", "o": ["2,0 mm gacha yeyilishi mumkin va ularni yangisiga almashtirish shartdir", "0,1 mm gacha yeyilishi mumkin va ularni tiklash kam mehnat talab qiladi", "0,6 mm gacha yeyilishi mumkin va ularni tiklash murakkab texnologiyadir", "1,0 mm gacha yeyilishi mumkin va payvandlab qoplash bilan tiklanadi"], "a": 1}, {"q": "Birinchi guruh detallariga (umumiy iste’mol detallariga) qanday qismlar kiradi?", "o": ["Dvigatel silindrlar bloki hamda orqa ko‘prikning yirik korpus detallari", "Uzatma qutisining tishli g‘ildiraklari va gidravlik tizim shlanglari", "Suv nasosining korpusi hamda uning valigi kabi maxsus ishlov beriladigan qismlar", "Porshen barmog‘i, plunjer juftligi, shatun va differensial krestovinalari"], "a": 3}, {"q": "Uchinchi guruh detallariga (maxsus iste’mol detallariga) qanday qismlar kiradi va ular qayerda tiklanadi?", "o": ["Suv nasosi korpusi va valigi kiradi hamda ta’mirlash zavodlarining sexlarida tiklanadi", "Bolt va gaykalar kiradi hamda ustaxonaning o‘zida qayta ishlanadi", "Dvigatel bloki hamda karterlar kiradi va doimiy ravishda yangisiga almashtiriladi", "Porshen barmoqlari hamda shatunlar kiradi va oddiy ustaxonalarda tiklanadi"], "a": 0}, {"q": "Detallarni tiklashning iqtisodiy jihatdan maqsadga muvofiqligi nima bilan izohlanadi?", "o": ["Yangi detal tayyorlashdagiga qaraganda ancha kam mehnat va materiallar sarflanishi bilan", "Ustaxonadagi stanoklarning doimiy ravishda to‘liq yuklanishini ta’minlash bilan", "Ehtiyot qismlar omboridagi joyni tejangani va saqlash xarajatlari kamaygani bilan", "Qayta tiklangan detalning yangisiga qaraganda chiroyliroq ko‘rinishga ega bo‘lishi bilan"], "a": 0}, {"q": "Tutash detallarning o‘lchamlarini o‘zgartirmasdan o‘rindiqni tiklash qanday usullar bilan amalga oshiriladi?", "o": ["Detallarni polimer kompozitsiyalar bilan yelimlash va silliqlash g‘ildiraklarida ishlov berish bilan", "Tirqishni rostlash va detallarni almashtirish yoki qo‘shimcha ish o‘rniga o‘tkazish bilan", "Detallarni yuqori haroratda qizdirib bolg‘alash va so‘ngra termik ishlov berish bilan", "Detallar yuzasini payvandlab metall qoplash va stanokda nominal o‘lchamgacha yonish bilan"], "a": 1}, {"q": "Ta’mirlangan o‘lchamdagi detallardan foydalanish usulining mohiyati nimadan iborat?", "o": ["Tutashmaga dastlabki tirqish miqdori qaytariladi, detallar kerakli geometrik shakl oladi", "Detallarning sirti xromlanadi va termik ishlov berilmasdan darhol biriktiriladi", "Detallarning barcha o‘lchamlari mutlaqo yangi zavod nominal o‘lchamiga keltiriladi", "Val o‘lchami kattalashtiriladi va teshik o‘lchami ham mos ravishda kichiklashtiriladi"], "a": 0}, {"q": "Korpus detallaridagi uzunligi L bo‘lgan yoriqlarni shtiftlash usulida ta’mirlashda teshiklar qanday parmalanadi?", "o": ["Chetki uchlarida 5...6 mm li teshiklar ochilib, shtift kiritiladi, so‘ngra orasiga 1.5d qadamda teshiladi", "Yoriq bo‘ylab uzluksiz ketma-ket teshiklar parmalanib, birdaniga kattta diametrli murvatlar buralanadi", "Yoriqning o‘rtasidan bitta katta teshik parmalanadi va unga rezbali tiqin urib kirgiziladi", "Parmalamasdan gaz payvandida eritib yopiladi hamda ustidan metall yamroq solinadi"], "a": 0}, {"q": "Korpus detallaridagi yoriqlarni shakldor quymalar (vstavkalar) bilan yamashda qanday yelim ishlatiladi?", "o": ["Silikatli yelim ishlatiladi hamda suvda erimaydigan birikma hosil qiladi", "Tseolitsiz yelim ishlatiladi hamda darhol qotib qolish xususiyatiga ega", "Kauchukli yelim ishlatiladi va yuqori haroratda qizdirib qotiriladi", "Epoksidli yelim ishlatiladi va shakldor tirqishga presslab kiritiladi"], "a": 3}, {"q": "Korpus teshiklarining o‘qdoshligi qanday moslama va asbob yordamida aniqlanadi?", "o": ["Suv sathini o‘lchagich (uroven) va ip yordamida to‘g‘rilash orqali", "Indikatorli moslama va teshikka mos keladigan vtulkali qolip yordamida", "Mikrometr hamda pasport o‘lchamlari bilan solishtirish yo‘li bilan", "Oddiy chizg‘ich hamda shtangenzirkul asbobi yordamida o‘lchash orqali"], "a": 1}, {"q": "Korpus teshiklarining parallelligi qanday aniqlanadi?", "o": ["Teshiklarning diametrlarini mikrometr bilan turli nuqtalarda o‘lchash orqali", "Teshiklar sirtining g‘adir-budurligini profilograf yordamida tekshirish orqali", "Teshiklarga moy quyib, uning oqib tushish tezligini sekundomerda o‘lchash orqali", "Teshiklarga o‘rnatilgan qoliplar orasidagi masofalarni shtixmas yoki indikator bilan o‘lchab"], "a": 3}, {"q": "Kuygan yoki tirnalgan quyma sirtlarning g‘adir-budurligi qanday texnologik usullar bilan bartaraf etiladi?", "o": ["Sirtga yangi bo‘yoq surtish hamda shpatlevka qilish texnologiyasi bilan", "Sirtni bolg‘alab tekislash hamda termik toblash usuli orqali", "Silliqlash, frezerlash yoki shaberlash usullari orqali bartaraf etiladi", "Qo‘lda jilvir qog‘oz bilan ishqalash hamda moylash yo‘li bilan"], "a": 2}, {"q": "Val va o‘qlarning asosiy nuqsonlariga qaysilar kiradi?", "o": ["Materialining kimyoviy tarkibi o‘zgarishi hamda zanglab ketishi", "Val diametrining issiqlikdan uzayishi va podshipniklar ichida qisilib qolishi", "Sirtlarining va podshipnik o‘rinlarining yeyilishi, bo‘g‘ilishi, buralishi hamda egilishi", "Val og‘irligining kamayib ketishi hamda rangi o‘chishi va xiralashishi"], "a": 2}, {"q": "Egilgan val va o‘qlarni to‘g‘rilash eng qulay va arzon qaysi usulda bajariladi?", "o": ["Presslarda yoki maxsus moslamalarda sovuq holda to‘g‘rilash usulida", "Valni gaz alangasida 1000 darajagacha qizdirib bolg‘alash usulida", "Val yuzasini payvandlab qoplash va so‘ngra tokarlik stanogida yonishda", "Valni suvga bo‘ktirib qo‘yish va og‘ir yuk ostida ushlab turish usulida"], "a": 0}, {"q": "Vallarning yoyilgan o‘tkazish (posadka) joylari qanday usullar bilan tiklanadi?", "o": ["Valga ehtiyot qismlarni yelimlab yopishtirish va issiq holda chiniqtirish bilan", "Eritib quyish (flyus ostida, vibroyoy), galvanik, metallash hamda polimer qoplamalar bilan", "Val diametrini bolg‘alab kichraytirish va podshipnikni kichik o‘lchamdagisiga almashtirish bilan", "Valni egovlash hamda jilvirlash orqali nominal o‘lchamga keltirish bilan"], "a": 1}, {"q": "Diametri 50 mm dan kichik bo‘lgan vallarning shlitsli ariqchalari qanday ta’mirlanadi?", "o": ["Egov bilan tekislanadi va shponka o‘rnatish uchun yangi ariqcha ochiladi", "Chuqurroq frezerlanadi va katta o‘lchamli shlitsli vtulka o‘rnatiladi", "Payvandlanib qoplanadi va so‘ngra nominal o‘lchamli shlitslar qayta qirqiladi", "Shlitslar butunlay yo‘nilib, silliq valga aylantiriladi va presslab biriktiriladi"], "a": 2}, {"q": "Shlitsli ariqchalarni payvandlab qoplashda val tob tashlamasligi uchun payvandlash qanday olib boriladi?", "o": ["Payvandlash valning bir boshidan ikkinchi boshiga qarab ketma-ket bir tomondan boradi", "Val suvli idishga to‘liq botirilgan holda ustki qismi payvandlanadi", "Valiklar diametral qarama-qarshi tomondan galma-galdan shlitsli ariqchalarga quyiladi", "Payvandlash vaqtida val yuqori tezlikda aylantirib turiladi"], "a": 2}, {"q": "Shlitslarni qo‘lda payvandlab qoplashda qaysi rusumli elektrodlar ishlatiladi?", "o": ["Alyuminiy elektrodlar va azot gaz muhiti ishlatiladi", "E-50 va E-60 elektrodlari hamda mis va bronza simlari ishlatiladi", "Cho‘yan elektrodlar hamda flyus aralashmasiz oddiy simlar ishlatiladi", "E-42 va E-46A elektrodlari hamda vibroyoyda Np-30 simi ishlatiladi"], "a": 3}, {"q": "Po‘lat flanetslar va vtulkalardagi yoyilgan shlitslar siqib tiklanganda detal qanday ishlanadi?", "o": ["Bog‘lanish haroratigacha qizdiriladi, sovuq val kirgizilib, puanson va matritsada siqiladi", "Yangi shlitslar frezerlanib, eski shlitslar payvandlanmasdan qoldiriladi", "Sovuq holda press ostiga qo‘yiladi hamda katta kuch bilan urib siqiladi", "Suyuq moyga botirib olinadi va bolg‘a bilan urib o‘lchami kichraytiriladi"], "a": 0}, {"q": "Cho‘yan detallardagi ichki shlitslar yoyilganda ular ta’mirlanadimi?", "o": ["Elektr yoyi bilan payvandlab qoplanadi va qayta shlits qirqiladi", "Tiklanmaydi, teshik yo‘nib kengaytiriladi va yangi yasalgan vtulka presslab kirgiziladi", "Gaz alangasida qizdirilib, bolg‘alash yo‘li bilan o‘lchami tiklanadi", "Epoksid smolasi surtilib, sovuq holda qotirish orqali tiklanadi"], "a": 1}, {"q": "Eng katta o‘lchamgacha yoyilgan shponka ariqchalari qanday ta’mirlanadi?", "o": ["Shponka ariqchasi yelim bilan to‘ldiriladi va standart shponka o‘rnatiladi", "Shponka ostiga yupqa metall qistirma qo‘yib mahkamlanadi", "Val boshqa tomonga burilib, mutlaqo yangi joyda nominal ariqcha qirqiladi", "Frezerlanib kengaytiriladi va kattalashtirilgan ta’mir o‘lchamli shponka qo‘yiladi"], "a": 3}, {"q": "Mashinani sovuq suv bilan yuvishda va issiq suv bilan yuvishda qaysi rusumli qurilmalardan foydalaniladi?", "o": ["Sovuq suvda OM-5359, issiq suvda esa M-1100 qurilmalaridan foydalaniladi", "Har ikkala holda ham M-107 uch plunjerli nasosli qurilmasidan foydalaniladi", "Sovuq suvda TsKB-1112, issiq va aralashmali suvda OM-5359 qurilmalaridan", "Sovuq va issiq suvda OM-3360A bug‘-havo qurilmasidan foydalaniladi"], "a": 2}, {"q": "O‘ta muhim birikmalarning (silindr bloklari va boshqalar) bolt va gaykalarini tortishda qanday kalit ishlatiladi?", "o": ["Uzaytirgich quvur kiygizilgan halqali kalitlardan foydalaniladi", "Maxsus dinamometrik dastali kalitlardan foydalaniladi", "Oddiy ochiq og‘izli gayka kalitlaridan foydalaniladi", "Pnevmatik zarbli kalitlardan maksimal kuch bilan foydalaniladi"], "a": 1}, {"q": "Tezligi 4 m/s gacha bo‘lgan zanjirlarni moylash oldidan qanday texnologik ishlov beriladi?", "o": ["Zanjir gaz alangasida qizdiriladi hamda sovutmasdan sovuq moyga botiriladi", "Zanjir suv bilan yuviladi va quritilmasdan darhol zanjirli uzatmaga o‘rnatiladi", "Zanjir yechilmasdan ustiga solidol surtiladi hamda simli cho‘tka bilan tozalanadi", "Zanjir yechib olinib, kerosinda yuviladi va moyli idishda 10...15 min ushlab turiladi"], "a": 3}, {"q": "Dvigatel karteridagi moyni almashtirish qanday holatda amalga oshirilishi kerak?", "o": ["Dvigatel butunlay sovitilgandan so‘ng, moy cho‘kkanda bo‘shatiladi", "Moyni almashtirish dvigatel kapital ta’mirlanganda amalga oshiriladi", "Dvigatel karteriga sovuq suv quyib, moyni yuzaga qalqitib bo‘shatiladi", "Ishlab turgan dvigatel to‘xtatilib, moy sobumasdan darhol bo‘shatilishi kerak"], "a": 3}, {"q": "Dvigatel karterini kirlardan yuvishda dizel yoqilg‘isi quyilgach dvigatel qancha vaqt ishlatiladi?", "o": ["30...40 min davomida nominal yuklama ostida ishlatiladi va bo‘shatiladi", "1...2 sekund davomida starter bilan aylantiriladi hamda to‘kib tashlanadi", "Dvigatel ishlatilmasdan 24 soat karterda ushlab turiladi hamda bo‘shatiladi", "5...7 min davomida ishga tushirilib, so‘ng bo‘shatiladi va yangi moy quyiladi"], "a": 3}, {"q": "Dvigatelning krivoship-shatun mexanizmidagi noo‘qshov taqqillashlar qaysi asbob yordamida baholanadi?", "o": ["Avtostetoskop asbobi yordamida tegishli nuqtalarga datchik qo‘yib baholanadi", "Indikatorli shtativ yordamida valning radial urishini o‘lchash orqali", "Manometr asbobi yordamida moy bosimini o‘lchash orqali baholanadi", "Sekundomer yordamida dvigatelning to‘xtash vaqtini o‘lchash orqali"], "a": 0}, {"q": "Qog‘oz elementli moy filtrining o‘tkazuvchanligi tekshirilganda, to‘lish vaqti qanchadan oshsa almashtiriladi?", "o": ["10 minutdan yuqori bo‘lsa yangi filtr elementi bilan almashtiriladi", "180 sekunddan yuqori bo‘lsa yangi filtr elementi bilan almashtiriladi", "5 sekunddan yuqori bo‘lsa yangi filtr elementi bilan almashtiriladi", "40 sekunddan yuqori bo‘lsa yangi filtr elementi bilan almashtiriladi"], "a": 3}, {"q": "Sentrifuga rotori dvigatel o‘chirilgandan so‘ng kamida necha sekund aylanishi kerak?", "o": ["Kamida 35 sekund davomida aylanishi va tovush berib turishi kerak", "Kamida 5 minut davomida aylanishi va sekin sekin to‘xtashi kerak", "Kamida 10 minut davomida uzluksiz aylanaverishi kerak", "Kamida 5 sekund davomida aylanishi va darhol to‘xtashi kerak"], "a": 0}, {"q": "Dvigatel moylash tizimini yuvishda karterga qanday aralashma solinadi?", "o": ["50% dizel yoqilg‘isi va 50% dizel moyi aralashmasi solinib 2...3 min ishlatiladi", "80% benzin va 20% transformator moyi aralashmasi solinadi", "100% kerosin solinadi va dvigatel 2 soat davomida ishlatiladi", "100% toza sovuq suv solinadi va 30 min davomida nominal yuklamada ishlatiladi"], "a": 0}, {"q": "Yoqilg‘i filtrining ifloslanish darajasi va bosimi qaysi moslama bilan aniqlanadi?", "o": ["KI-1308V rusumli moslama bilan aniqlanadi va bosim 0,01 MPa dan oshsa almashtiriladi", "KI-13943 rusumli moslama bilan aniqlanadi va bosim 0,08 MPa dan oshsa almashtiriladi", "KI-9912 rusumli moslama bilan aniqlanadi va bosim 1,5 MPa dan oshsa almashtiriladi", "KI-13918 rusumli moslama bilan aniqlanadi va bosim 10,0 MPa dan oshsa almashtiriladi"], "a": 1}, {"q": "Qog‘oz filtrli 2TF-2 rusumli yoqilg‘i filtrini yuvish qanday amalga oshiriladi?", "o": ["Filtr elementi gaz alangasida kuydiriladi hamda simli cho‘tkada tozalanadi", "Filtr karteriga benzin quyiladi hamda starter bilan 10 minut aylantiriladi", "Filtr to‘liq bo‘laklarga ajratilib, qog‘oz elementi issiq suvda yuviladi", "Tizim qismlari bo‘laklarga ajratilmasdan, jo‘mrak holatlarini o‘zgartirib 5...6 min yuviladi"], "a": 3}, {"q": "Forsunkalarning yoqilg‘ini purkash bosimi dvigateldan yechmasdan qaysi asboblar bilan o‘lchanadi?", "o": ["KI-15706 hamda KI-562 rusumli stasionar stendlarda o‘lchanadi", "KI-13943 hamda KI-13936 rusumli manometrlarda o‘lchanadi", "PIM-4816 hamda KI-9918 rusumli indikatorli moslamalarda o‘lchanadi", "KI-9917 hamda KI-16301P rusumli asboblar yordamida o‘lchanadi"], "a": 3}, {"q": "Forsunkadan yoqilg‘ining changitilish sifati va germetikligi tekshirilganda nima kuzatiladi?", "o": ["Changitgich atrofida quyuq qora tutun hosil bo‘lishi va uning yonib ketishi kerak", "Yoqilg‘i yirik tomchilar holatida uzluksiz oqib tushishi kerak", "Changitgich konusi uchi 20 s ichida tomchi hosil qilmasligi hamda ovoz chiqarishi kerak", "Purkash bosimi 0,01 MPa ga teng bo‘lganda yoqilg‘i favvora bo‘lib otilishi kerak"], "a": 2}, {"q": "Yoqilg‘i nasosida yoqilg‘ini berish momentini tekshirishda qaysi asbob qo‘llaniladi?", "o": ["KI-13671 rusumli karter indicator asbobi qo‘llaniladi", "KI-13918 rusumli tasmali indicator asbobi qo‘llaniladi", "KI-5315 rusumli vakuummetr asbobi qo‘llaniladi", "KI-4941 rusumli momentoskop asbobi birinchi seksiyaga o‘rnatib qo‘llaniladi"], "a": 3}, {"q": "Cho‘l sharoitidagi quruq havoda chang miqdori qanchani tashkil qiladi va dvigatel 1 soatda qancha havo so‘radi?", "o": ["Havoda chang bo‘lmaydi va dvigatel havo so‘rmasdan uzluksiz ishlayveradi", "Havoda chang 100...150 g/m3 ni tashkil etadi va dvigatel 1 soatda 10 m3 havo so‘radi", "Havoda chang 4...6 g/m3 ni tashkil etadi va orta quvvatli dvigatel 1 soatda 200 m3 havo so‘radi", "Havoda chang 0,1...0,2 g/m3 ni tashkil etadi va dvigatel 1 soatda 5000 m3 havo so‘radi"], "a": 2}, {"q": "Bosh mufta disklari kerosin bilan yuvilgandan so‘ng qurishi uchun qancha vaqt ajratilgan holda qoldiriladi?", "o": ["5...10 sekund davomida qoldiriladi va darhol yuklama beriladi", "5...6 soat oralig‘ida ajratilgan holda qoldiriladi va disklar to‘liq quriydi", "Dvigatel o‘chirilmasdan darhol maksimal tezlikda ishlatib yuboriladi", "24 soat davomida issiq pechda ushlab turiladi"], "a": 1}, {"q": "T-130M traktori burish mexanizmi servomexanizmi dasta erkin yo‘li necha mm bo‘lishi kerak?", "o": ["100...150 mm bo‘lishi kerak va tormoz valigi orqali rostlanadi", "20...30 mm bo‘lishi kerak va sharli gayka orqali rostlanadi", "Erkin yo‘l bo‘lmasligi kerak va dasta qattiq biriktiriladi", "1...2 mm bo‘lishi kerak va richagni qisqartirish orqali o‘rnatiladi"], "a": 1}, {"q": "T-130M traktori tormozini rostlashda burchak murvati oxirigacha buralgach necha marta orqaga buriladi?", "o": ["Orqaga burilmaydi va maksimal kuch bilan qotirib qo‘yiladi", "0,75...1,5 marta orqaga buriladi hamda qo‘shgayka tortib mahkamlanadi", "20 marta orqaga buriladi hamda yangi prujina o‘rnatiladi", "5...10 marta orqaga buriladi va murvat butunlay bo‘shatib qo‘yiladi"], "a": 1}, {"q": "Zanjirli yurish tasmalarining to‘g‘ri tortilganligi lom bilan ko‘tarilganda necha mm ko‘tarilish bilan aniqlanadi?", "o": ["100...150 mm ko‘tarilsa me’yorda bo‘ladi (200 mm dan ortiq bo‘lsa rostlanadi)", "Ko‘tarilmasligi kerak va zanjir mutlaqo taran bo‘lishi lozim", "1...2 mm ko‘tarilsa me’yorda bo‘ladi (10 mm dan ortiq bo‘lsa rostlanadi)", "30...40 mm ko‘tarilsa me’yorda bo‘ladi (80 mm dan ortiq bo‘lsa rostlanadi)"], "a": 3}, {"q": "EO-4121 ekskavatorining zanjirli tasmasi pastki qismi va rama orasidagi masofa necha mm bo‘lishi kerak?", "o": ["500 mm bo‘lishi kerak va zanjir erga tegib turishi lozim", "50...60 mm bo‘lishi kerak (agar 30 mm bo‘lsa tortish talab etiladi)", "200...250 mm bo‘lishi kerak (agar 100 mm bo‘lsa bo‘shatish talab etiladi)", "5...10 mm bo‘lishi kerak (agar 2 mm bo‘lsa tortish talab etiladi)"], "a": 1}, {"q": "Avtomatlashtirilgan diagnostika tizimlari (ATT) axborot hajmi necha parametr atrofida bo‘ladi?", "o": ["1 ta parametr bo‘yicha ishlaydi va tezlikni o‘lchaydi", "2...3 parametr atrofida bo‘ladi va moy haroratini ko‘rsatadi", "80...100 parametr atrofida bo‘ladi va datchiklar orqali axborot yig‘adi", "1000...2000 parametr atrofida bo‘ladi va murakkab hisob-kitoblarni bajaradi"], "a": 2}, {"q": "Bir chomichli ekskavatorning nazariy ish unumdorligi Un qaysi formula bo‘yicha aniqlanadi?", "o": ["Un = 3600 / (q * td) formula bo‘yicha aniqlanadi", "Un = q * td * 100 formula bo‘yicha aniqlanadi", "Un = (q + td) / 3600 formula bo‘yicha aniqlanadi", "Un = (3600 * q) / td formula bo‘yicha aniqlanadi (q - cho‘mich hajmi, td - davr vaqti)"], "a": 3}, {"q": "Ekskavatorning texnik ish unumdorligi Ut ni hisoblashda qaysi koeffitsientlar hisobga olinadi?", "o": ["KIS (ichki smena) hamda Ksm (smena koeffitsienti) koeffitsientlari", "Fn (nominal vaqt fondi) hamda Fh (haqiqiy vaqt fondi) koeffitsientlari", "Kh (hajmdan foydalanish), kq (qazish qiyinligi) hamda kg (yumshatish) koeffitsientlari", "Kp (motto-soatga o‘tish) hamda Kvaqt (vaqt koeffitsienti) koeffitsientlari"], "a": 2}, {"q": "Detallarni tozalashning fizik-kimyoviy usulida qanday moddalardan foydalaniladi?", "o": ["Yog‘och qirindilari hamda paxta momig‘idan", "Toza sovuq suv hamda qum-tuproq aralashmasidan", "Sintetik yuvuvchi vositalar (SYUV) hamda erituvchi-emulsiyalovchi vositalar (EEV) dan", "Konsentrlangan sulfat va xlorid kislotalaridan"], "a": 2}, {"q": "Mashina va detallardagi texnologik iflosliklarga qanday materiallar kiradi?", "o": ["Qolip qumi, qirindilar, ishqalash pastalari, jilvirtosh qoldiqlari hamda shlaklar", "Zaharli kimyoviy dorilar, bitum hamda mineral o‘g‘it qoldiqlari", "Eski lak-bo‘yoqlar, asfalt-smolali qasmoqlar hamda mastika qoldiqlari", "Yo‘l-tuproq kirlari, zang mahsulotlari hamda o‘simlik qoldiqlari"], "a": 0}, {"q": "Ultratovush yordamida tozalash usulida tebranishlar chastotasi va tozalash vaqti qancha bo‘ladi?", "o": ["1...2 kGts tebranishda tozalash 10 soat davom etadi", "20...25 kGts tebranishda uglerodli o‘tirindilar 2...3 min, moy pardalari 30...40 s da tozalanadi", "100 kGts tebranishda tozalash 24 soat davomida bajariladi", "50 kGts tebranishda tozalash mutlaqo samara bermaydi"], "a": 1}, {"q": "Termik usulda detallardagi uglerodli o‘tirindilar termik pechda qanday haroratda tozalanadi?", "o": ["100...150 °S gacha qizdirilib, 5 minut ushlab turiladi hamda muzga botiriladi", "1500...2000 °S gacha qizdirilib, eritib yuboriladi va qayta quyiladi", "0 °S haroratda ushlab turiladi va so‘ngra muzli suvda yuviladi", "600...700 °S gacha qizdirilib, 2...3 soat ushlab turiladi va sekin sovitiladi"], "a": 3}, {"q": "Qismlarga ajratish va yig‘ish ishlari ta’mirlashning umumiy sermehnatliligining qancha foizini tashkil qiladi?", "o": ["90% ini tashkil qiladi va boshqa ta’mirlash ishlariga vaqt qolmaydi", "1% ini tashkil qiladi va tezda o‘tib ketadigan yordamchi ishdir", "5% ini tashkil qiladi va asosiy vaqtni bo‘yash ishlari egallaydi", "50% dan ortig‘ini tashkil qiladi hamda maxsus moslamalarni talab etadi"], "a": 3}, {"q": "Shtift va shpilkalarning korpus ichida sinib qolgan qismlarini chiqarib olishda qanday usul qo‘llaniladi?", "o": ["Bolg‘a bilan kuchli urib korpus ichiga surib yuboriladi", "Korpus alangasiz pechda eritib yuboriladi va yangidan quyiladi", "Uchiga gayka/sterjen payvandlanadi yoki kichik teshik ochilib teskari rezba o‘yiladi", "Moy quyib 1 oy davomida zanglashini kutib turiladi"], "a": 2}, {"q": "Makrotozalash, mikrotozalash va faol tozalash darajalari nimasi bilan farqlanadi?", "o": ["Ular orasida hech qanday farq yo‘q, barchasi bir xil tushunchalardir", "Makrotozalash - asosiy sirt, mikrotozalash - mikronotisizliklar, faol - kislotada korroziyalashdir", "Makrotozalash - suvda yuvish, mikrotozalash - havoda puflash, faol - bo‘yashdir", "Makrotozalash - egovlash, mikrotozalash - silliqlash, faol - toblashdir"], "a": 1}, {"q": "Sintetik yuvish vositalari (SYUV) konsentratsiyasi va eritma harorati qanday bo‘lishi kerak?", "o": ["Konsentratsiyasi 500 g/l hamda eritma harorati 0 °S bo‘lganda samaralidir", "Konsentratsiyasi 0,1 g/l hamda eritma harorati 20 °S bo‘lganda samaralidir", "Konsentratsiyasi 5...20 g/l hamda eritma harorati 80...85 °S bo‘lganda samaralidir", "Konsentratsiyasi 1 g/l hamda eritma harorati 200 °S bo‘lganda samaralidir"], "a": 2}, {"q": "Detallarni nuqsonlarini aniqlashda kapillyar usuli nimaga asoslangan?", "o": ["Detallarning tarozida tortib og‘irligini aniqlash xususiyatiga asoslangan", "Ultratovush toshlarining qaytishi va yorilish pufakchalariga asoslangan", "Detallarning magnit maydonidagi magnitlanish xususiyatiga asoslangan", "Eritmalarning ingichka yoriq va tirqishlarga shimilish xususiyatiga asoslangan"], "a": 3}, {"q": "Detallarni nusqsonlashda magnit-kukun usuli yordamida qanday nuqsonlar aniqlanadi?", "o": ["Detallarning ichki teshiklari diametrining aniqligi o‘lchanadi", "Detallarning kimyoviy tarkibidagi uglerod foizi aniqlanadi", "Sirtqi va sirtga yaqin joylashgan microscopic darzlar hamda govaklar aniqlanadi", "Detallarning bo‘yoq rangi hamda sirtining yaltiroqlik darajasi aniqlanadi"], "a": 2}, {"q": "Gidravlik usulda korpus detallaridagi (silindrlar bloki) darzlar necha MPa bosim ostida suv bilan sinalladi?", "o": ["0,01 MPa bosim ostida havo puflab tekshiriladi", "0,3...0,4 MPa bosim ostida suv bilan to‘ldirilib, sizib chiqishiga qarab aniqlanadi", "100 MPa bosim ostida gidravlik pressda siqib ko‘riladi", "10...15 MPa yuqori bosim ostida moy bilan to‘ldirib sinalladi"], "a": 1}, {"q": "Detallarni komplektlashning oddiy, selektiv va aralash usullari nima bilan farqlanadi?", "o": ["Oddiy - tanlab olish, selektiv - o‘lcham guruhlariga ajratish, aralash - ikkalasining birgalikdagi usulidir", "Ular bir xil usullar bo‘lib nomlanishi bilan farqlanadi", "Oddiy - yangi detallar, selektiv - eski detallar, aralash - sinigan detallardir", "Oddiy - qo‘lda yig‘ish, selektiv - stanokda yig‘ish, aralash - robotda yig‘ishdir"], "a": 0}, {"q": "Att datchiklarining qaysi turlari diagnostika jarayonida qo‘llaniladi?", "o": ["simli mexanik datchiklar hamda pnevmatik o‘lchagichlar", "Kontaktli, kontaktsiz (yorug‘lik, magnit), stroboskoplar hamda o‘rnatilgan datchiklar", "termometr va monometrlar hamda ruletka chizg‘ichlar", "fotoapparatlar hamda videokameralar"], "a": 1}, {"q": "Tashkilotning ta’mirlash ustaxonasida ishchilarning nominal vaqt fondi Fn va haqiqiy vaqt fondi Fh taxminan qancha olinadi?", "o": ["Fn = 5000 soat hamda Fh = 4500 soat atrofida qabul qilinadi", "Fn = 10000 soat hamda Fh = 9000 soat atrofida qabul qilinadi", "Fn = 2070 soat hamda Fh = 1610...1890 soat atrofida qabul qilinadi", "Fn = 500 soat hamda Fh = 300 soat atrofida qabul qilinadi"], "a": 2}, {"q": "Yordamchi ishchilar va muhandis-texnik xodimlar soni ishlab chiqarish ishchilarining necha foizini tashkil etadi?", "o": ["Yordamchi ishchilar 1% hamda muhandis-texnik xodimlar 1% olinadi", "Yordamchi ishchilar 50% hamda muhandis-texnik xodimlar 40% olinadi", "Yordamchi ishchilar 5% gacha hamda muhandis-texnik xodimlar 10% gacha olinadi", "Yordamchi ishchilar 90% hamda muhandis-texnik xodimlar 80% olinadi"], "a": 2}, {"q": "Ta’mirlash ustaxonasida metall kesish stanoklarining turlari bo‘yicha tokarli stanoklar necha foizni tashkil etadi?", "o": ["90% ni tashkil etadi va boshqa stanoklar ishlatilmaydi", "1% ni tashkil etadi va kam qo‘llaniladigan stanokdir", "35...50% ni tashkil etadi hamda eng ko‘p ulushga ega stanok turidir", "5...8% ni tashkil etadi va frezerli stanoklardan kamroqdir"], "a": 2}, {"q": "Mashinalarni boshqa ish joyiga ko‘chirishda tirkamaning yuk ko‘taruvchanligi mashina massasidan qancha yuqori bo‘lishi kerak?", "o": ["Tirkama yuk ko‘taruvchanligi hisobga olinmaydi va ixtiyoriy tirkamaga ortiladi", "5...10 % yuqori bo‘lishi kerak va ortiqcha xarajatlarga yo‘l qo‘ymaslik lozim", "200...300 % yuqori bo‘lishi kerak va eng katta tirkama tanlanishi lozim", "Mashina massasiga mutlaqo teng bo‘lishi yoki kamroq bo‘lishi kerak"], "a": 1}, {"q": "Silindr gilzalarini yeyilishga chidamli po‘lat lentalar qoqish usuli bilan tiklash kim tomonidan yaratilgan?", "o": ["A.K.Zaytsev tomonidan ishlab chiqilgan standartdir", "Prof. M.M.Xrushchov tomonidan taklif etilgan gipotezadir", "Texnika fanlari doktori I.Sobolev tomonidan yaratilgan texnologiyadir", "Prof. B.I.Kostetskiy tomonidan yaratilgan klassifikatsiyadir"], "a": 2}, {"q": "Kukunli materiallar bilan silindr gilzalarini ichki yuzasini tiklashda qanday qizdirish moslamasi ishlatiladi?", "o": ["Gilza ichiga induktor kiritilib, kukunli material aylanasi bo‘ylab qizdiriladi", "Kerosin lampasi tutatilib 24 soat davomida qizdirib turiladi", "Gaz gorelka alangasi bilan tashqaridan 2000 gradusda eritiladi", "Qizdirish talab qilinmaydi va kukun yelim aralashmasida qotiriladi"], "a": 0}, {"q": "Silindrik sirtlarni tiklashda metall o‘stirish elektroimpuls usulida qaysi metall elektrodlar ishlatiladi?", "o": ["Cho‘yan va alyuminiy simlaridan tayyorlangan elektroddan", "Yog‘och va ko‘mir sterjenlaridan tayyorlangan elektroddan", "Qurg‘oshin hamda rux moddalaridan tayyorlangan elektroddan", "Qizil mis yoki zanglamaydigan po‘latdan qilingan aylanuvchi elektrodlar"], "a": 3}, {"q": "Uzatma qutisi va reduktor korpuslaridagi yoriqlar yuklanmagan joylarda qanday polimer bilan yopiladi?", "o": ["Epoksid smolasi asosida tayyorlangan polimer kompozitsiyalari hamda yelimlar bilan", "Tsement va qum aralashmasidan tayyorlangan qorishma bilan", "Mumu va parafin aralashmasidan tayyorlangan suyuqlik bilan", "Gips va alabastr qorishmasi bilan"], "a": 0}, {"q": "Val va o‘qlarning podshipnik o‘rnatiladigan yoyilgan joylari elektro-mexanik ishlov berishda qanday tiklanadi?", "o": ["Val diametri egov bilan topshirladi va silliqlanadi", "Val suvda sovitiladi va keskich bilan yo‘nib tashlanadi", "Val yuzasiga kraska surtilib quritiladi", "Metall sirti elektr toki bilan qizdirilib, plastmassa yoki metall bilan shakllantiriladi"], "a": 3}, {"q": "Traktor va avtomobillarning rezbali birikmalarini yechishda zanglagan bolt va gaykalarga nima tomiziladi?", "o": ["Kerosin yoki maxsus zang yoyuvchi suyuqlik tomizilib biroz kutiladi", "Suyuq shisha hamda tsement eritmasi surtiladi", "Sovuq suv va tuz aralashmasi to‘kiladi", "Moylash uchun quyuq solidol surtiladi va darhol burab chiqariladi"], "a": 0}, {"q": "Presslab biriktirilgan detallarni ajratishda qanday asbob va moslamalardan foydalaniladi?", "o": ["Zubilo va kraysmessel keskichlaridan foydalanish usulidan", "Po‘lat bolg‘a bilan to‘g‘ridan-to‘g‘ri urib chiqarish usulidan", "Lom va zanjirli tal moslamalaridan foydalanish usulidan", "Presslar, syemniklar hamda mis uchlikli maxsus chiqargichlardan"], "a": 3}, {"q": "Dumalatib tushiriladigan podshipniklarni valdan yechishda kuch qaysi halqaga qo‘yilishi kerak?", "o": ["Podshipnikning valga tig‘iz o‘rnatilgan ichki halqasiga qo‘yiladi", "Podshipnikning tashqi erkin halqasiga va separatoriga qo‘yiladi", "Podshipnikning rezina zichlagichlariga va qopqog‘iga qo‘yiladi", "Podshipnikning shariklariga yoki roliklariga to‘g‘ridan-to‘g‘ri qo‘yiladi"], "a": 0}, {"q": "Detallarni yog‘sizlantirish uchun ishqorli eritmalardan foydalanilganda minerial moylar nima hosil qiladi?", "o": ["Sovun hosil qiladi va eritma tubigiga cho‘kindi bo‘lib tushadi", "Emulsiya hosil qiladi va bu emulsiya detal sirtidan osongina ketadi", "Mustahkam lak pardasi hosil qiladi va sirtni qoplaydi", "Gaz hosil qilib portlaydi va detalni darz ketkazadi"], "a": 1}, {"q": "Eski bo‘yoqlarni kimyoviy usulda ketkazishda qaysi erituvchilar ishlatiladi?", "o": ["Toza suv hamda kir sovuni eritmasi ishlatiladi", "SP-6, AFT-1 yuvgichlari hamda №646, 647, R-10 eritgichlari ishlatiladi", "Transformator moyi hamda nigrol aralashmasi ishlatiladi", "Gidravlik suyuqlik hamda antifriz A-40 ishlatiladi"], "a": 1}, {"q": "Detallarni qum va danak kukunlari bilan tozalash uskunalarida havo bosimi qancha bo‘ladi?", "o": ["Bosimsiz og‘irlik kuchi ta’sirida kukun to‘kiladi", "10...20 MPa yuqori bosim ostida havo puflab tozalangan", "0,3...0,6 MPa bosim ostida kukunlar katta tezlikda sirtga sachratiladi", "0,01 MPa juda kichik bosim ostida chang purkaladi"], "a": 2}, {"q": "Radiator tubalarining sirtidagi cho‘kindi tuzlar kaustik sodaning 3...5% li eritmasidan so‘ng qanday kislotada yuviladi?", "o": ["Konsentrlangan sulfat kislotasida 100 °S haroratda yuviladi", "Azot kislotasida 200 °S haroratda qaynatib olinadi", "Sirka kislotasining 90% li eritmasida sovuq holda yuviladi", "Xlorid kislotasining suvdagi 5...8% li eritmasida 50...60 °S haroratda yuviladi"], "a": 3}, {"q": "Dvigatelning gaz taqsimlash mexanizmida shayi bilan klapan sterjeni orasidagi tirqish qachon rostlanadi?", "o": ["Har 10 yilda bir marta profilaktika maqsadida olib boriladi", "2-DTXK (ikkinchi davriy texnik xizmat ko‘rsatish) vaqtida o‘z tartibida olib boriladi", "Har kuni ish smenasi boshlanishidan oldin haydovchi tomonidan", "dvigatel kapital ta’mirlanib bo‘lingandan so‘ng bir marta"], "a": 1}, {"q": "Dvigatelning moylash tizimidagi karterdagi moy sathi qachon va qanday o‘lchanadi?", "o": ["Har kuni ish boshlashdan oldin maxsus metall chizg‘ich (shchup) yordamida o‘lchanadi", "Har oyda bir marta karter bo‘shatilib idishda o‘lchanadi", "Moy sathi o‘lchanmaydi va chiroq yonganda quyiladi", "dvigatel qizib ketganida ko‘rish oynasi orqali qaraladi"], "a": 0}, {"q": "Inersion-moyli havo tozalagichning hermetikligi dvigatelda qanday tekshiriladi?", "o": ["Manometr ulabb karterdagi gaz bosimi o‘lchanadi", "Havo tozalagich ichiga suv quyiladi va suv oqmasa germetik deyiladi", "Havo tozalagichga bosim ostida moy purkaladi va tutun chiqishi kuzatiladi", "Dvigatel ishlayotganda havo so‘ruvchi quvur yopiladi, dvigatel o‘chsa germetik hisoblanadi"], "a": 3}, {"q": "T-130M traktori burish muftasi disklari moylanganda ular kerosin bilan qanday yuviladi?", "o": ["Karterga 7,5...8,5 l kerosin solinadi va traktor muftani qo‘shmasdan 5...8 min yurgiziladi", "Disklar yechib olinib qaynoq suvda 2 soat davomida sovuq suvda chayqab olinadi", "Moylangan disklar ta’mirlanmaydi va darhol yangisiga almashtiriladi", "Karterga benzin quyilib 1 soat davomida maksimal tezlikda haydaladi"], "a": 0}, {"q": "EO-4121 ekskavatori yurish uskunasi tormozini rostlashda kolodka va shkiv orasidagi tirqish necha mm bo‘lishi kerak?", "o": ["1,5...2,0 mm bo‘lishi kerak hamda gaykalar va tortqilar orqali rostlanadi", "50 mm bo‘lishi kerak va tormoz pedalini bosganda birikishi lozim", "10...15 mm bo‘lishi kerak hamda tormoz tasmasi bo‘shatib qo‘yiladi", "Tirqish bo‘lmasligi va kolodka shkivga zich yopishib turishi kerak"], "a": 0}, {"q": "Ishlab chiqarish ishchilarining ro‘yxatdagi soni Rr hisoblashda qaysi vaqt fondi ishlatiladi?", "o": ["Kalendar yildagi kunlar soni dk ishlatiladi", "Smenadagi soatlar soni tsm ishlatiladi", "Ishchining haqiqiy yillik vaqt fondi Fh ishlatiladi (ish vaqti yo‘qotishlarini hisobga olgan holda)", "nominal vaqt fondi Fn ishlatiladi va yo‘qotishlar hisobga olinmaydi"], "a": 2}, {"q": "Ta’mirlash ustaxonasida payvandlash va temirchilik ishlarini bajaruvchi ishchilarning haqiqiy vaqt fondi Fh qancha soat?", "o": ["2070 soat qabul qilinadi va nominal vaqt fondiga teng bo‘ladi", "1820 soat qabul qilinadi (slesarlar uchun 1840 soat, boyoqchilar uchun 1610 soat)", "1000 soat qabul qilinadi va qisqartirilgan ish kuni hisoblanadi", "3000 soat qabul qilinadi va ortiqcha smenalarni o‘z ichiga oladi"], "a": 1}, {"q": "Traktor va avtomobillarni ta’mirlashda har xil qo‘shimcha ishlar hajmi asosiy ishlar hajmining necha foizini tashkil etadi?", "o": ["50 % miqdorida olinadi va alohida smenada bajariladi", "10...20 % miqdorida olinadi hamda yillik umumiy mehnat sig‘imiga qo‘shiladi", "80...90 % miqdorida olinadi va asosiy ishlardan ko‘proq bo‘ladi", "0 % miqdorida olinadi va qo‘shimcha ishlar bajarilmaydi"], "a": 1}, {"q": "K-701 hamda T-130MG traktorlarida moto-soatdan mashina-soatga o‘tish koeffitsienti Kp qanchaga teng?", "o": ["2,50 ga teng bo‘lib, mashina soatini oshirib ko‘rsatadi", "0,63 ga teng bo‘lib, yillik ish rejimini hisoblashda qo‘llaniladi", "1,00 ga teng bo‘lib, o‘tish koeffitsienti o‘zgarmaydi", "0,10 ga teng bo‘lib, juda kichik qiymatga ega"], "a": 1}, {"q": "Bir cho‘michli gidravlik ekskavatorlar (EO-2621V, EO-4121B) uchun bir marta ko‘chirib o‘tkazish vaqti qancha?", "o": ["0,3 soatni tashkil etadi hamda ko‘chirish ishlarini tez bajarilishini ko‘rsatadi", "10 soatni tashkil etadi va uzoq vaqt talab qiladi", "4,0 soatni tashkil etadi va buldozerlar ko‘chirish vaqtiga teng", "24 soatni tashkil etadi va butun bir sutkani egallaydi"], "a": 0}, {"q": "Ekspluatatsion iflosliklarga qaysi turdagi kirlar kiradi?", "o": ["Yo‘l-tuproq kirlari, yonilg‘i-moy qoldiqlari, asfalt-smola cho‘kindilari va qurum", "stanoklarda ishlov berishda hosil bo‘ladigan metall qirindilari va jilvir zarrachalari", "quyuv sexida metall quyishda ishlatilgan qolip qumlari hamda shlaklar", "bo‘yash jarayonida va gruntovka qilishda hosil bo‘ladigan qurigan bo‘yoq tomchilari"], "a": 0}, {"q": "Dvigatel detallarida asfalt-smola va qattiq qurum cho‘kindilarini yuvishda qaysi Labomid vositasi ishlatiladi?", "o": ["Labomid-203 vositasi ishlatilib, eritma harorati 80...85 °S bo‘lishi lozim", "RNTM vositasi ishlatilib, eritma harorati 0 °S bo‘lishi lozim", "Temp-10 vositasi ishlatilib, eritma harorati 20 °S bo‘lishi lozim", "Labomid-101 vositasi ishlatilib, eritma harorati 10...15 °S bo‘lishi lozim"], "a": 0}, {"q": "Alyuminiyli qotishmalardan tayyorlangan detallar sirtidagi qurumni ketkazishda qaysi ishqor eritmasi ishlatilmaydi?", "o": ["Kaustik soda (NaOH) ishlatilmaydi, chunki u alyuminiyni yemiradi", "Kalsiylangan soda (Na2CO3) ishlatilmaydi va alyuminiyga ta’sir ko‘rsatmaydi", "Kir sovuni eritmasi ishlatilmaydi va sirtni yog‘sizlantiradi", "Suyuq shisha ishlatilmaydi va alyuminiy sirtini himoyalaydi"], "a": 0}, {"q": "Mashinaning 1 soat ishlagandagi asosiy yoqilg‘i sarfi qs qaysi parametrlarga bog‘liq?", "o": ["g‘ildiraklardagi havo bosimi hamda tormoz yo‘liga bog‘liq", "mashinaning harakat tezligi hamda burilish radiusiga bog‘liq", "karterdagi moy hajmiga hamda sovutish suyuqligi haroratiga bog‘liq", "Dvigatel nominal quvvati, vaqt va quvvat bo‘yicha foydalanish koeffitsientlari hamda nisbiy sarfga"], "a": 3}, {"q": "Bir cho‘michli universal ekskavatorga qanday ish jihozlari almashtirib o‘rnatilishi mumkin?", "o": ["avtomobil kuzovi hamda tirkama platformasi almashtiriladi", "yer haydash plugi hamda chizel-kul’tivator moslamalari", "To‘g‘ri cho‘mich, teskari cho‘mich, draglayn va greyferli ish jihozlari", "buldozer agregati hamda skreper cho‘michi almashtirib o‘rnatiladi"], "a": 2}, {"q": "Bir cho‘michli ekskavator cho‘michini to‘ldirishga ketgan vaqt tq qanday hisoblanadi?", "o": ["tq = lq * vq * 100 formula bo‘yicha hisoblanadi", "tq = vq / lq formula bo‘yicha hisoblanadi", "tq = (lq + vq) / 2 formula bo‘yicha hisoblanadi", "tq = lq / vq formula bo‘yicha (lq - qirqish yo‘li 6...10 m, vq - arqon tezligi 0,3...0,5 m/s)"], "a": 3}, {"q": "Mashinalarning yillik ish tartibini (mashina-soatda) hisoblashda Dish nimani bildiradi?", "o": ["Smenadagi soatlar sonini bildiradi va 8,2 soatga teng", "Mashinaning bir yil davomidagi ish kunlari sonini bildiradi", "Smena koeffitsientini bildiradi va 0,75 ga teng", "Kalendar yildagi dam olish kunlari sonini bildiradi"], "a": 1}, {"q": "Ob-havo noqulay kelishi munosabati bilan mashinalarning ishlamagan kunlari soni dob.x nima bo‘yicha aniqlanadi?", "o": ["yoqilg‘i yetkazib beruvchi avtomobillar soni bo‘yicha", "Ob-havo noqulay kelgan kunlar soni va smenalilik koeffitsienti bo‘yicha", "ustaxonadagi ishchilarning ta’til kunlari soni bo‘yicha", "bayram kunlari va yakshanba kunlari soni bo‘yicha"], "a": 1}, {"q": "Mashinalarning oxirgi ta’mirlash va TXK o‘tkazilgandan so‘ng bajarilgan ish hajmini aniqlashda C nimani bildiradi?", "o": ["Tasodifiy sonlar jadvalidan olinadigan tasodifiy son koeffitsientini", "Ustaxonadagi stanoklarning umumiy sonini va quvvatini", "Dvigatelning silindrlari sonini va porshen diametrini", "Yoqilg‘i bakining hajmini va moy sig‘imini"], "a": 0}, {"q": "Oylik reja-jadvalni tuzishda 1-TXK va 2-TXK bir kunga tushib qolsa, jadvalga qaysi biri qo‘yiladi?", "o": ["Mashina zudlik bilan kapital ta’mirlashga yuboriladi", "Har ikkala xizmat ko‘rsatish turi ham bekor qilinadi", "Texnik xizmat ko‘rsatishning kattasi (ya’ni 2-TXK) qo‘yiladi", "Texnik xizmat ko‘rsatishning kichigi (ya’ni 1-TXK) qo‘yiladi"], "a": 2}, {"q": "Pnevmog‘ildirakli mashinalar uchun asfalt va asfalt-beton qoplamali quruq yo‘lda harakatlanishga qarshilik koeffitsienti f1 qancha?", "o": ["0,50...0,80 qiymatni tashkil etadi va juda katta qarshilik beradi", "0,0001 qiymatni tashkil etadi va qarshilik mutlaqo bo‘lmaydi", "1,50...2,00 qiymatni tashkil etadi va g‘ildirak aylanishini to‘xtatadi", "0,01...0,02 qiymatni tashkil etadi (ilashish koeffitsienti phi esa 0,4...0,5)"], "a": 3}, {"q": "Ta’mirlash ustaxonasi ishlab chiqarish ishchilarini razryadlar bo‘yicha taqsimlashda eng ko‘p ulush qaysi razryadlarga to‘g‘ri keladi?", "o": ["VI razryadga 80% hamda V razryadga 20% to‘g‘ri keladi", "Barcha razryadlar bo‘yicha teng ravishda 16,6% dan taqsimlanadi", "I razryadga 90% hamda VI razryadga 10% to‘g‘ri keladi", "III razryadga 36% hamda IV razryadga 41% to‘g‘ri keladi"], "a": 3}, {"q": "Ustaxonada ishlovchilarning o‘rtacha razryadi qanday hisoblanadi?", "o": ["Har bir razryaddagi ishchilar sonini razryad raqamiga ko‘paytirib, umumiy ishchilar soniga bo‘lib", "Eng yuqori va eng quyi razryadlarni qo‘shib ikkiga bo‘lish orqali", "VI razryaddagi ishchilar sonini hisobga olish orqali", "Ustaxona mudirining buyrug‘i bilan erkin tayinlash orqali"], "a": 0}, {"q": "Davriy ta’sir etuvchi yuvish mashinalarining talab etiladigan soni qaysi parametrlarga bog‘liq?", "o": ["Yuviladigan detallar massasi, bir partiyani yuvish vaqti, vaqt fondi hamda to‘lish koeffitsientiga", "ustaxonadagi elektriklar soniga hamda xona maydoniga", "haydovchilarning ish stajiga hamda traktor rusumiga", "bo‘yoqlar rangiga hamda binoning balandligiga"], "a": 0}, {"q": "Metall kesish stanoklarining talab etiladigan sonini hisoblashda Nnotekis yuklanish koeffitsienti Kn necha olinadi?", "o": ["Kn = 0,1...0,2 oralig‘ida olinadi va stanoklar sonini kamaytiradi", "Kn = 10,0...15,0 oralig‘ida olinadi va stanoklar sonini 10 barobar oshiradi", "Kn = 1,0...1,3 oralig‘ida olinadi (bir tekis yuklanganda Kn = 1,0)", "Kn = 0,001 olinadi va hisobda e’tiborga olinmaydi"], "a": 2}, {"q": "Silindr gilzalarining ichki yuzasiga yeyilishga chidamli po‘lat lentalar qoqilganda lenta qalinligi qancha bo‘ladi?", "o": ["0,001 mm qalinlikdagi zarqog‘oz yelimlab yopishtiriladi", "0,2...0,7 mm qalinlikdagi issiq ishlov berilgan lentalar qoqiladi", "10...15 mm qalinlikdagi po‘lat plitalar kavsharlanadi", "5,0 mm qalinlikdagi cho‘yan halqa presslab kirgiziladi"], "a": 1}, {"q": "Kukunli materiallar bilan silindr gilzalarini tiklashda kukun qanday usulda qizdiriladi va biriktiriladi?", "o": ["Induktor yordamida gilza aylanasi bo‘ylab kukun belgilangan haroratda eritib biriktiriladi", "Kerosin gorelkalari bilan 24 soat davomida sekin qizdiriladi", "Quyosh nuri to‘planadigan linzalar yordamida qizdiriladi", "Suvli vannaga botirilib elektr toki o‘tkazish orqali"], "a": 0}, {"q": "Silindr bloki va karterlardagi quyqani ketkazish uchun qaynatish vannalarida 1 soatda qancha detal qaynatilishi mumkin?", "o": ["1 soat davomida 100...200 kg detal qaynatilishi mumkin", "1 soat davomida 1 kg detal qaynatilishi mumkin", "Qaynatish vannalarida detal qaynatib bo‘lmaydi", "1 soat davomida 10000 kg detal qaynatilishi mumkin"], "a": 0}];
+const CH = [
+  {name:"Ishonchlilik asoslari", from:1, to:26, c:"var(--c0)", ico:"m_shield"},
+  {name:"Yeyilish turlari", from:27, to:36, c:"var(--c1)", ico:"m_wear"},
+  {name:"Tarix va defektatsiya", from:37, to:50, c:"var(--c2)", ico:"m_hist"},
+  {name:"Detallarni tiklash", from:51, to:67, c:"var(--c3)", ico:"m_wrench"},
+  {name:"Texnik xizmat va rostlash", from:68, to:90, c:"var(--c4)", ico:"m_gauge"},
+  {name:"Tozalash va nuqson aniqlash", from:91, to:103, c:"var(--c5)", ico:"m_drop"},
+  {name:"Ta'mirlash texnologiyasi", from:104, to:124, c:"var(--c6)", ico:"m_cog"},
+  {name:"Ustaxona hisob-kitobi", from:125, to:147, c:"var(--c7)", ico:"m_calc"}
+];
+const ICO = {
+  m_shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>',
+  m_wear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h18M3 17l3-6 3 4 3-7 3 5 3-3 3 7"/></svg>',
+  m_hist:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  m_wrench:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg>',
+  m_gauge:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4-5"/><path d="M6.5 12.5l1 .6M12 9v1M17.5 12.5l-1 .6"/></svg>',
+  m_drop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/><path d="M9.5 14.5a2.5 2.5 0 0 0 2.5 2.5"/></svg>',
+  m_cog:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>',
+  m_calc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/></svg>',
+
+  trophy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3.5 4M16 6h3a3 3 0 0 1-3.5 4"/><path d="M12 13v4M8.5 20.5h7M10 17h4"/></svg>',
+  camera:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2.5h6L16.5 7h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+  image:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M20.5 16l-5-5-8.5 8.5"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/></svg>',
+  copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5C4.7 19 4 18.3 4 17.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5-.7 1.5-1.5z"/></svg>',
+  dozer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="8" height="6" rx="1"/><rect x="5" y="14" width="13" height="5" rx="2.5"/><path d="M18 10l3-1v10"/><path d="M10 7V5h4"/></svg>',
+  level:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="7" rx="3.5"/><circle cx="12" cy="12.5" r="1.6"/><path d="M9.5 9v7M14.5 9v7"/></svg>',
+  soil:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7c3-2 6 2 9 0s6-2 9 0"/><path d="M3 12c3-2 6 2 9 0s6-2 9 0"/><path d="M3 17c3-2 6 2 9 0s6-2 9 0"/></svg>',
+  digger:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="15" width="10" height="4" rx="2"/><path d="M5 15v-4h5l1 4"/><path d="M10 11l5-6 4 3"/><path d="M19 8l1 5h-4z"/></svg>',
+  pipe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9h14a4 4 0 0 1 4 4v2"/><path d="M2 14h11a2 2 0 0 1 2 2"/><path d="M20 19c0 1-.7 2-1.5 2S17 20 17 19s1.5-3 1.5-3S20 18 20 19z"/></svg>',
+  trough:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6c0 7 3 10 8 10s8-3 8-10"/><path d="M7 11c2 1 3-1 5 0s3 1 5 0"/><path d="M8 16l-1 5M16 16l1 5"/></svg>',
+  quiz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg>',
+  cards:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="13" height="16" rx="2.5"/><path d="M4 7v11.5A2.5 2.5 0 0 0 6.5 21H15"/></svg>',
+  bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>',
+  wrench:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8a2.8 2.8 0 0 1-4-4l8-8z" transform="translate(-2 -1)"/><path d="M15 3a4 4 0 0 1 5.6 5.6"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  soundOn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>',
+  soundOff:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>',
+  tap:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>',
+  star:'<svg viewBox="0 0 24 24"><path class="s" d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>'
+};
+const $ = s => document.querySelector(s);
+document.querySelectorAll('[data-ico]').forEach(el => el.innerHTML = ICO[el.dataset.ico]);
+
+function drop(size, mood){
+  return `<svg class="drop ${mood||'idle'}" width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true">
+    <g fill="#868E96" stroke="#212529" stroke-width="2.5"><rect x="44" y="18" width="12" height="13" rx="2" transform="rotate(0 50 52)"/><rect x="44" y="18" width="12" height="13" rx="2" transform="rotate(45 50 52)"/><rect x="44" y="18" width="12" height="13" rx="2" transform="rotate(90 50 52)"/><rect x="44" y="18" width="12" height="13" rx="2" transform="rotate(135 50 52)"/><rect x="44" y="18" width="12" height="13" rx="2" transform="rotate(180 50 52)"/><rect x="44" y="18" width="12" height="13" rx="2" transform="rotate(225 50 52)"/><rect x="44" y="18" width="12" height="13" rx="2" transform="rotate(270 50 52)"/><rect x="44" y="18" width="12" height="13" rx="2" transform="rotate(315 50 52)"/></g>
+    <circle cx="50" cy="52" r="29" fill="#ADB5BD" stroke="#212529" stroke-width="3"/>
+    <circle cx="50" cy="52" r="21" fill="#F1F3F5" stroke="#212529" stroke-width="2.5"/>
+    <path d="M20 86 l14-14 M24 90 l14-14" stroke="#212529" stroke-width="0"/>
+    <circle cx="42" cy="49" r="3.8" fill="#212529"/><circle cx="58" cy="49" r="3.8" fill="#212529"/>
+    <circle cx="43.2" cy="47.8" r="1.2" fill="#fff"/><circle cx="59.2" cy="47.8" r="1.2" fill="#fff"/>
+    <circle cx="36" cy="57" r="3.2" fill="#FF8787" opacity=".55"/><circle cx="64" cy="57" r="3.2" fill="#FF8787" opacity=".55"/>
+    <path class="m m-idle" d="M44 59 Q50 63 56 59" fill="none" stroke="#212529" stroke-width="2.8" stroke-linecap="round"/>
+    <path class="m m-happy" d="M42 57 Q50 69 58 57 Z" fill="#212529" stroke="#212529" stroke-width="2.2" stroke-linejoin="round"/>
+    <path class="m m-sad" d="M44 63 Q50 57 56 63" fill="none" stroke="#212529" stroke-width="2.8" stroke-linecap="round"/>
+    <g transform="rotate(-35 80 80)"><rect x="74" y="66" width="8" height="26" rx="3" fill="#FFB000" stroke="#212529" stroke-width="2.5"/><path d="M71 60 a9 9 0 1 0 14 0 l-3 6 h-8 z" fill="#CED4DA" stroke="#212529" stroke-width="2.5" stroke-linejoin="round"/></g>
+  </svg>`;
+}
+function setMood(host, mood){ const s = host.querySelector('svg'); if(!s) return; s.classList.remove('idle','happy','sad'); void s.offsetWidth; s.classList.add(mood); }
+
+/* ---------- state ---------- */
+const KEY = 'mexanik.v1';
+let S = {xp:0, prog:{}, best:0, streak:0, last:'', sound:true};
+try { const raw = localStorage.getItem(KEY); if(raw) S = Object.assign(S, JSON.parse(raw)); } catch(e){}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+const dayStr = d => d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+function touchStreak(){
+  const t = dayStr(new Date()); if(S.last === t) return;
+  const y = new Date(); y.setDate(y.getDate()-1);
+  S.streak = (S.last === dayStr(y)) ? S.streak + 1 : 1; S.last = t;
+}
+function P(n){ return S.prog[n] || (S.prog[n] = {c:0,w:0,m:0,s:0}); }
+function status(n){ const p = S.prog[n]; if(!p) return 'new'; if(p.m) return 'mistake'; if(p.c >= 2) return 'mastered'; return p.s ? 'seen' : 'new'; }
+function record(n, ok){ const p = P(n); p.s = 1; if(ok){ p.c++; p.m = 0; } else { p.c = 0; p.w++; p.m = 1; } touchStreak(); save(); }
+const chOf = n => CH.find(c => n >= c.from && n <= c.to);
+const chIdx = n => CH.indexOf(chOf(n));
+const range = (a,b) => Array.from({length:b-a+1}, (_,i) => a+i);
+const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const LET = ['A','B','C','D'];
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+
+/* ---------- levels ---------- */
+const LV = [[0,"Shogird"],[100,"Slesar"],[300,"Motorist"],[700,"Diagnost"],[1500,"Usta"],[3000,"Bosh mexanik"],[6000,"Bosh muhandis"]];
+function level(xp){ let i=0; while(i<LV.length-1 && xp>=LV[i+1][0]) i++; const nx=LV[i+1]; return {name:LV[i][1], next:nx?nx[1]:null, pct:nx?(xp-LV[i][0])/(nx[0]-LV[i][0]):1, need:nx?nx[0]-xp:0}; }
+
+/* ---------- sound & fx ---------- */
+let AC;
+function tone(f,d,type,v,delay){ if(!S.sound) return; try{ AC = AC || new (window.AudioContext||window.webkitAudioContext)(); const t=AC.currentTime+(delay||0); const o=AC.createOscillator(), g=AC.createGain(); o.type=type||'triangle'; o.frequency.value=f; g.gain.setValueAtTime(v||.08,t); g.gain.exponentialRampToValueAtTime(.0001,t+d); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t+d+.02);}catch(e){} }
+const sfx = {
+  ok(){ tone(660,.12); tone(990,.2,'triangle',.08,.09); buzz(20); },
+  bad(){ tone(240,.22,'sawtooth',.045); tone(180,.25,'sawtooth',.04,.1); buzz([40,40,40]); },
+  flip(){ tone(520,.08,'sine',.05); },
+  win(){ [523,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.08,i*.11)); }
+};
+function buzz(p){ try{ navigator.vibrate && navigator.vibrate(p); }catch(e){} }
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fx = $('#fx'), ctx = fx.getContext('2d'); let parts = [], raf = 0;
+function sizeFx(){ fx.width = innerWidth*devicePixelRatio; fx.height = innerHeight*devicePixelRatio; }
+sizeFx(); addEventListener('resize', sizeFx);
+function burst(x, y, count){
+  if(reduce) return;
+  const cs = getComputedStyle(document.documentElement);
+  const cols = ['--sun','--water2','--field','--clay','--c6','--c0'].map(v => cs.getPropertyValue(v).trim());
+  for(let i=0;i<count;i++){ const a=Math.random()*Math.PI*2, sp=3+Math.random()*7;
+    parts.push({x:x*devicePixelRatio,y:y*devicePixelRatio,vx:Math.cos(a)*sp*devicePixelRatio,vy:(Math.sin(a)*sp-5)*devicePixelRatio,r:(3+Math.random()*4)*devicePixelRatio,c:pick(cols),life:70+Math.random()*30,rot:Math.random()*6,drop:Math.random()<.4}); }
+  if(!raf) raf = requestAnimationFrame(tick);
+}
+function tick(){
+  ctx.clearRect(0,0,fx.width,fx.height);
+  parts = parts.filter(p => p.life-- > 0);
+  for(const p of parts){ p.vy += .25*devicePixelRatio; p.x += p.vx; p.y += p.vy; p.vx *= .98; p.rot += .15;
+    ctx.globalAlpha = Math.min(1, p.life/30); ctx.fillStyle = p.c; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+    if(p.drop){ ctx.beginPath(); ctx.arc(0,0,p.r,0,Math.PI*2); ctx.fill(); } else ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r); ctx.restore(); }
+  ctx.globalAlpha = 1;
+  raf = parts.length ? requestAnimationFrame(tick) : 0;
+}
+function burstFrom(el, n){ const r = el.getBoundingClientRect(); burst(r.left + r.width/2, r.top + r.height/2, n); }
+
+/* ---------- navigation ---------- */
+const SCREENS = ['home','quiz','cards','blitz','result','duel','duelplay','duelres','scan'];
+function show(id){ if(id !== 'duelplay') stopDuel(); SCREENS.forEach(s => $('#'+s).hidden = s !== id); hideFb(); scrollTo(0,0); if(id==='home') renderHome(); }
+document.querySelectorAll('[data-exit]').forEach(b => b.addEventListener('click', () => { stopBlitz(); clearHash(); show('home'); }));
+
+/* ---------- home ---------- */
+const greet = ["Salom, mexanik! Bugun qaysi agregatni tiklaymiz?","Profilaktika — eng arzon ta'mir: har kuni 10 ta savol!","Xato — bu nosozlik. Defektatsiya qilib, tuzatamiz!","Ishonchlilik: buzilmaslik, chidamlilik, ta'mirboplik, saqlanuvchanlik!","Bilim resursi tugamaydi — davom etamiz!"];
+$('#heroDrop').innerHTML = drop(92);
+$('#heroBubble').textContent = pick(greet);
+function renderSound(){ $('#soundBtn').innerHTML = S.sound ? ICO.soundOn : ICO.soundOff; $('#soundBtn').setAttribute('aria-pressed', S.sound); }
+$('#soundBtn').addEventListener('click', () => { S.sound = !S.sound; save(); renderSound(); if(S.sound) sfx.ok(); });
+renderSound();
+
+let filterCh = -1;
+function buildList(){
+  $('#qlist').innerHTML = Q.map((q,i) => { const n=i+1, c=chOf(n);
+    return `<button class="qrow" data-n="${n}" style="--cc:${c.c}"><span class="qnum">${n}</span><span class="qtxt">${esc(q.q)}</span><i class="dot" data-dot="${n}"></i></button>`; }).join('');
+  $('#qlist').addEventListener('click', e => { const b = e.target.closest('.qrow'); if(b) openDetail(+b.dataset.n); });
+  const fl = [{name:'Hammasi', i:-1}].concat(CH.map((c,i)=>({name:c.name, i})));
+  $('#filters').innerHTML = fl.map(f => `<button class="fbtn" data-f="${f.i}" aria-pressed="${f.i===-1}">${f.name}</button>`).join('');
+  $('#filters').addEventListener('click', e => { const b=e.target.closest('.fbtn'); if(!b) return; filterCh=+b.dataset.f; $('#filters').querySelectorAll('.fbtn').forEach(x=>x.setAttribute('aria-pressed', x===b)); applyFilter(); });
+  $('#q').addEventListener('input', applyFilter);
+}
+function applyFilter(){
+  const s = $('#q').value.trim().toLowerCase(); let shown = 0;
+  $('#qlist').querySelectorAll('.qrow').forEach(r => { const n=+r.dataset.n, q=Q[n-1];
+    const okCh = filterCh === -1 || chIdx(n) === filterCh;
+    const okS = !s || String(n) === s || q.q.toLowerCase().includes(s) || q.o[q.a].toLowerCase().includes(s);
+    r.hidden = !(okCh && okS); if(!r.hidden) shown++; });
+  $('#listCount').textContent = shown + ' ta'; $('#listEmpty').hidden = shown > 0;
+}
+function renderHome(){
+  const L = level(S.xp);
+  $('#lvlName').textContent = L.name; $('#lvlXp').textContent = S.xp + ' XP';
+  $('#lvlBar').style.width = Math.round(L.pct*100) + '%';
+  $('#lvlNext').textContent = L.next ? `"${L.next}" darajasigacha ${L.need} XP qoldi` : 'Eng yuqori daraja! Siz endi bosh muhandissiz.';
+  let mastered = 0, mistakes = 0;
+  for(let n=1;n<=Q.length;n++){ const st = status(n); if(st==='mastered') mastered++; if(st==='mistake') mistakes++;
+    const d = document.querySelector(`[data-dot="${n}"]`); if(d) d.className = 'dot ' + (st==='new'?'':st); }
+  $('#stMastered').textContent = mastered; $('#stMistakes').textContent = mistakes;
+  const y = new Date(); y.setDate(y.getDate()-1);
+  $('#stStreak').textContent = (S.last === dayStr(new Date()) || S.last === dayStr(y)) ? S.streak : 0;
+  $('#fixBadge').hidden = !mistakes; $('#fixBadge').textContent = mistakes;
+  $('#chs').innerHTML = CH.map((c,i) => { const ids = range(c.from,c.to); const m = ids.filter(n=>status(n)==='mastered').length; const pct = m/ids.length; const C = 2*Math.PI*16;
+    return `<button class="ch" data-ch="${i}" style="--cc:${c.c}"><div class="ch-top"><span class="ch-ico">${ICO[c.ico]}</span>
+      <svg class="ring" viewBox="0 0 40 40"><circle class="bgc" cx="20" cy="20" r="16"/><circle class="fgc" cx="20" cy="20" r="16" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}"/><text x="20" y="20">${Math.round(pct*100)}%</text></svg></div>
+      <h3>${c.name}</h3><small>${c.from}–${c.to} · ${ids.length} savol</small></button>`; }).join('');
+}
+$('#chs').addEventListener('click', e => { const b = e.target.closest('.ch'); if(b) setupSheet('quiz', +b.dataset.ch); });
+
+/* ---------- sheets ---------- */
+function openSheet(html, onMount){
+  $('#scrimHost').innerHTML = `<div class="scrim" id="scrim"><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div></div>`;
+  $('#scrim').addEventListener('click', e => { if(e.target.id === 'scrim') closeSheet(); });
+  onMount && onMount($('#scrim .sheet'));
+}
+function closeSheet(){ $('#scrimHost').innerHTML = ''; }
+addEventListener('keydown', e => { if(e.key === 'Escape') closeSheet(); });
+
+function openDetail(n){
+  const q = Q[n-1], c = chOf(n), st = status(n), p = S.prog[n];
+  const stTxt = {new:'Hali o\'ynalmagan', seen:'Ko\'rilgan, hali yodlanmagan', mastered:'Yodlangan — 2 marta ketma-ket to\'g\'ri topilgan', mistake:'Oxirgi safar xato topilgan'}[st];
+  openSheet(`<span class="tag" style="--cc:${c.c}">${ICO[c.ico].replace('<svg','<svg width="16" height="16"')} ${c.name}</span>
+    <div class="dq"><b>${n}.</b> ${esc(q.q)}</div>
+    <div class="dopts">${q.o.map((o,i)=>`<div class="dopt ${i===q.a?'right':''}"><span class="L">${LET[i]}</span><span>${i===q.a?`<span class="mark">${esc(o)}</span>`:esc(o)}</span>${i===q.a?ICO.check:'<span></span>'}</div>`).join('')}</div>
+    <div class="statusline"><i class="dot ${st==='new'?'':st}"></i>${stTxt}${p&&p.w?` · ${p.w} marta xato`:''}</div>
+    <div class="navrow"><button class="big ghost" id="dPrev" ${n===1?'disabled':''}>← ${n>1?n-1:''}</button><button class="big ghost" id="dNext" ${n===Q.length?'disabled':''}>${n<Q.length?n+1:''} →</button></div>
+    <div class="btns" style="margin-top:12px"><button class="big blue" id="dPlay">"${c.name}" bobini o'ynash</button></div>`,
+    () => {
+      $('#dPrev').onclick = () => n>1 && openDetail(n-1);
+      $('#dNext').onclick = () => n<Q.length && openDetail(n+1);
+      $('#dPlay').onclick = () => { closeSheet(); setupSheet('quiz', CH.indexOf(c)); };
+      const pp = S.prog[n] || {}; if(!pp.s){ P(n).s = 1; save(); renderHome(); }
+    });
+}
+
+function setupSheet(mode, ch){
+  let sel = ch === undefined ? -1 : ch, len = 10;
+  const title = mode === 'quiz' ? 'Viktorina' : 'Kartochkalar';
+  const sub = mode === 'quiz' ? 'Bobni va savollar sonini tanlang. Variantlar har safar aralashtiriladi.' : 'Kartani bosing — orqasida to\'g\'ri javob. Bilmaganlaringiz yana chiqadi.';
+  const opts = [{i:-1,name:'Hammasi aralash',sub:'1–147',ico:'quiz',c:'var(--water)'}].concat(CH.map((c,i)=>({i,name:c.name,sub:`${c.from}–${c.to}`,ico:c.ico,c:c.c})));
+  openSheet(`<h2>${title}</h2><p class="sub">${sub}</p>
+    <div class="pick" id="pk">${opts.map(o=>`<button data-i="${o.i}" style="--cc:${o.c}" aria-pressed="${o.i===sel}"><span class="ch-ico">${ICO[o.ico]}</span><span>${o.name}</span><small>${o.sub}</small></button>`).join('')}</div>
+    <div class="seg" id="sg"><button data-l="10" aria-pressed="true">10 ta</button><button data-l="20" aria-pressed="false">20 ta</button><button data-l="0" aria-pressed="false">Hammasi</button></div>
+    <button class="big blue" id="go">Boshlash</button>`, () => {
+      $('#pk').onclick = e => { const b=e.target.closest('button'); if(!b) return; sel=+b.dataset.i; $('#pk').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); };
+      $('#sg').onclick = e => { const b=e.target.closest('button'); if(!b) return; len=+b.dataset.l; $('#sg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); };
+      $('#go').onclick = () => { closeSheet(); const ids = sel===-1 ? range(1,Q.length) : range(CH[sel].from, CH[sel].to);
+        let pool = shuffle(ids); if(len) pool = pool.slice(0,len);
+        mode === 'quiz' ? startQuiz(pool, {kind:'quiz', sel, len}) : startCards(pool, {sel, len}); };
+    });
+}
+$('#gQuiz').onclick = () => setupSheet('quiz');
+$('#gCards').onclick = () => setupSheet('cards');
+$('#gBlitz').onclick = () => openBlitz();
+$('#gFix').onclick = () => {
+  const ids = range(1,Q.length).filter(n => status(n)==='mistake');
+  if(!ids.length){ openSheet(`<div class="center">${drop(90,'happy')}<h2>Xato savollar yo'q!</h2><p>Viktorina yoki "Rostmi?" o'ynang. Adashgan savollaringiz shu yerga yig'iladi va siz ularni qayta yechasiz.</p><div class="btns"><button class="big blue" id="toQuiz">Viktorina boshlash</button></div></div>`, () => { $('#toQuiz').onclick = () => { closeSheet(); setupSheet('quiz'); }; }); return; }
+  startQuiz(shuffle(ids), {kind:'fix'});
+};
+
+/* ---------- quiz ---------- */
+let G = null;
+const goodMsg = ['Barakalla!','Zo\'r!','To\'ppa-to\'g\'ri!','Ajoyib, usta!','Suvdek oqib ketyapsiz!','Qoyil!'];
+const badMsg = ['Hechqisi yo\'q!','Eslab qoling!','Keyingisi chiqadi!','Biroz adashdik'];
+function startQuiz(ids, opt){
+  G = {mode:'quiz', ids, pos:0, ok:0, combo:0, best:0, xp:0, wrong:[], opt};
+  $('#qDrop').innerHTML = drop(68); show('quiz'); renderQ();
+}
+function renderQ(){
+  const n = G.ids[G.pos], q = Q[n-1], c = chOf(n);
+  G.order = shuffle([0,1,2,3]); G.locked = false;
+  $('#qProg').style.width = (G.pos / G.ids.length * 100) + '%';
+  $('#qCount').textContent = (G.pos+1) + '/' + G.ids.length;
+  const tag = $('#qTag'); tag.style.setProperty('--cc', c.c); tag.innerHTML = ICO[c.ico].replace('<svg','<svg width="16" height="16"') + ' ' + c.name;
+  $('#qNum').textContent = 'Savol № ' + n;
+  $('#qText').textContent = q.q;
+  $('#qOpts').innerHTML = G.order.map((oi,k) => `<button class="opt" data-k="${k}"><span class="L">${LET[k]}</span><span>${esc(q.o[oi])}</span></button>`).join('');
+  setMood($('#qDrop'), 'idle');
+}
+$('#qOpts').addEventListener('click', e => { const b = e.target.closest('.opt'); if(b) answerQ(+b.dataset.k); });
+function answerQ(k){
+  if(!G || G.mode!=='quiz' || G.locked) return; G.locked = true;
+  const n = G.ids[G.pos], q = Q[n-1], ok = G.order[k] === q.a;
+  const btns = [...$('#qOpts').children];
+  btns.forEach((b,i) => { const oi = G.order[i];
+    if(oi === q.a){ b.classList.add('ok'); b.lastElementChild.innerHTML = `<span class="mark">${esc(q.o[oi])}</span>`; }
+    else if(i === k) b.classList.add('bad'); else b.classList.add('dim'); });
+  record(n, ok);
+  if(ok){
+    G.ok++; G.combo++; G.best = Math.max(G.best, G.combo);
+    const mult = G.combo >= 6 ? 3 : G.combo >= 3 ? 2 : 1; const gain = 10*mult; G.xp += gain; S.xp += gain; save();
+    sfx.ok(); burstFrom(btns[k], 28 + G.combo*4); setMood($('#qDrop'),'happy');
+    showFb(true, pick(goodMsg), `+${gain} XP` + (mult>1 ? ` · x${mult} kombo!` : ''));
+  } else {
+    G.combo = 0; G.wrong.push(n); sfx.bad(); setMood($('#qDrop'),'sad');
+    showFb(false, pick(badMsg), 'To\'g\'ri javob: ' + q.o[q.a]);
+  }
+  const cb = $('#qCombo'); const m = G.combo >= 6 ? 3 : G.combo >= 3 ? 2 : 0;
+  cb.textContent = m ? `x${m} kombo · ${G.combo} ketma-ket` : ''; cb.classList.toggle('on', !!m);
+}
+function showFb(ok, title, text){
+  const fb = $('#fb'); fb.classList.toggle('badfb', !ok);
+  $('#fbTitle').textContent = title; $('#fbText').textContent = text;
+  $('#fbNext').className = 'big' + (ok ? '' : ' red');
+  fb.classList.add('show'); setTimeout(() => $('#fbNext').focus({preventScroll:true}), 50);
+}
+function hideFb(){ $('#fb').classList.remove('show'); }
+$('#fbNext').addEventListener('click', nextQ);
+function nextQ(){
+  if(!G || G.mode!=='quiz') return; hideFb();
+  G.pos++; if(G.pos >= G.ids.length) return finishQuiz();
+  renderQ(); scrollTo({top:0, behavior: reduce?'auto':'smooth'});
+}
+addEventListener('keydown', e => {
+  if($('#quiz').hidden || !G || G.mode!=='quiz') return;
+  if(!G.locked && /^[1-4]$/.test(e.key)) answerQ(+e.key-1);
+  else if(G.locked && e.key === 'Enter'){ e.preventDefault(); nextQ(); }
+});
+function finishQuiz(){
+  const total = G.ids.length, acc = G.ok/total;
+  const stars = acc >= .9 ? 3 : acc >= .7 ? 2 : acc >= .4 ? 1 : 0;
+  const titles = ['Mashq davom etadi!','Yaxshi boshlanish!','Zo\'r natija!','Mukammal, mexanik!'];
+  showResult({stars, title: titles[stars], sub: `${total} ta savoldan ${G.ok} tasini topdingiz.`,
+    stats: [[G.ok+'/'+total,'to\'g\'ri'],['+'+G.xp,'XP'],[G.best,'eng uzun kombo']],
+    wrong: G.wrong, again: () => G.opt.kind==='fix' ? $('#gFix').click() : startQuiz(shuffle(G.ids), G.opt)});
+}
+
+/* ---------- result ---------- */
+function showResult(r){
+  show('result');
+  $('#rDrop').innerHTML = drop(100, r.stars >= 2 ? 'happy' : 'idle');
+  $('#rStars').innerHTML = [0,1,2].map(i => ICO.star.replace('class="s"', `class="s ${i<r.stars?'on':''}" style="animation-delay:${.2+i*.18}s"`)).join('');
+  $('#rTitle').textContent = r.title; $('#rSub').textContent = r.sub;
+  $('#rStats').innerHTML = r.stats.map(s => `<div class="rstat"><b>${s[0]}</b><span>${s[1]}</span></div>`).join('');
+  const w = [...new Set(r.wrong)];
+  $('#rReview').innerHTML = w.length ? `<h3 style="font-size:19px">Eslab qoling (${w.length})</h3>` + w.map(n => `<div class="rv"><div class="n">Savol № ${n}</div><p>${esc(Q[n-1].q)}</p><span class="mark">${esc(Q[n-1].o[Q[n-1].a])}</span></div>`).join('') : '';
+  $('#rAgain').onclick = r.again;
+  if(r.stars >= 2){ sfx.win(); setTimeout(() => burst(innerWidth/2, innerHeight*.28, 140), 250); }
+}
+
+/* ---------- flashcards ---------- */
+function startCards(ids, opt){ G = {mode:'cards', ids:ids.slice(), total:ids.length, done:0, know:0, again:{}, opt}; show('cards'); renderCard(); }
+function renderCard(){
+  const n = G.ids[0], q = Q[n-1], c = chOf(n);
+  $('#flip').classList.remove('on'); $('#flip').style.setProperty('--cc', c.c);
+  $('#cProg').style.width = (G.done/G.total*100) + '%';
+  $('#cCount').textContent = Math.min(G.done+1, G.total) + '/' + G.total;
+  setTimeout(() => {
+    $('#cFront').innerHTML = `<span class="tag" style="--cc:${c.c}">${c.name}</span><div class="n" style="margin-top:12px">Savol № ${n}</div><div class="qq">${esc(q.q)}</div><div class="hint">${ICO.tap} Javobni ko'rish uchun bosing</div>`;
+    $('#cBack').innerHTML = `<div class="n">To'g'ri javob · № ${n}</div><div class="small-q">${esc(q.q)}</div><div class="ans"><span class="mark">${esc(q.o[q.a])}</span></div><div class="hint">${G.again[n]?'Bu kartani '+(G.again[n])+' marta qaytardingiz':'Bilsangiz — "Bilaman" ni bosing'}</div>`;
+  }, 120);
+}
+function flip(){ $('#flip').classList.toggle('on'); sfx.flip(); }
+$('#flip').addEventListener('click', flip);
+$('#flip').addEventListener('keydown', e => { if(e.key===' '||e.key==='Enter'){ e.preventDefault(); flip(); } });
+$('#cKnow').addEventListener('click', () => {
+  const n = G.ids.shift(); record(n, true); S.xp += 5; save(); G.done++; G.know++; sfx.ok(); burstFrom($('#cKnow'), 22);
+  if(!G.ids.length) return finishCards(); renderCard();
+});
+$('#cAgain').addEventListener('click', () => {
+  const n = G.ids.shift(); P(n).s = 1; save(); G.again[n] = (G.again[n]||0)+1;
+  const at = Math.min(G.ids.length, 3 + Math.floor(Math.random()*3)); G.ids.splice(at, 0, n); sfx.flip(); renderCard();
+});
+function finishCards(){
+  const rep = Object.values(G.again).reduce((a,b)=>a+b,0);
+  const stars = rep === 0 ? 3 : rep <= G.total*.3 ? 2 : 1;
+  showResult({stars, title: stars===3 ? 'Hammasini bilasiz!' : 'Kartalar tugadi!', sub: `${G.total} ta karta ko'rildi, ${rep} marta qayta ko'rildi.`,
+    stats: [[G.total,'karta'],['+'+G.total*5,'XP'],[rep,'qaytarish']], wrong: Object.keys(G.again).map(Number),
+    again: () => startCards(shuffle(Object.keys(G.again).length ? Object.keys(G.again).map(Number) : G.opt && G.opt.sel>=0 ? range(CH[G.opt.sel].from,CH[G.opt.sel].to) : range(1,Q.length)).slice(0, G.total), G.opt)});
+}
+
+/* ---------- blitz ---------- */
+let BT = null;
+function openBlitz(){ G = {mode:'blitz'}; $('#bDrop').innerHTML = drop(96); $('#bIntro').hidden = false; $('#bPlay').hidden = true;
+  $('#bBest').textContent = S.best ? `Eng yaxshi natijangiz: ${S.best} ball` : ''; $('#bTime').style.transform = 'scaleX(1)'; $('#bSec').textContent = '60'; show('blitz'); }
+$('#bStart').addEventListener('click', () => {
+  G = {mode:'blitz', score:0, combo:0, ends: Date.now()+60000, wrong:[], seen:0, lock:false};
+  $('#bIntro').hidden = true; $('#bPlay').hidden = false; $('#bScore').textContent = '0'; $('#bToast').textContent = '';
+  nextBlitz(); clearInterval(BT);
+  BT = setInterval(() => { const left = Math.max(0, G.ends - Date.now());
+    $('#bTime').style.transform = `scaleX(${left/60000})`; $('#bSec').textContent = Math.ceil(left/1000);
+    if(!left) endBlitz(); }, 100);
+});
+function nextBlitz(){
+  const n = 1 + Math.floor(Math.random()*Q.length), q = Q[n-1], c = chOf(n);
+  const truth = Math.random() < .5; const shown = truth ? q.a : pick([0,1,2,3].filter(i => i !== q.a));
+  Object.assign(G, {n, truth, lock:false});
+  const tag = $('#bTag'); tag.style.setProperty('--cc', c.c); tag.textContent = `№ ${n} · ${c.name}`;
+  $('#bQ').textContent = q.q; $('#bA').textContent = q.o[shown]; $('#bCard').className = 'bcard';
+}
+function answerBlitz(yes){
+  if(!G || G.mode!=='blitz' || G.lock || !BT) return; G.lock = true;
+  const ok = yes === G.truth, q = Q[G.n-1]; G.seen++;
+  record(G.n, ok);
+  $('#bCard').classList.add(ok ? 'flash-ok' : 'flash-bad');
+  if(ok){ G.combo++; const add = G.combo >= 5 ? 2 : 1; G.score += add; S.xp += 3*add; sfx.ok(); burstFrom($('#bScore'), 14);
+    $('#bToast').innerHTML = `<b style="color:var(--good)">To'g'ri!</b> ${add>1?'Kombo: +2 ball':''}`; setTimeout(nextBlitz, 280); }
+  else { G.combo = 0; G.wrong.push(G.n); sfx.bad();
+    $('#bToast').innerHTML = `<b style="color:var(--bad)">Adashdingiz.</b> To'g'ri javob: <span class="mark">${esc(q.o[q.a])}</span>`; setTimeout(nextBlitz, 1300); }
+  save(); $('#bScore').textContent = G.score;
+  const cb = $('#bCombo'); cb.textContent = G.combo >= 5 ? `x2 · ${G.combo} ketma-ket` : ''; cb.classList.toggle('on', G.combo >= 5);
+}
+$('#bYes').addEventListener('click', () => answerBlitz(true));
+$('#bNo').addEventListener('click', () => answerBlitz(false));
+addEventListener('keydown', e => { if($('#blitz').hidden || !BT) return; if(e.key==='ArrowRight') answerBlitz(true); if(e.key==='ArrowLeft') answerBlitz(false); });
+function stopBlitz(){ clearInterval(BT); BT = null; }
+function endBlitz(){
+  stopBlitz(); const rec = G.score > S.best; if(rec) S.best = G.score; save();
+  const stars = G.score >= 25 ? 3 : G.score >= 15 ? 2 : G.score >= 6 ? 1 : 0;
+  showResult({stars, title: rec ? 'Yangi rekord!' : 'Vaqt tugadi!', sub: `${G.seen} ta savolga javob berdingiz. Eng yaxshi natija: ${S.best} ball.`,
+    stats: [[G.score,'ball'],['+'+G.score*3,'XP'],[G.seen - G.wrong.length + '/' + G.seen,'to\'g\'ri']], wrong: G.wrong, again: () => { openBlitz(); $('#bStart').click(); }});
+}
+
+
+/* ======================= BELLASHUV ======================= */
+const APP = {id:'M', name:'Mexanik', url:'https://claude.ai/artifact/33aqoX7HXrGgL5pHWJHJBP'};
+const B32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+const NOPTS = [5,10,15,20,30];
+const normCode = s => String(s || '').toUpperCase().replace(/O/g,'0').replace(/[IL]/g,'1').replace(/U/g,'V').replace(/[^0-9A-Z]/g,'');
+function encodeDuel(ch, nIdx, seed){ let v = (ch * 8 + nIdx) * 8388608 + seed, s = ''; for(let i = 0; i < 6; i++){ s = B32[v % 32] + s; v = Math.floor(v / 32); } return APP.id + s; }
+function decodeDuel(raw){
+  let code = normCode(raw); if(code.length === 6) code = APP.id + code;
+  if(code.length !== 7 || code[0] !== APP.id) return null;
+  let v = 0; for(const c of code.slice(1)){ const k = B32.indexOf(c); if(k < 0) return null; v = v * 32 + k; }
+  const seed = v % 8388608; v = Math.floor(v / 8388608);
+  const nIdx = v % 8, ch = Math.floor(v / 8);
+  if(nIdx >= NOPTS.length || ch > CH.length) return null;
+  return {code, ch, n: NOPTS[nIdx], seed};
+}
+function rng(a){ return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function sShuffle(arr, r){ const a = arr.slice(); for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const duelPool = ch => ch ? range(CH[ch-1].from, CH[ch-1].to) : range(1, Q.length);
+const qChars = n => Q[n-1].q.length + Q[n-1].o.join('').length;
+function autoTime(ids){ const avg = ids.reduce((s, n) => s + 4 + qChars(n) / 20, 0) / ids.length; return Math.max(10, Math.min(25, Math.round(avg))); }
+function duelSet(d){ const r = rng((Math.imul(d.seed, 2654435761) ^ (d.ch * 131 + d.n)) >>> 0); const ids = sShuffle(duelPool(d.ch), r).slice(0, d.n); return {ids, orders: ids.map(() => sShuffle([0,1,2,3], r)), T: autoTime(ids)}; }
+function newSeed(){ try { return crypto.getRandomValues(new Uint32Array(1))[0] % 8388608; } catch(e){ return Math.floor(Math.random() * 8388608); } }
+const fmtT = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+function sig(s){ let h = 0x811c9dc5; for(let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } h >>>= 0; let o = ''; for(let i = 0; i < 5; i++){ o += B32[h % 32]; h = Math.floor(h / 32); } return o.toLowerCase(); }
+const cleanName = s => String(s || '').replace(/[|#\r\n\t]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 24);
+const resBody = r => `Bellashuv ${r.code} | ${r.name} | ${r.correct}/${r.n} | ${r.points} ball | ${fmtT(r.secs)}`;
+const resLine = r => resBody(r) + ' | #' + sig(APP.id + '|' + resBody(r));
+const RES_RE = /Bellashuv\s+([0-9A-Za-z]{7})\s*\|\s*([^|\r\n]{1,40}?)\s*\|\s*(\d{1,3})\s*\/\s*(\d{1,3})\s*\|\s*(\d{1,6})\s*ball\s*\|\s*(\d{1,3}):(\d{2})\s*\|\s*#([0-9A-Za-z]{5})/g;
+function parseResults(text, code){
+  const out = []; let bad = 0, other = 0, m; RES_RE.lastIndex = 0;
+  while((m = RES_RE.exec(text))){
+    const r = {code: m[1].toUpperCase(), name: cleanName(m[2]), correct: +m[3], n: +m[4], points: +m[5], secs: +m[6] * 60 + +m[7]};
+    if(r.code !== code){ other++; continue; }
+    if(!r.name || r.correct > r.n || r.points > r.n * 1000 || sig(APP.id + '|' + resBody(r)) !== m[8].toLowerCase()){ bad++; continue; }
+    out.push(r);
+  }
+  return {out, bad, other};
+}
+function duelRec(code){ S.duels = S.duels || {}; return S.duels[code] || (S.duels[code] = {mine: null, others: [], at: Date.now()}); }
+function pruneDuels(){ const ks = Object.keys(S.duels || {}); if(ks.length <= 30) return; ks.sort((a, b) => S.duels[a].at - S.duels[b].at).slice(0, ks.length - 30).forEach(k => delete S.duels[k]); }
+/* Qayerda ochilgan: claude.ai sahifasi, oddiy sayt (GitHub Pages va h.k.) yoki telefondagi fayl */
+const RUN = /^https?:$/.test(location.protocol) ? (/claude|anthropic/i.test(location.hostname) ? 'claude' : 'web') : 'file';
+const duelLink = code => RUN === 'web' ? location.origin + location.pathname + '#b-' + code : RUN === 'claude' ? APP.url + '#b-' + code : '';
+const tgShare = (url, text) => url ? 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text) : 'https://t.me/share/url?url=' + encodeURIComponent(text);
+const joinHow = code => `"${APP.name}" ilovasini oching → Bellashuv → "Kod bilan qo'shilish" → ${code}`;
+function clearHash(){ try { if(location.hash) history.replaceState(null, '', location.pathname + location.search); } catch(e){} }
+async function copyText(text, out){
+  let ok = false;
+  try { await navigator.clipboard.writeText(text); ok = true; }
+  catch(e){ try { const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); ok = document.execCommand('copy'); ta.remove(); } catch(_){} }
+  if(out) out.textContent = ok ? 'Nusxalandi — endi kerakli joyga joylang.' : "Nusxalab bo'lmadi. Matnni bosib turib, qo'lda nusxalang.";
+}
+
+function duelSheet(){
+  let ch = 0, nIdx = 1; const seed = newSeed();
+  const opts = [{i:0, name:'Barcha boblar', sub:`1–${Q.length}`, ico:'quiz', c:'var(--water)'}].concat(CH.map((c, i) => ({i: i + 1, name: c.name, sub: `${c.from}–${c.to}`, ico: c.ico, c: c.c})));
+  const recent = Object.entries(S.duels || {}).sort((a, b) => b[1].at - a[1].at).slice(0, 5);
+  openSheet(`<h2>Bellashuv</h2><p class="sub">Do'stlaringiz bilan bir xil savollarni yeching. Har savolga vaqt savollar uzunligiga qarab avtomatik belgilanadi; tez va to'g'ri javob ko'proq ball beradi.</p>
+    <div class="pick" id="bpk">${opts.map(o => `<button data-i="${o.i}" style="--cc:${o.c}" aria-pressed="${o.i === 0}"><span class="ch-ico">${ICO[o.ico]}</span><span>${o.name}</span><small>${o.sub}</small></button>`).join('')}</div>
+    <div class="seg seg5" id="bsg">${NOPTS.map((n, i) => `<button data-n="${i}" aria-pressed="${i === nIdx}">${n} ta</button>`).join('')}</div>
+    <p class="sub" id="bInfo" style="margin-top:0"></p>
+    <button class="big blue" id="bGo">Bellashuv yaratish</button>
+    <p class="hint" style="margin-top:8px">${RUN === 'file' ? "Ilova fayldan ochilgan: do'stlaringizga shu HTML faylni yuboring, ular kod bilan qo'shiladi." : RUN === 'claude' ? "Claude hisobi yo'q do'stlar uchun ilovani fayl yoki oddiy sayt sifatida ulashing." : "Havolani ochgan har kim hisobsiz o'ynay oladi."}</p>
+    <div class="field" style="margin-top:18px"><label for="bCode">Do'stingiz yuborgan kod bilan qo'shilish</label><div class="joinrow"><input class="input" id="bCode" maxlength="10" placeholder="${APP.id}XXXXXX" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="big ghost" id="bJoin">Qo'shilish</button></div></div>
+    <p class="hint err" id="bErr" aria-live="polite"></p>
+    ${recent.length ? `<h3 style="font-size:18px;margin-top:16px">Oxirgi bellashuvlar</h3><div class="pick" id="brc" style="margin-top:8px">${recent.map(([k, v]) => `<button data-code="${k}" style="--cc:var(--c0)"><span class="ch-ico">${ICO.trophy}</span><span>${k}</span><small>${v.mine ? `${v.mine.correct}/${v.mine.n} · ${v.mine.points} ball` : "o'ynalmagan"}</small></button>`).join('')}</div>` : ''}`,
+    () => {
+      const info = () => { const set = duelSet({ch, n: NOPTS[nIdx], seed}); $('#bInfo').textContent = `${set.ids.length} ta savol · har biriga ${set.T} soniya · jami taxminan ${fmtT(set.ids.length * set.T)}`; };
+      $('#bpk').onclick = e => { const b = e.target.closest('button'); if(!b) return; ch = +b.dataset.i; $('#bpk').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); info(); };
+      $('#bsg').onclick = e => { const b = e.target.closest('button'); if(!b) return; nIdx = +b.dataset.n; $('#bsg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); info(); };
+      $('#bGo').onclick = () => { const code = encodeDuel(ch, nIdx, seed); closeSheet(); openDuel(code); };
+      const join = () => {
+        const raw = $('#bCode').value, d = decodeDuel(raw);
+        if(!d){ const c = normCode(raw); $('#bErr').textContent = c.length === 7 && c[0] !== APP.id ? 'Bu kod boshqa ilova uchun yaratilgan.' : "Kod noto'g'ri. 7 belgidan iborat kodni tekshiring."; return; }
+        closeSheet(); openDuel(d.code);
+      };
+      $('#bJoin').onclick = join; $('#bCode').onkeydown = e => { if(e.key === 'Enter') join(); };
+      const rc = $('#brc'); if(rc) rc.onclick = e => { const b = e.target.closest('button'); if(!b) return; closeSheet(); const v = S.duels[b.dataset.code]; v && v.mine ? openDuelRes(b.dataset.code) : openDuel(b.dataset.code); };
+      info();
+    });
+}
+$('#gDuel').onclick = () => duelSheet();
+
+let DUEL = null;
+function openDuel(code){
+  const d = decodeDuel(code); if(!d) return;
+  const set = duelSet(d); DUEL = {d, set};
+  const chName = d.ch ? CH[d.ch-1].name : 'Barcha boblar';
+  $('#dCode').textContent = d.code;
+  $('#dInfo').innerHTML = [chName, `${set.ids.length} ta savol`, `har biriga ${set.T} soniya`, `jami ~${fmtT(set.ids.length * set.T)}`].map(t => `<span class="dchip">${esc(t)}</span>`).join('');
+  const invite = `"${APP.name}" bellashuvi (${chName}): ${set.ids.length} ta savol, har biriga ${set.T} soniya. Kod: ${d.code}.`;
+  $('#dShareTg').href = duelLink(d.code)
+    ? tgShare(duelLink(d.code), invite + " Havolani ochib o'ynang va natijangizni shu yerga yuboring!")
+    : tgShare('', invite + '\nQanday qo\'shilish: ' + joinHow(d.code) + '. Natijangizni shu yerga yuboring!');
+  $('#dCopy').lastChild.textContent = duelLink(d.code) ? 'Havolani nusxalash' : 'Kodni nusxalash';
+  $('#dFileNote').hidden = RUN !== 'file';
+  $('#dCopyMsg').textContent = ''; $('#dNameErr').textContent = '';
+  $('#dName').value = S.dname || '';
+  const rec = S.duels && S.duels[d.code], mine = rec && rec.mine;
+  $('#dPlayed').hidden = !mine;
+  if(mine) $('#dPlayed').textContent = `Siz bu bellashuvda qatnashgansiz: ${mine.correct}/${mine.n}, ${mine.points} ball. Qayta o'ynasangiz, bu mashq hisoblanadi va reytingga kirmaydi.`;
+  $('#dStart').textContent = mine ? "Mashq sifatida qayta o'ynash" : 'Boshlash';
+  $('#dBoard').hidden = !rec;
+  show('duel');
+}
+$('#dCopy').onclick = () => copyText(duelLink(DUEL.d.code) || DUEL.d.code, $('#dCopyMsg'));
+$('#dName').addEventListener('input', () => { $('#dNameErr').textContent = ''; });
+$('#dBoard').onclick = () => openDuelRes(DUEL.d.code);
+$('#dStart').onclick = () => {
+  const name = cleanName($('#dName').value);
+  if(!name){ $('#dNameErr').textContent = "Ismingizni yozing — u natijada ko'rinadi."; $('#dName').focus(); return; }
+  S.dname = name; save();
+  const rec = S.duels && S.duels[DUEL.d.code];
+  startDuel(name, !!(rec && rec.mine));
+};
+
+function startDuel(name, practice){
+  G = {mode:'duel', d: DUEL.d, set: DUEL.set, pos: 0, answered: 0, points: 0, correct: 0, ms: 0, wrong: [], name, practice, locked: true};
+  $('#dpScore').textContent = '0 ball'; $('#dpOpts').innerHTML = ''; $('#dpText').textContent = ''; $('#dpNum').textContent = '';
+  $('#dpCount').textContent = `1/${G.set.ids.length}`;
+  $('#dpTime').style.transform = 'scaleX(1)'; $('#dpTime').classList.remove('low'); $('#dpSec').textContent = G.set.T;
+  show('duelplay');
+  let k = 3; const cd = $('#dpCd'), num = $('#dpCdN'); cd.hidden = false;
+  const tick = () => {
+    if(!G || G.mode !== 'duel'){ cd.hidden = true; return; }
+    if(k === 0){ cd.hidden = true; renderDQ(); return; }
+    num.textContent = k; num.style.animation = 'none'; void num.offsetWidth; num.style.animation = '';
+    tone(520 + (3 - k) * 140, .12, 'sine', .06); k--; G.cdT = setTimeout(tick, 750);
+  };
+  tick();
+}
+function stopDuel(){
+  if(G && G.mode === 'duel'){ clearTimeout(G.cdT); clearTimeout(G.nextT); clearTimeout(G.toT); cancelAnimationFrame(G.raf); G.mode = 'duel-stopped'; }
+  const cd = $('#dpCd'); if(cd) cd.hidden = true;
+}
+function renderDQ(){
+  const n = G.set.ids[G.pos], q = Q[n-1], ord = G.set.orders[G.pos], c = chOf(n);
+  const tag = $('#dpCount'); tag.style.setProperty('--cc', c.c); tag.textContent = `${G.pos + 1}/${G.set.ids.length}`;
+  $('#dpNum').textContent = 'Savol № ' + n;
+  $('#dpText').textContent = q.q;
+  $('#dpOpts').innerHTML = ord.map((oi, k) => `<button class="opt" data-k="${k}"><span class="L">${LET[k]}</span><span>${esc(q.o[oi])}</span></button>`).join('');
+  $('#dpTime').classList.remove('low');
+  G.locked = false; G.t0 = performance.now(); G.tEnd = G.t0 + G.set.T * 1000;
+  clearTimeout(G.toT); G.toT = setTimeout(() => answerDuel(-1), G.set.T * 1000 + 120);
+  scrollTo(0, 0); tickDuel();
+}
+function tickDuel(){
+  if(!G || G.mode !== 'duel' || G.locked) return;
+  const T = G.set.T * 1000, left = G.tEnd - performance.now();
+  $('#dpTime').style.transform = `scaleX(${Math.max(0, left) / T})`;
+  if(left < T * 0.3) $('#dpTime').classList.add('low');
+  const s = String(Math.max(0, Math.ceil(left / 1000)));
+  if($('#dpSec').textContent !== s){ $('#dpSec').textContent = s; if(+s <= 3 && +s > 0) tone(880, .05, 'square', .03); }
+  if(left <= 0) return answerDuel(-1);
+  G.raf = requestAnimationFrame(tickDuel);
+}
+$('#dpOpts').addEventListener('click', e => { const b = e.target.closest('.opt'); if(b) answerDuel(+b.dataset.k); });
+addEventListener('keydown', e => { if($('#duelplay').hidden || !G || G.mode !== 'duel' || G.locked) return; if(/^[1-4]$/.test(e.key)) answerDuel(+e.key - 1); });
+function answerDuel(k){
+  if(!G || G.mode !== 'duel' || G.locked) return; G.locked = true;
+  cancelAnimationFrame(G.raf); clearTimeout(G.toT);
+  const T = G.set.T * 1000, n = G.set.ids[G.pos], q = Q[n-1], ord = G.set.orders[G.pos];
+  const el = Math.min(performance.now() - G.t0, T), ok = k >= 0 && ord[k] === q.a;
+  const pts = ok ? 500 + Math.round(500 * (1 - el / T)) : 0;
+  G.points += pts; G.ms += el; G.answered++; if(ok) G.correct++; else G.wrong.push(n);
+  record(n, ok); if(ok){ S.xp += 5; save(); }
+  [...$('#dpOpts').children].forEach((b, i) => { const oi = ord[i];
+    if(oi === q.a){ b.classList.add('ok'); b.lastElementChild.innerHTML = `<span class="mark">${esc(q.o[oi])}</span>`; }
+    else if(i === k) b.classList.add('bad'); else b.classList.add('dim'); });
+  $('#dpScore').textContent = G.points + ' ball';
+  if(ok){ sfx.ok(); floatPts('+' + pts); } else { sfx.bad(); floatPts(k < 0 ? 'Vaqt tugadi' : '0 ball', true); }
+  G.nextT = setTimeout(nextDuel, ok ? 850 : 1700);
+}
+function floatPts(t, bad){ if(reduce) return; const el = document.createElement('div'); el.className = 'pts' + (bad ? ' bad' : ''); el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 950); }
+function nextDuel(){ if(!G || G.mode !== 'duel') return; G.pos++; if(G.pos >= G.set.ids.length) return finishDuel(); renderDQ(); }
+function finishDuel(){
+  const r = {code: G.d.code, name: G.name, correct: G.correct, n: G.set.ids.length, points: G.points, secs: Math.round(G.ms / 1000)};
+  const rec = duelRec(r.code); rec.at = Date.now();
+  const practice = G.practice || !!rec.mine;
+  if(!practice) rec.mine = r;
+  pruneDuels(); save();
+  const wrong = G.wrong.slice(); G.mode = 'duel-done';
+  openDuelRes(r.code, practice ? r : null, wrong);
+}
+$('#dpExit').onclick = () => openSheet(`<h2>Bellashuvni to'xtatasizmi?</h2><p class="sub">Javob berilmagan savollar 0 ball bo'ladi va natijangiz shu holatda saqlanadi.</p><div class="btns"><button class="big" id="xCont">Davom etish</button><button class="big red" id="xStop">To'xtatish</button></div>`, () => {
+  $('#xCont').onclick = closeSheet;
+  $('#xStop').onclick = () => {
+    closeSheet(); if(!G || G.mode !== 'duel') return;
+    cancelAnimationFrame(G.raf); clearTimeout(G.toT); clearTimeout(G.nextT); clearTimeout(G.cdT); $('#dpCd').hidden = true;
+    if(!G.locked) G.ms += Math.min(performance.now() - G.t0, G.set.T * 1000);
+    G.wrong.push(...G.set.ids.slice(G.answered)); G.locked = true;
+    finishDuel();
+  };
+});
+
+function openDuelRes(code, practiceRes, wrong){
+  const d = decodeDuel(code); if(!d){ show('home'); return; }
+  if(!DUEL || DUEL.d.code !== d.code) DUEL = {d, set: duelSet(d)};
+  const rec = duelRec(d.code), mine = rec.mine, shown = practiceRes || mine;
+  $('#drCode').textContent = d.code;
+  $('#drMine').hidden = !shown;
+  if(shown) $('#drNums').innerHTML = `<div><b>${shown.correct}/${shown.n}</b><span>to'g'ri</span></div><div><b>${shown.points}</b><span>ball</span></div><div><b>${fmtT(shown.secs)}</b><span>vaqt</span></div>`;
+  $('#drPractice').hidden = !practiceRes;
+  $('#drShareBox').hidden = !mine;
+  if(mine){ const line = resLine(mine); $('#drLine').textContent = line; $('#drShareTg').href = duelLink(d.code) ? tgShare(duelLink(d.code), line + "\nSiz ham o'ynab ko'ring:") : tgShare('', line + '\nSiz ham o\'ynab ko\'ring: ' + joinHow(d.code)); }
+  $('#drCopyMsg').textContent = ''; $('#drMsg').textContent = ''; $('#drPaste').value = '';
+  const w = [...new Set(wrong || [])];
+  $('#drReview').innerHTML = w.length ? `<h3 style="font-size:19px">Eslab qoling (${w.length})</h3>` + w.map(n => `<div class="rv"><div class="n">Savol № ${n}</div><p>${esc(Q[n-1].q)}</p><span class="mark">${esc(Q[n-1].o[Q[n-1].a])}</span></div>`).join('') : '';
+  renderBoard(d.code);
+  show('duelres');
+  if(shown && shown.n && shown.correct / shown.n >= 0.7 && wrong){ sfx.win(); setTimeout(() => burst(innerWidth / 2, innerHeight * .25, 120), 200); }
+}
+function renderBoard(code){
+  const rec = duelRec(code), seen = new Set(), rows = [];
+  for(const r of (rec.mine ? [Object.assign({me: true}, rec.mine)] : []).concat(rec.others)){ const k = r.name.toLowerCase(); if(seen.has(k)) continue; seen.add(k); rows.push(r); }
+  rows.sort((a, b) => b.points - a.points || b.correct - a.correct || a.secs - b.secs);
+  $('#drBoard').innerHTML = rows.length ? rows.map((r, i) => `<div class="lbrow${r.me ? ' me' : ''}"><span class="lbrank">${i + 1}</span><span class="lbname">${esc(r.name)}${r.me ? '<em>siz</em>' : ''}<small>${r.correct}/${r.n} to'g'ri</small></span><span class="lbpts">${r.points}</span><span class="lbtime">${fmtT(r.secs)}</span></div>`).join('') : `<p class="hint">Hali natija yo'q. Do'stlaringiz o'ynab, natijani guruhga yuborgach, ularni pastga joylang.</p>`;
+  $('#drCount').textContent = rows.length ? `${rows.length} ishtirokchi` : '';
+}
+$('#drCopy').onclick = () => { const rec = duelRec($('#drCode').textContent); if(rec.mine) copyText(resLine(rec.mine) + '\n' + (duelLink(rec.mine.code) || joinHow(rec.mine.code)), $('#drCopyMsg')); };
+$('#drLobby').onclick = () => openDuel($('#drCode').textContent);
+$('#drAdd').onclick = () => {
+  const code = $('#drCode').textContent, {out, bad, other} = parseResults($('#drPaste').value, code);
+  const rec = duelRec(code); let added = 0;
+  const names = new Set([...(rec.mine ? [rec.mine.name] : []), ...rec.others.map(r => r.name)].map(s => s.toLowerCase()));
+  for(const r of out){ const k = r.name.toLowerCase(); if(names.has(k)) continue; names.add(k); rec.others.push(r); added++; }
+  rec.at = Date.now(); save(); renderBoard(code);
+  const msg = [added ? `${added} ta natija qo'shildi.` : 'Yangi natija topilmadi.'];
+  if(bad) msg.push(`${bad} tasi tekshiruvdan o'tmadi (matni o'zgartirilgan).`);
+  if(other) msg.push(`${other} tasi boshqa bellashuvga tegishli.`);
+  $('#drMsg').textContent = msg.join(' '); if(added) $('#drPaste').value = '';
+};
+function routeHash(){ const m = (location.hash || '').match(/^#b-([0-9A-Za-z]{7})$/); if(m && decodeDuel(m[1])) openDuel(m[1]); }
+addEventListener('hashchange', routeHash);
+
+/* ======================= SURATDAN TOPISH ======================= */
+$('#gScan').onclick = () => show('scan');
+const OCRV = {tjs:'6.0.1', core:'6.0.0'};
+const OCR_ST = {'loading tesseract core':'OCR dvigateli yuklanmoqda','initializing tesseract':'OCR ishga tushmoqda','loading language traineddata':"O'zbek tili ma'lumotlari tayyorlanmoqda",'initializing api':'Tayyorlanmoqda','recognizing text':"Matn o'qilmoqda"};
+let OCRW = null, OCRP = null, scanBusy = false;
+function setScan(msg, p){ $('#scMsg').textContent = msg; if(p != null) $('#scBar').style.width = Math.round(Math.max(0, Math.min(1, p)) * 100) + '%'; }
+function loadScript(src){ return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = () => res(); s.onerror = () => rej(new Error('script ' + src)); document.head.appendChild(s); }); }
+async function wasmOk(){ try { if(typeof WebAssembly !== 'object') return false; await WebAssembly.instantiate(new Uint8Array([0,97,115,109,1,0,0,0])); return true; } catch(e){ return false; } }
+async function hasLocalOcr(){ try { const r = await fetch('ocr/ok.txt', {cache: 'no-store'}); return r.ok; } catch(e){ return false; } }
+function b64bytes(s){ const bin = atob(s), out = new Uint8Array(bin.length); for(let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i); return out; }
+function getOcr(){
+  if(OCRW) return Promise.resolve(OCRW);
+  if(OCRP) return OCRP;
+  OCRP = (async () => {
+    if(!(await wasmOk())){ const e = new Error('wasm'); e.code = 'wasm'; throw e; }
+    const local = await hasLocalOcr(), cdn = 'https://cdn.jsdelivr.net/npm/', abs = p => new URL(p, location.href).href;
+    const logger = m => { if(!m || !m.status || !scanBusy) return; const p = m.status === 'recognizing text' ? 0.4 + 0.6 * (m.progress || 0) : 0.1 + 0.28 * (m.progress || 0); setScan((OCR_ST[m.status] || m.status) + '…', p); };
+    if(!window.Tesseract) await loadScript(local ? 'ocr/tesseract.min.js' : `${cdn}tesseract.js@${OCRV.tjs}/dist/tesseract.min.js`);
+    let langs = 'uzb', opts;
+    if(local){
+      setScan("O'zbek tili ma'lumotlari yuklanmoqda…", 0.06);
+      await loadScript('ocr/uzb-traineddata.js');
+      langs = [{code: 'uzb', data: b64bytes(window.OCR_UZB_B64)}]; window.OCR_UZB_B64 = null;
+      opts = {workerPath: abs('ocr/worker.min.js'), corePath: abs('ocr/core'), workerBlobURL: false, cacheMethod: 'none', logger};
+    } else {
+      opts = {workerPath: `${cdn}tesseract.js@${OCRV.tjs}/dist/worker.min.js`, corePath: `${cdn}tesseract.js-core@${OCRV.core}`, langPath: `${cdn}@tesseract.js-data/uzb/4.0.0_best_int`, logger};
+    }
+    let w;
+    try { w = await Tesseract.createWorker(langs, 1, opts); }
+    catch(e){ if(!local) throw e; w = await Tesseract.createWorker(langs, 1, Object.assign({}, opts, {workerBlobURL: true})); }
+    OCRW = w; return w;
+  })();
+  OCRP.catch(() => { OCRP = null; });
+  return OCRP;
+}
+async function prepImage(file){
+  const url = URL.createObjectURL(file);
+  try {
+    const img = new Image(); img.src = url; await img.decode();
+    let w = img.naturalWidth, h = img.naturalHeight; const k = Math.min(2, 2000 / Math.max(w, h)); w = Math.round(w * k); h = Math.round(h * k);
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const x = c.getContext('2d', {willReadFrequently: true}); x.drawImage(img, 0, 0, w, h);
+    const im = x.getImageData(0, 0, w, h), p = im.data, hist = new Uint32Array(256);
+    for(let i = 0; i < p.length; i += 4){ const g = (p[i] * 77 + p[i+1] * 150 + p[i+2] * 29) >> 8; p[i] = g; hist[g]++; }
+    const tot = w * h; let lo = 0, hi = 255, a = 0;
+    for(let v = 0; v < 256; v++){ a += hist[v]; if(a > tot * 0.01){ lo = v; break; } }
+    a = 0; for(let v = 255; v >= 0; v--){ a += hist[v]; if(a > tot * 0.01){ hi = v; break; } }
+    const span = Math.max(24, hi - lo);
+    for(let i = 0; i < p.length; i += 4){ let g = (p[i] - lo) * 255 / span; g = g < 0 ? 0 : g > 255 ? 255 : g; p[i] = p[i+1] = p[i+2] = g; }
+    x.putImageData(im, 0, 0);
+    return c;
+  } finally { URL.revokeObjectURL(url); }
+}
+let scanNext = null;
+async function runScan(file){
+  if(!file) return;
+  if(scanBusy){ scanNext = file; setScan("Avvalgi surat o'qilmoqda, keyingisi navbatda…", null); return; }
+  scanBusy = true;
+  $('#scState').hidden = false; $('#scHits').innerHTML = '';
+  const img = $('#scImg'); if(img.dataset.url) URL.revokeObjectURL(img.dataset.url);
+  const url = URL.createObjectURL(file); img.src = url; img.dataset.url = url;
+  setScan('Surat tayyorlanmoqda…', 0.03);
+  try {
+    const canvas = await prepImage(file);
+    const w = await getOcr();
+    setScan("Matn o'qilmoqda…", 0.4);
+    const res = await w.recognize(canvas);
+    const text = ((res && res.data && res.data.text) || '').trim();
+    $('#scText').value = text;
+    const hits = searchText(text);
+    renderHits(hits, text);
+    setScan(hits.length ? `Tayyor: ${hits.length} ta savol topildi` : (text ? 'Matn o\'qildi, lekin mos savol topilmadi' : 'Suratda matn topilmadi'), 1);
+    if(hits.length) sfx.ok();
+  } catch(e){
+    setScan(e && e.code === 'wasm' ? "Bu brauzerda surat o'qish ishlamadi (xavfsizlik cheklovi). Savoldan bir necha so'zni pastdagi maydonga yozib qidiring." : "Suratni o'qib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring yoki savoldan bir necha so'zni yozing.", 0);
+  } finally {
+    scanBusy = false; $('#scCam').value = ''; $('#scGal').value = '';
+    if(scanNext){ const f = scanNext; scanNext = null; runScan(f); }
+  }
+}
+$('#scCam').addEventListener('change', e => runScan(e.target.files && e.target.files[0]));
+$('#scGal').addEventListener('change', e => runScan(e.target.files && e.target.files[0]));
+$('#scFind').onclick = () => { const t = $('#scText').value; renderHits(searchText(t), t); };
+function renderHits(hits, text){
+  const box = $('#scHits');
+  if(!hits.length){ box.innerHTML = String(text || '').trim() ? `<div class="note">Bazadan mos savol topilmadi. Suratni aniqroq oling (yorug' joyda, tekis, faqat savol qismi) yoki pastdagi matnni tuzatib, "Matn bo'yicha qidirish"ni bosing.</div>` : ''; return; }
+  box.innerHTML = `<h3>${hits.length} ta savol topildi</h3>` + hits.map(h => { const q = Q[h.n-1], c = chOf(h.n);
+    return `<button class="hit" data-n="${h.n}" style="--cc:${c.c}"><span class="hit-top"><span class="qn">№ ${h.n} · ${esc(c.name)}</span><span class="pct">${Math.round(h.score * 100)}% mos</span></span><p>${esc(q.q)}</p><span class="ans">Javob: <span class="mark">${esc(q.o[q.a])}</span></span></button>`; }).join('');
+}
+$('#scHits').addEventListener('click', e => { const b = e.target.closest('.hit'); if(b) openDetail(+b.dataset.n); });
+
+/* matn bo'yicha moslash: OCR xatolariga chidamli qidiruv */
+let IDX = null;
+const normTxt = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[\u02bb\u02bc\u2018\u2019`\u00b4'\u02b9\u2032]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+const toksOf = s => normTxt(s).split(' ').filter(t => t.length > 1 || /\d/.test(t));
+const tolFor = len => len >= 8 ? 2 : len >= 4 ? 1 : 0;
+function lev(a, b, max){
+  const la = a.length, lb = b.length; if(Math.abs(la - lb) > max) return max + 1;
+  let prev = new Array(lb + 1); for(let j = 0; j <= lb; j++) prev[j] = j;
+  for(let i = 1; i <= la; i++){ const cur = [i]; let best = i;
+    for(let j = 1; j <= lb; j++){ const v = Math.min(prev[j] + 1, cur[j-1] + 1, prev[j-1] + (a[i-1] === b[j-1] ? 0 : 1)); cur[j] = v; if(v < best) best = v; }
+    if(best > max) return max + 1; prev = cur; }
+  return prev[lb];
+}
+function buildIdx(){
+  const docs = Q.map((q, i) => ({n: i + 1, toks: [...new Set(toksOf(q.q))], all: new Set(toksOf(q.q + ' ' + q.o.join(' ')))}));
+  const df = new Map(); docs.forEach(d => d.all.forEach(t => df.set(t, (df.get(t) || 0) + 1)));
+  const N = docs.length, idf = t => Math.log(1 + N / (df.get(t) || 0.5));
+  docs.forEach(d => { d.w = d.toks.map(idf); d.W = d.w.reduce((a, b) => a + b, 0); });
+  IDX = {docs, idf};
+}
+function searchText(text){
+  if(!IDX) buildIdx();
+  const toks = normTxt(text).split(' ').filter(Boolean);
+  if(!toks.length) return [];
+  let res = toks.length >= 8 ? findInText(toks) : [];
+  if(!res.length) res = findTyped(toks);
+  return res;
+}
+function findInText(toks){
+  const pos = new Map(); toks.forEach((t, i) => { if(!pos.has(t)) pos.set(t, []); pos.get(t).push(i); });
+  const uniq = [...pos.keys()].filter(u => u.length >= 3), cache = new Map();
+  const where = qt => { let out = cache.get(qt); if(out) return out; out = [];
+    const ex = pos.get(qt);
+    if(ex) ex.forEach(p => out.push([p, 1]));
+    else { const tol = tolFor(qt.length); if(tol) for(const u of uniq){ if(Math.abs(u.length - qt.length) <= tol && lev(qt, u, tol) <= tol) pos.get(u).forEach(p => out.push([p, 0.85])); } }
+    cache.set(qt, out); return out; };
+  const cands = [];
+  for(const d of IDX.docs){
+    const hits = [];
+    d.toks.forEach((qt, ti) => { for(const [p, m] of where(qt)) hits.push([p, ti, m * d.w[ti]]); });
+    if(hits.length < 3) continue;
+    hits.sort((a, b) => a[0] - b[0]);
+    const L = d.toks.length * 2 + 8;
+    let best = 0, bestPos = 0, bestCnt = 0;
+    for(let l = 0; l < hits.length; l++){
+      if(l && hits[l][0] === hits[l-1][0]) continue;
+      const got = new Map(); let sum = 0;
+      for(let r = l; r < hits.length && hits[r][0] - hits[l][0] <= L; r++){ const ti = hits[r][1], w = hits[r][2], pv = got.get(ti) || 0; if(w > pv){ sum += w - pv; got.set(ti, w); } }
+      if(sum > best){ best = sum; bestPos = hits[l][0]; bestCnt = got.size; }
+    }
+    const score = best / d.W;
+    if(score >= 0.5 && bestCnt >= Math.min(4, d.toks.length)) cands.push({n: d.n, score, pos: bestPos, len: d.toks.length});
+  }
+  cands.sort((a, b) => b.score - a.score);
+  const out = [];
+  for(const c of cands){
+    const clash = out.find(o => Math.abs(o.pos - c.pos) < Math.max(o.len, c.len));
+    if(clash && clash.score - c.score > 0.08) continue;
+    out.push(c); if(out.length >= 12) break;
+  }
+  return out.sort((a, b) => a.pos - b.pos);
+}
+function findTyped(toks){
+  const qt = [...new Set(toks.filter(t => t.length > 1 || /\d/.test(t)))]; if(!qt.length) return [];
+  const res = [];
+  for(const d of IDX.docs){
+    let got = 0, tot = 0;
+    for(const t of qt){
+      const w = IDX.idf(t); tot += w;
+      if(d.all.has(t)){ got += w; continue; }
+      if(t.length >= 3){ const tol = tolFor(t.length); for(const u of d.all){ if(u.startsWith(t) || (tol && Math.abs(u.length - t.length) <= tol && lev(t, u, tol) <= tol)){ got += w * 0.8; break; } } }
+    }
+    const s = got / tot; if(s >= 0.55) res.push({n: d.n, score: s});
+  }
+  return res.sort((a, b) => b.score - a.score).slice(0, 8);
+}
+
+buildList(); renderHome(); routeHash();
+</script>

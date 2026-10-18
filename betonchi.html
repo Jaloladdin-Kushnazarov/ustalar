@@ -1,0 +1,1393 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Betonchi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#CFCAC1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,800;1,9..144,700;1,9..144,800&family=Figtree:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: one-column phone app shell (max 520px). Home = exposed-concrete (formwork + tie holes) hero with a lab sample tag (teacher name) and cube mascot, teal water-level wave, textured game tiles, chapter cards, then the full numbered question list. */
+:root{
+  --bg:#ECE9E3; --card:#FBFAF7; --ink:#1E2A2D; --muted:#5E6A6C; --line:#D9D3C9;
+  --water:#0F6B6B; --water2:#2A9D8F; --onwater:#1E2A2D;
+  --field:#5B8E3E; --clay:#C8553D; --soil:#DED8CD; --sun:#E9B44C; --onsun:#2A1E00;
+  --good:#24865A; --okbg:#E1F2E8; --bad:#C8423A; --badbg:#F8E4E1;
+  --c0:#0F6B6B; --c1:#C8553D; --c2:#3D5A80; --c3:#7A5C3A; --c4:#5B8E3E; --c5:#8E4A75; --c6:#2A7FA8; --c7:#6B6E2E;
+  --tg:#229ED9; --gold:#F4C430; --silver:#C5CACD; --bronze:#E0A06A;
+  --concrete:#CFCAC1; --conc2:#BFB9AE; --tie:rgba(40,36,30,.35);
+  --shadow:0 1px 2px rgba(30,42,45,.08), 0 10px 24px rgba(30,42,45,.08);
+  --f-display:"Fraunces", Georgia, "Times New Roman", serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --r:20px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#141A1B; --card:#1D2526; --ink:#E9ECEA; --muted:#97A3A3; --line:#2F3A3B;
+  --water:#3DB8A8; --water2:#2A9D8F; --onwater:#1E2A2D;
+  --field:#8CC56A; --clay:#E7826B; --soil:#263031; --sun:#E9B44C; --onsun:#2A1E00;
+  --good:#47C38A; --okbg:#123024; --bad:#F0776D; --badbg:#3A1E1C;
+  --c0:#3DB8A8; --c1:#E7826B; --c2:#8DA9D4; --c3:#C9A27A; --c4:#8CC56A; --c5:#D08AB8; --c6:#6CC3EC; --c7:#C7CA7A;
+  --tg:#2AABEE; --gold:#E9BE3A; --silver:#A9B1B3; --bronze:#D08E5A;
+  --concrete:#B9B4AA; --conc2:#A9A398; --tie:rgba(30,26,20,.4);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 24px rgba(0,0,0,.3);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#141A1B; --card:#1D2526; --ink:#E9ECEA; --muted:#97A3A3; --line:#2F3A3B;
+  --water:#3DB8A8; --water2:#2A9D8F; --onwater:#1E2A2D;
+  --field:#8CC56A; --clay:#E7826B; --soil:#263031; --sun:#E9B44C; --onsun:#2A1E00;
+  --good:#47C38A; --okbg:#123024; --bad:#F0776D; --badbg:#3A1E1C;
+  --c0:#3DB8A8; --c1:#E7826B; --c2:#8DA9D4; --c3:#C9A27A; --c4:#8CC56A; --c5:#D08AB8; --c6:#6CC3EC; --c7:#C7CA7A;
+  --tg:#2AABEE; --gold:#E9BE3A; --silver:#A9B1B3; --bronze:#D08E5A;
+  --concrete:#B9B4AA; --conc2:#A9A398; --tie:rgba(30,26,20,.4);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 24px rgba(0,0,0,.3);
+  color-scheme:dark;
+}
+:root{color-scheme:light}
+body{margin:0}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);line-height:1.1;margin:0;text-wrap:balance}
+.app{max-width:520px;margin:0 auto;padding-bottom:28px}
+.pad{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.mark{background:linear-gradient(transparent 10%, var(--sun) 10%, var(--sun) 90%, transparent 90%);color:var(--onsun);-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:0 .18em;border-radius:3px}
+
+/* ---------- mascot ---------- */
+.drop{display:block;overflow:visible}
+.drop .m{display:none}
+.drop.idle .m-idle,.drop.happy .m-happy,.drop.sad .m-sad{display:inline}
+.drop.happy{animation:hop .5s ease}
+.drop.sad{animation:wob .45s ease}
+.bob{animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes hop{30%{transform:translateY(-12px) scale(1.05)}60%{transform:translateY(0) scale(.97)}}
+@keyframes wob{25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;background:linear-gradient(165deg,var(--water2),var(--water));color:var(--onwater);padding-block:18px 46px;overflow:hidden}
+.hero .wave{position:absolute;left:0;right:0;bottom:-1px;width:100%;height:34px;display:block}
+.hero .wave path{fill:var(--bg)}
+.hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;flex-direction:column}
+.brand h1{font-size:30px;font-weight:800;letter-spacing:.2px}
+.brand small{font-weight:700;opacity:.85;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+.icon-btn{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.18);display:grid;place-items:center;color:var(--onwater)}
+.icon-btn svg{width:22px;height:22px}
+.hero-main{display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:end;margin-top:14px}
+.bubble{background:var(--card);color:var(--ink);border-radius:18px 18px 18px 4px;padding:10px 14px;font-weight:700;font-size:15px;box-shadow:var(--shadow);min-width:0}
+.lvl{margin-top:16px;background:rgba(255,255,255,.14);border-radius:var(--r);padding:12px 14px}
+.lvl-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-weight:800}
+.lvl-name{font-family:var(--f-display);font-size:21px}
+.lvl-xp{font-variant-numeric:tabular-nums;font-size:14px;opacity:.9}
+.lvl-bar{height:12px;border-radius:99px;background:rgba(0,0,0,.18);margin-top:8px;overflow:hidden}
+.lvl-bar i{display:block;height:100%;background:var(--sun);border-radius:99px;transition:width .6s ease}
+.lvl-next{font-size:12.5px;margin-top:6px;opacity:.9;font-weight:700}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.chip{background:rgba(255,255,255,.14);border-radius:14px;padding:8px 10px;display:flex;flex-direction:column}
+.chip b{font-family:var(--f-display);font-size:22px;line-height:1;font-variant-numeric:tabular-nums}
+.chip span{font-size:11.5px;font-weight:700;opacity:.9;margin-top:3px}
+
+/* ---------- sections ---------- */
+.sec{margin-top:22px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sec-h h2{font-size:22px;font-weight:800}
+.sec-h span{color:var(--muted);font-weight:700;font-size:13px}
+
+.games{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.game{position:relative;text-align:left;border-radius:22px;padding:14px;min-height:128px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;box-shadow:var(--shadow);overflow:hidden;transition:transform .15s ease}
+.game:active{transform:scale(.97)}
+.game h3{font-size:20px;font-weight:800}
+.game p{margin:2px 0 0;font-size:12.5px;font-weight:700;opacity:.92;line-height:1.3}
+.game .gi{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.22);display:grid;place-items:center}
+.game .gi svg{width:26px;height:26px}
+.g-quiz{background:linear-gradient(150deg,#2F8FD6,#1A5FA8)}
+.g-cards{background:linear-gradient(150deg,#F0913F,#C95A1E)}
+.g-blitz{background:linear-gradient(150deg,#3DB46A,#1F7F44)}
+.g-fix{background:linear-gradient(150deg,#E2557A,#A8304F)}
+.badge{position:absolute;top:12px;right:12px;background:var(--sun);color:var(--onsun);font-weight:800;font-size:13px;border-radius:99px;padding:2px 9px;font-variant-numeric:tabular-nums}
+
+.chs{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;margin-right:calc(-1 * max(16px, env(safe-area-inset-right, 0px)))}
+.chs::-webkit-scrollbar{display:none}
+.ch{flex:0 0 150px;scroll-snap-align:start;background:var(--card);border-radius:20px;padding:12px;text-align:left;box-shadow:var(--shadow);border-top:6px solid var(--cc);display:flex;flex-direction:column;gap:8px}
+.ch:last-child{margin-right:16px}
+.ch-top{display:flex;justify-content:space-between;align-items:center}
+.ch-ico{width:36px;height:36px;border-radius:12px;background:color-mix(in srgb, var(--cc) 16%, transparent);color:var(--cc);display:grid;place-items:center}
+.ch-ico svg{width:22px;height:22px}
+.ring{width:40px;height:40px}
+.ring circle{fill:none;stroke-width:5}
+.ring .bgc{stroke:var(--line)}
+.ring .fgc{stroke:var(--cc);stroke-linecap:round;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset .6s}
+.ring text{font:800 11px var(--f-body);fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.ch h3{font-size:16px;font-weight:800;color:var(--ink)}
+.ch small{color:var(--muted);font-weight:700;font-size:12px;font-variant-numeric:tabular-nums}
+
+.search{display:flex;align-items:center;gap:8px;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:0 12px;height:48px}
+.search svg{width:20px;height:20px;color:var(--muted);flex:none}
+.search input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:700 16px var(--f-body);outline:none;height:100%}
+.filters{display:flex;gap:8px;overflow-x:auto;margin-top:10px;padding-bottom:4px}
+.filters::-webkit-scrollbar{display:none}
+.fbtn{flex:none;border:2px solid var(--line);background:var(--card);border-radius:99px;padding:6px 12px;font-weight:800;font-size:13px;color:var(--muted)}
+.fbtn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px;color:var(--muted);font-size:12.5px;font-weight:700}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+
+.qlist{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.qrow{display:grid;grid-template-columns:44px 1fr 14px;gap:10px;align-items:center;text-align:left;background:var(--card);border-radius:16px;padding:10px 12px 10px 10px;box-shadow:0 1px 0 var(--line)}
+.qrow:active{transform:scale(.99)}
+.qnum{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font:800 17px var(--f-display);color:#fff;background:var(--cc);font-variant-numeric:tabular-nums}
+.qtxt{min-width:0;font-weight:700;font-size:14.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dot.seen{background:var(--water2)}
+.dot.mastered{background:var(--good)}
+.dot.mistake{background:var(--bad)}
+.empty{color:var(--muted);font-weight:700;text-align:center;padding:24px 8px}
+
+/* ---------- game screens ---------- */
+.gbar{position:sticky;top:env(safe-area-inset-top, 0px);z-index:5;background:var(--bg);display:flex;align-items:center;gap:12px;padding-block:12px}
+.xbtn{width:42px;height:42px;border-radius:14px;background:var(--card);display:grid;place-items:center;box-shadow:0 1px 0 var(--line);flex:none}
+.xbtn svg{width:20px;height:20px}
+.canal{flex:1;height:20px;border-radius:99px;background:var(--soil);position:relative;overflow:hidden;box-shadow:inset 0 2px 0 rgba(0,0,0,.08)}
+.canal i{position:absolute;inset:0 auto 0 0;width:0;border-radius:99px;transition:width .5s ease;
+  background:repeating-linear-gradient(110deg,var(--water2) 0 14px,var(--water) 14px 28px);background-size:56px 100%;animation:flow 1.2s linear infinite}
+@keyframes flow{to{background-position:56px 0}}
+.gcount{font:800 16px var(--f-display);font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4px}
+.tag{display:inline-flex;align-items:center;gap:6px;font-weight:800;font-size:12.5px;color:var(--cc);background:color-mix(in srgb, var(--cc) 14%, transparent);border-radius:99px;padding:4px 10px}
+.combo{font:800 15px var(--f-display);color:var(--clay);opacity:0;transform:scale(.8);transition:.2s}
+.combo.on{opacity:1;transform:scale(1)}
+.qhead{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:end;margin-top:14px}
+.qcard{background:var(--card);border-radius:20px 20px 20px 6px;padding:14px 16px;box-shadow:var(--shadow);min-width:0}
+.qcard .n{font:800 13px var(--f-body);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.qcard p{margin:4px 0 0;font:700 19px/1.35 var(--f-body)}
+.opts{display:flex;flex-direction:column;gap:10px;margin-top:18px;padding-bottom:150px}
+.opt{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:center;text-align:left;background:var(--card);border:2.5px solid var(--line);border-bottom-width:5px;border-radius:18px;padding:12px;font-weight:700;font-size:16px;line-height:1.3;transition:transform .12s, border-color .2s, background .2s}
+.opt:active{transform:translateY(2px)}
+.opt .L{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font:800 18px var(--f-display);background:var(--bg);color:var(--muted)}
+.opt span:last-child{min-width:0}
+.opt.ok{border-color:var(--good);background:var(--okbg)}
+.opt.ok .L{background:var(--good);color:#fff}
+.opt.bad{border-color:var(--bad);background:var(--badbg);animation:shake .4s}
+.opt.bad .L{background:var(--bad);color:#fff}
+.opt.dim{opacity:.5}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+.fb{position:fixed;left:0;right:0;bottom:0;z-index:20;transform:translateY(110%);transition:transform .28s ease;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-top:14px;padding-bottom:calc(14px + env(safe-area-inset-bottom, 0px));background:var(--okbg);border-top:3px solid var(--good)}
+.fb.show{transform:none}
+.fb.badfb{background:var(--badbg);border-top-color:var(--bad)}
+.fb-in{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
+.fb h3{font-size:22px;color:var(--good)}
+.fb.badfb h3{color:var(--bad)}
+.fb p{margin:0;font-weight:700;font-size:15px}
+.big{width:100%;height:54px;border-radius:16px;font:800 18px var(--f-display);color:#fff;background:var(--good);box-shadow:0 4px 0 color-mix(in srgb, var(--good) 60%, #000)}
+.big:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb, var(--good) 60%, #000)}
+.big.blue{background:var(--water);box-shadow:0 4px 0 color-mix(in srgb, var(--water) 60%, #000)}
+.big.red{background:var(--bad);box-shadow:0 4px 0 color-mix(in srgb, var(--bad) 60%, #000)}
+.big.ghost{background:var(--card);color:var(--ink);box-shadow:0 4px 0 var(--line)}
+.fb .big.red{background:var(--bad)}
+
+/* flashcards */
+.cardwrap{perspective:1200px;margin-top:18px}
+.flip{position:relative;height:min(62vh,430px);transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.8,.2,1);cursor:pointer}
+.flip.on{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:26px;padding:22px;display:flex;flex-direction:column;box-shadow:var(--shadow);overflow:auto}
+.front{background:var(--card);border:3px solid var(--cc)}
+.back{background:var(--card);border:3px solid var(--good);transform:rotateY(180deg)}
+.face .n{font:800 13px var(--f-body);color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.face .qq{font:700 21px/1.35 var(--f-body);margin-top:10px}
+.face .ans{font:800 24px/1.35 var(--f-display);margin-top:auto;margin-bottom:auto}
+.face .hint{margin-top:auto;color:var(--muted);font-weight:800;font-size:13px;display:flex;align-items:center;gap:6px}
+.face .small-q{color:var(--muted);font-weight:700;font-size:14px;margin-top:8px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+
+/* blitz */
+.timer{flex:1;height:20px;border-radius:99px;background:var(--line);overflow:hidden}
+.timer i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--field),var(--sun));transform-origin:left;border-radius:99px}
+.bcard{margin-top:16px;background:var(--card);border-radius:24px;padding:18px;box-shadow:var(--shadow);min-height:250px;display:flex;flex-direction:column;gap:12px}
+.bcard .q{font:700 18px/1.35 var(--f-body)}
+.bcard .claim{border-top:2px dashed var(--line);padding-top:12px}
+.bcard .claim small{display:block;font-weight:800;color:var(--muted);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+.bcard .claim b{font:800 21px/1.3 var(--f-display)}
+.bcard.flash-ok{outline:4px solid var(--good)}
+.bcard.flash-bad{outline:4px solid var(--bad)}
+.bscore{font:800 34px var(--f-display);font-variant-numeric:tabular-nums}
+.tf{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.tf .big{height:68px;font-size:22px}
+.toast{margin-top:12px;font-weight:700;font-size:14.5px;min-height:44px;color:var(--muted)}
+.center{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;padding-block:24px}
+.center p{margin:0;color:var(--muted);font-weight:700;max-width:34ch}
+
+/* result */
+.stars{display:flex;gap:6px;justify-content:center}
+.stars svg{width:54px;height:54px}
+.stars .s{fill:var(--line)}
+.stars .s.on{fill:var(--sun);animation:pop .45s backwards}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.25)}}
+.rstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%}
+.rstat{background:var(--card);border-radius:16px;padding:10px;box-shadow:0 1px 0 var(--line)}
+.rstat b{display:block;font:800 26px var(--f-display);font-variant-numeric:tabular-nums}
+.rstat span{font-size:12px;font-weight:700;color:var(--muted)}
+.review{width:100%;text-align:left;display:flex;flex-direction:column;gap:10px}
+.rv{background:var(--card);border-radius:16px;padding:12px 14px;box-shadow:0 1px 0 var(--line)}
+.rv .n{font-weight:800;font-size:12.5px;color:var(--muted)}
+.rv p{margin:4px 0 6px;font-weight:700}
+.btns{display:flex;flex-direction:column;gap:12px;width:100%;margin-top:6px}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(5,15,25,.5);z-index:30;display:flex;align-items:flex-end;justify-content:center}
+.sheet{width:100%;max-width:520px;max-height:88vh;overflow:auto;background:var(--bg);border-radius:26px 26px 0 0;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-top:10px;padding-bottom:calc(20px + env(safe-area-inset-bottom, 0px));animation:up .25s ease}
+@keyframes up{from{transform:translateY(40%);opacity:.4}}
+.grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 12px}
+.sheet h2{font-size:24px;font-weight:800}
+.sheet .sub{color:var(--muted);font-weight:700;font-size:14px;margin:4px 0 12px}
+.pick{display:flex;flex-direction:column;gap:8px}
+.pick button{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;text-align:left;background:var(--card);border:2.5px solid var(--line);border-radius:16px;padding:10px 12px;font-weight:800}
+.pick button[aria-pressed="true"]{border-color:var(--water);background:color-mix(in srgb, var(--water) 10%, var(--card))}
+.pick .ch-ico{width:36px;height:36px}
+.pick small{color:var(--muted);font-weight:700;font-variant-numeric:tabular-nums}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.seg button{height:44px;border-radius:14px;background:var(--card);border:2.5px solid var(--line);font-weight:800}
+.seg button[aria-pressed="true"]{border-color:var(--water);color:var(--water)}
+.dopts{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.dopt{display:grid;grid-template-columns:30px 1fr 22px;gap:10px;align-items:center;background:var(--card);border-radius:14px;padding:10px 12px;font-weight:700;border:2px solid var(--line)}
+.dopt.right{border-color:var(--good)}
+.dopt .L{width:30px;height:30px;border-radius:10px;background:var(--bg);display:grid;place-items:center;font:800 15px var(--f-display);color:var(--muted)}
+.dopt.right .L{background:var(--good);color:#fff}
+.dopt svg{width:22px;height:22px;color:var(--good)}
+.dq{font:700 20px/1.35 var(--f-body);margin-top:6px}
+.navrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.statusline{margin-top:12px;font-weight:700;font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
+
+/* ---------- bellashuv + suratdan topish ---------- */
+.g-duel{background:linear-gradient(150deg,#7B5CF0,#4A2EA8)}
+.g-scan{background:linear-gradient(150deg,#22A3B8,#10606F)}
+.gtitle{font-size:22px;font-weight:800;flex:1;min-width:0}
+.stack{display:flex;flex-direction:column;gap:14px;padding-bottom:36px}
+.stack0{display:flex;flex-direction:column;gap:10px}
+.dcard{background:var(--card);border-radius:22px;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px}
+.eyebrow{font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.codebig{font:800 40px/1 var(--f-display);letter-spacing:.12em;font-variant-numeric:tabular-nums;color:var(--ink);user-select:all;word-break:break-all}
+.dchips{display:flex;flex-wrap:wrap;gap:8px}
+.dchip{background:var(--bg);border-radius:99px;padding:5px 11px;font-weight:800;font-size:13px;color:var(--ink)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lnk{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;text-align:center;line-height:1.1;padding:0 10px;cursor:pointer}
+.lnk [data-ico]{display:inline-flex;flex:none}
+.lnk svg{width:20px;height:20px}
+.big.tg{background:var(--tg);color:#fff;box-shadow:0 4px 0 color-mix(in srgb, var(--tg) 60%, #000)}
+.big.ghost.lnk{color:var(--ink)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:800;font-size:13.5px;color:var(--muted)}
+.input{width:100%;min-width:0;height:52px;border-radius:14px;border:2.5px solid var(--line);background:var(--card);color:var(--ink);font:800 17px var(--f-body);padding:0 14px}
+.input:focus{outline:none;border-color:var(--clay)}
+textarea.input{height:auto;min-height:104px;padding:12px 14px;font:600 15px/1.45 var(--f-body);resize:vertical}
+.joinrow{display:grid;grid-template-columns:1fr auto;gap:8px}
+.joinrow .big{width:auto;padding:0 18px;height:52px;font-size:16px}
+.hint{margin:0;color:var(--muted);font-weight:700;font-size:13.5px;line-height:1.4}
+.hint.err{color:var(--bad)}
+.hint:empty{display:none}
+.note{background:color-mix(in srgb, var(--sun) 26%, var(--card));border-radius:14px;padding:10px 12px;font-weight:700;font-size:14px;line-height:1.4}
+.lead{margin:0;font-weight:700;font-size:15.5px;line-height:1.45}
+.seg.seg5{grid-template-columns:repeat(5,1fr)}
+.rules{background:var(--card);border-radius:18px;padding:12px 16px;box-shadow:0 1px 0 var(--line)}
+.rules h3{font-size:17px}
+.rules ul{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-weight:600;font-size:14px;line-height:1.4}
+.resline{font:700 13.5px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;background:var(--bg);border-radius:12px;padding:10px 12px;word-break:break-word;user-select:all}
+.bignums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.bignums div{background:var(--bg);border-radius:14px;padding:10px 6px;text-align:center;min-width:0}
+.bignums b{display:block;font:800 25px var(--f-display);font-variant-numeric:tabular-nums}
+.bignums span{font-size:12px;font-weight:700;color:var(--muted)}
+.lb{display:flex;flex-direction:column;gap:6px}
+.lbrow{display:grid;grid-template-columns:32px 1fr auto auto;gap:10px;align-items:center;background:var(--card);border-radius:14px;padding:10px 12px;box-shadow:0 1px 0 var(--line);font-variant-numeric:tabular-nums}
+.lbrow.me{box-shadow:inset 0 0 0 2.5px var(--clay)}
+.lbrank{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:800 15px var(--f-display);background:var(--bg);color:var(--muted)}
+.lbrow:nth-child(1) .lbrank{background:var(--gold);color:#3B2A00}
+.lbrow:nth-child(2) .lbrank{background:var(--silver);color:#22303C}
+.lbrow:nth-child(3) .lbrank{background:var(--bronze);color:#3A1E08}
+.lbname{min-width:0;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lbname small{display:block;color:var(--muted);font-weight:700;font-size:12px}
+.lbname em{font-style:normal;color:var(--clay);font-size:12px;margin-left:4px}
+.lbpts{font:800 18px var(--f-display)}
+.lbtime{color:var(--muted);font-weight:800;font-size:13px;min-width:38px;text-align:right}
+.dscore{font:800 18px var(--f-display);font-variant-numeric:tabular-nums}
+.timer i.low{background:var(--bad)}
+.countdown{position:fixed;inset:0;z-index:25;display:grid;place-items:center;background:color-mix(in srgb, var(--bg) 84%, transparent)}
+.countdown b{font:800 120px/1 var(--f-display);color:var(--clay);animation:pop .6s ease}
+.pts{position:fixed;left:50%;top:38%;z-index:30;pointer-events:none;font:800 34px var(--f-display);color:var(--good);text-shadow:0 2px 0 var(--card);animation:floatup .9s ease forwards;white-space:nowrap}
+.pts.bad{color:var(--bad);font-size:26px}
+@keyframes floatup{from{opacity:1;transform:translate(-50%,-20%)}to{opacity:0;transform:translate(-50%,-140%)}}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;opacity:0}
+.scanst{display:flex;gap:12px;align-items:center;background:var(--card);border-radius:18px;padding:10px;box-shadow:0 1px 0 var(--line)}
+.scanst img{width:76px;height:76px;object-fit:cover;border-radius:12px;flex:none;background:var(--bg)}
+.scanst .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.scanst .hint:empty{display:block;min-height:1em}
+.prog{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--field);border-radius:99px;transition:width .3s}
+.hits{display:flex;flex-direction:column;gap:10px}
+.hits:empty{display:none}
+.hits h3{font-size:18px}
+.hit{display:flex;flex-direction:column;gap:8px;text-align:left;background:var(--card);border-radius:18px;padding:12px 14px;box-shadow:var(--shadow);border-left:6px solid var(--cc)}
+.hit-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hit .qn{font:800 15px var(--f-display);color:var(--cc);min-width:0}
+.hit .pct{font-weight:800;font-size:12.5px;color:var(--muted);flex:none}
+.hit p{margin:0;font-weight:700;font-size:15px;line-height:1.35}
+.hit .ans{font-weight:800;font-size:16px;line-height:1.4}
+
+/* ---- Betonchi: ochiq beton va laboratoriya uslubi ---- */
+h1,h2,h3{font-variation-settings:"opsz" 72}
+.hero{background-color:var(--concrete);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .34  0 0 0 0 .32  0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(circle,var(--tie) 0 3px,rgba(255,255,255,.35) 3.5px 4px,transparent 4.5px),repeating-linear-gradient(180deg,transparent 0 78px,rgba(40,36,30,.13) 78px 80px);background-size:160px 160px,120px 80px,100% 80px;background-position:0 0,60px 40px,0 0;color:#1E2A2D;padding-block:18px 40px}
+.hero .wave{display:block;height:26px}
+.hero .wave path{fill:var(--water)}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:12px;background:var(--water)}
+.brand h1{font-size:40px;font-weight:800;font-style:italic;letter-spacing:-.02em;line-height:1}
+.brand small{color:#3F4A4D;opacity:1;font-weight:800}
+.icon-btn{background:rgba(255,255,255,.55);color:#1E2A2D;border-radius:50%}
+.tag{}
+.stag{position:relative;margin-top:16px;background:#FBFAF7;color:#1E2A2D;border-radius:14px 22px 22px 14px;padding:14px 18px 14px 46px;box-shadow:0 10px 24px rgba(30,42,45,.18);transform:rotate(1deg)}
+.stag::before{content:"";position:absolute;left:14px;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:50%;background:var(--concrete);box-shadow:inset 0 2px 3px rgba(0,0,0,.25)}
+.stag::after{content:"";position:absolute;left:38px;top:10px;bottom:10px;border-left:2px dashed #C9C2B6}
+.stag small{display:block;font:800 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--water)}
+.stag span{display:block;font:700 12px var(--f-body);color:#5E6A6C;margin-top:8px;text-transform:uppercase;letter-spacing:.08em}
+.stag b{display:block;font:800 italic 30px/1.05 var(--f-display);margin-top:1px}
+.stag p{margin:6px 0 0;font:600 13px/1.35 var(--f-body);color:#3F4A4D}
+.hero-main{margin-top:18px}
+.bubble{border-radius:20px 20px 20px 6px;background:#FBFAF7;color:#1E2A2D}
+.lvl{background:rgba(251,250,247,.82);color:#1E2A2D;border-radius:20px;backdrop-filter:blur(2px)}
+.lvl-name{font-style:italic}
+.lvl-bar{background:#DED8CD;height:12px}
+.lvl-bar i{background:linear-gradient(90deg,var(--water2),var(--water))}
+.chip{background:#ECE9E3;border-radius:14px}
+.sec-h h2{font-family:var(--f-display);font-style:italic;font-weight:800;font-size:26px}
+.game{border-radius:22px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .34  0 0 0 0 .32  0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")!important;background-size:160px 160px!important;min-height:136px}
+.game h3{font-family:var(--f-display);font-style:italic;font-size:22px}
+.game .gi{border-radius:50%;background:rgba(255,255,255,.2)}
+.g-quiz{background-color:#0F6B6B}.g-cards{background-color:#C8553D}.g-blitz{background-color:#5B7F3A}
+.g-fix{background-color:#8E3B46}.g-duel{background-color:#3D5A80}.g-scan{background-color:#6B5B95}
+.ch{border-radius:22px;border-top:0;background:linear-gradient(180deg,color-mix(in srgb,var(--cc) 14%,var(--card)) 0 54px,var(--card) 54px)}
+.ch h3{font-family:var(--f-display);font-style:italic;font-size:17px}
+.ch-ico{border-radius:50%;background:var(--card)}
+.qrow{border-radius:18px;box-shadow:var(--shadow)}
+.qnum{border-radius:12px;background:linear-gradient(145deg,color-mix(in srgb,var(--cc) 80%,#fff),var(--cc));box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.search{border-radius:99px}
+.fbtn[aria-pressed="true"]{background:var(--water);border-color:var(--water);color:#fff}
+.canal{background:var(--soil);border-radius:99px}
+.canal i{background:linear-gradient(90deg,var(--water2),var(--water));animation:none}
+.qcard{border-radius:24px 24px 24px 8px}
+.qcard p{font-family:var(--f-body)}
+.opt{border-radius:18px;border-width:2px;border-bottom-width:4px}
+.opt .L{border-radius:50%;font-family:var(--f-display);font-style:italic}
+.big{border-radius:99px;font-family:var(--f-body);font-weight:800}
+.face{border-radius:28px}
+
+#fx{position:fixed;inset:0;pointer-events:none;z-index:40;width:100%;height:100%}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="app" id="app">
+  <!-- HOME -->
+  <section id="home">
+    <div class="hero">
+      <div class="pad">
+        <div class="hero-top">
+          <div class="brand"><small>Yakuniy nazorat · 148 savol</small><h1>Betonchi</h1></div>
+          <button class="icon-btn" id="soundBtn" aria-label="Ovozni yoqish yoki o'chirish"></button>
+        </div>
+        <div class="stag" aria-label="Namuna yorlig'i">
+          <small>Namuna · 15×15×15 sm</small>
+          <span>Fan o'qituvchisi</span>
+          <b>Asliddin</b>
+          <p>Gidrotexnik beton va qurilish ishlari · 148 savol · 8 bo'lim</p>
+        </div>
+        <div class="hero-main">
+          <div id="heroDrop" class="bob"></div>
+          <div class="bubble" id="heroBubble">Salom, betonchi! Bugun qaysi blokni quyamiz?</div>
+        </div>
+        <div class="lvl">
+          <div class="lvl-row"><span class="lvl-name" id="lvlName">Laborant</span><span class="lvl-xp" id="lvlXp">0 XP</span></div>
+          <div class="lvl-bar"><i id="lvlBar" style="width:0%"></i></div>
+          <div class="lvl-next" id="lvlNext"></div>
+          <div class="chips">
+            <div class="chip"><b id="stMastered">0</b><span>yodlangan / 148</span></div>
+            <div class="chip"><b id="stMistakes">0</b><span>xato savol</span></div>
+            <div class="chip"><b id="stStreak">0</b><span>kunlik seriya</span></div>
+          </div>
+        </div>
+      </div>
+      <svg class="wave" viewBox="0 0 400 34" preserveAspectRatio="none" aria-hidden="true"><path d="M0 20 C 50 4, 100 4, 150 18 S 250 34, 300 18 S 380 6, 400 14 L400 34 L0 34Z"/></svg>
+    </div>
+
+    <div class="pad">
+      <div class="sec">
+        <div class="sec-h"><h2>O'yinlar</h2><span>tanlang va boshlang</span></div>
+        <div class="games">
+          <button class="game g-quiz" id="gQuiz"><div class="gi" data-ico="quiz"></div><div><h3>Viktorina</h3><p>4 variantdan to'g'risini toping, kombo yig'ing</p></div></button>
+          <button class="game g-cards" id="gCards"><div class="gi" data-ico="cards"></div><div><h3>Kartochkalar</h3><p>Aylantiring, javobni eslab qoling</p></div></button>
+          <button class="game g-blitz" id="gBlitz"><div class="gi" data-ico="bolt"></div><div><h3>Rostmi?</h3><p>60 soniya: rost yoki yolg'on</p></div></button>
+          <button class="game g-fix" id="gFix"><span class="badge" id="fixBadge" hidden>0</span><div class="gi" data-ico="wrench"></div><div><h3>Xatolar ustida</h3><p>Adashgan savollarni qayta yeching</p></div></button>
+          <button class="game g-duel" id="gDuel"><div class="gi" data-ico="trophy"></div><div><h3>Bellashuv</h3><p>Do'stlar bilan bir xil savollar: kim tez va to'g'ri?</p></div></button>
+          <button class="game g-scan" id="gScan"><div class="gi" data-ico="camera"></div><div><h3>Suratdan topish</h3><p>Qog'ozdagi savolni suratga oling, javobini topamiz</p></div></button>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-h"><h2>Boblar</h2><span>bosib, shu bobdan o'ynang</span></div>
+        <div class="chs" id="chs"></div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-h"><h2>Barcha savollar</h2><span id="listCount">148 ta</span></div>
+        <label class="search" for="q"><span data-ico="search"></span><input id="q" type="search" placeholder="Savol yoki javob bo'yicha qidiring" autocomplete="off"></label>
+        <div class="filters" id="filters"></div>
+        <div class="legend">
+          <span><i class="dot"></i>yangi</span><span><i class="dot seen"></i>ko'rilgan</span><span><i class="dot mastered"></i>yodlangan</span><span><i class="dot mistake"></i>xato</span>
+        </div>
+        <div class="qlist" id="qlist"></div>
+        <div class="empty" id="listEmpty" hidden>Bunday savol topilmadi.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" data-exit aria-label="Bosh menyuga qaytish" data-ico="x"></button><div class="canal"><i id="qProg"></i></div><div class="gcount" id="qCount">1/10</div></div>
+    <div class="meta"><span class="tag" id="qTag"></span><span class="combo" id="qCombo">x2 kombo</span></div>
+    <div class="qhead"><div id="qDrop"></div><div class="qcard"><div class="n" id="qNum"></div><p id="qText"></p></div></div>
+    <div class="opts" id="qOpts"></div>
+  </section>
+
+  <!-- CARDS -->
+  <section id="cards" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" data-exit aria-label="Bosh menyuga qaytish" data-ico="x"></button><div class="canal"><i id="cProg"></i></div><div class="gcount" id="cCount">1/10</div></div>
+    <div class="cardwrap"><div class="flip" id="flip" role="button" tabindex="0" aria-label="Kartani aylantirish">
+      <div class="face front" id="cFront"></div>
+      <div class="face back" id="cBack"></div>
+    </div></div>
+    <div class="two"><button class="big red" id="cAgain">Yana ko'raman</button><button class="big" id="cKnow">Bilaman</button></div>
+  </section>
+
+  <!-- BLITZ -->
+  <section id="blitz" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" data-exit aria-label="Bosh menyuga qaytish" data-ico="x"></button><div class="timer"><i id="bTime"></i></div><div class="gcount" id="bSec">60</div></div>
+    <div id="bIntro" class="center">
+      <div id="bDrop"></div>
+      <h2>Rostmi yoki yolg'onmi?</h2>
+      <p>Savol va bitta javob chiqadi. Javob to'g'ri bo'lsa "Rost", noto'g'ri bo'lsa "Yolg'on" ni bosing. 60 soniyada iloji boricha ko'p toping.</p>
+      <p id="bBest"></p>
+      <div class="btns"><button class="big blue" id="bStart">Boshlash</button></div>
+    </div>
+    <div id="bPlay" hidden>
+      <div class="meta"><span class="bscore" id="bScore">0</span><span class="combo" id="bCombo">x2</span></div>
+      <div class="bcard" id="bCard"><span class="tag" id="bTag"></span><div class="q" id="bQ"></div><div class="claim"><small>Javob</small><b id="bA"></b></div></div>
+      <div class="tf"><button class="big red" id="bNo">Yolg'on</button><button class="big" id="bYes">Rost</button></div>
+      <div class="toast" id="bToast"></div>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section id="result" class="pad" hidden>
+    <div class="center">
+      <div id="rDrop"></div>
+      <div class="stars" id="rStars"></div>
+      <h2 id="rTitle">Ajoyib!</h2>
+      <p id="rSub"></p>
+      <div class="rstats" id="rStats"></div>
+      <div class="review" id="rReview"></div>
+      <div class="btns"><button class="big blue" id="rAgain">Yana o'ynash</button><button class="big ghost" data-exit>Bosh menyu</button></div>
+    </div>
+  </section>
+
+  <!-- BELLASHUV: LOBBY -->
+  <section id="duel" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" data-exit aria-label="Bosh menyuga qaytish" data-ico="x"></button><h2 class="gtitle">Bellashuv</h2></div>
+    <div class="stack">
+      <div class="dcard">
+        <span class="eyebrow">Bellashuv kodi</span>
+        <div class="codebig" id="dCode"></div>
+        <div class="dchips" id="dInfo"></div>
+      </div>
+      <div class="row2">
+        <a class="big tg lnk" id="dShareTg" href="https://t.me/share/url" target="_blank" rel="noopener"><span data-ico="send"></span>Telegram'da ulashish</a>
+        <button class="big ghost lnk" id="dCopy"><span data-ico="copy"></span>Havolani nusxalash</button>
+      </div>
+      <p class="hint" id="dCopyMsg" aria-live="polite"></p>
+      <div class="note" id="dFileNote" hidden>Ilova telefondagi fayldan ochilgan. Do'stlaringizga shu HTML faylni Telegram'da yuboring va kodni ayting: ular faylni ochib, Bellashuv → "Kod bilan qo'shilish" orqali shu bellashuvga kiradi.</div>
+      <div class="field">
+        <label for="dName">Ismingiz (natijada ko'rinadi)</label>
+        <input class="input" id="dName" maxlength="24" autocomplete="nickname" placeholder="Ismingizni yozing">
+        <p class="hint err" id="dNameErr" aria-live="polite"></p>
+      </div>
+      <div class="note" id="dPlayed" hidden></div>
+      <button class="big blue" id="dStart">Boshlash</button>
+      <button class="big ghost" id="dBoard" hidden>Natijalar jadvali</button>
+      <div class="rules">
+        <h3>Qoidalar</h3>
+        <ul>
+          <li>Hamma bir xil savollarni bir xil tartibda oladi.</li>
+          <li>Har savolga vaqt beriladi. Vaqt tugasa, savol 0 ball.</li>
+          <li>To'g'ri javob 500 ball, tez javob uchun yana 500 ballgacha qo'shiladi.</li>
+          <li>Tugatgach natijangizni guruhga yuboring. Guruhdagi natijalarni "Natijalar" sahifasiga joylasangiz, reyting tuziladi.</li>
+          <li>Faqat birinchi urinish hisoblanadi.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- BELLASHUV: O'YIN -->
+  <section id="duelplay" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" id="dpExit" aria-label="Bellashuvni to'xtatish" data-ico="x"></button><div class="timer"><i id="dpTime"></i></div><div class="gcount" id="dpSec"></div></div>
+    <div class="meta"><span class="tag" id="dpCount"></span><span class="dscore" id="dpScore">0 ball</span></div>
+    <div class="qcard" style="margin-top:14px"><div class="n" id="dpNum"></div><p id="dpText"></p></div>
+    <div class="opts" id="dpOpts"></div>
+    <div class="countdown" id="dpCd" hidden><b id="dpCdN">3</b></div>
+  </section>
+
+  <!-- BELLASHUV: NATIJALAR -->
+  <section id="duelres" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" data-exit aria-label="Bosh menyuga qaytish" data-ico="x"></button><h2 class="gtitle">Natijalar · <span id="drCode"></span></h2></div>
+    <div class="stack">
+      <div class="dcard" id="drMine">
+        <span class="eyebrow">Sizning natijangiz</span>
+        <div class="bignums" id="drNums"></div>
+        <div class="note" id="drPractice" hidden>Bu mashq natijasi — reytingga kirmaydi.</div>
+        <div class="stack0" id="drShareBox">
+          <div class="resline" id="drLine"></div>
+          <div class="row2">
+            <a class="big tg lnk" id="drShareTg" href="https://t.me/share/url" target="_blank" rel="noopener"><span data-ico="send"></span>Guruhga yuborish</a>
+            <button class="big ghost lnk" id="drCopy"><span data-ico="copy"></span>Nusxalash</button>
+          </div>
+          <p class="hint" id="drCopyMsg" aria-live="polite"></p>
+        </div>
+      </div>
+      <div class="sec-h" style="margin:4px 0 0"><h2>Reyting</h2><span id="drCount"></span></div>
+      <div class="lb" id="drBoard"></div>
+      <div class="field">
+        <label for="drPaste">Guruhdagi natijalarni shu yerga joylang</label>
+        <textarea class="input" id="drPaste" rows="4" placeholder="Telegram'da natija xabarlarini belgilab nusxalang va shu yerga joylang"></textarea>
+      </div>
+      <button class="big blue" id="drAdd">Reytingga qo'shish</button>
+      <p class="hint" id="drMsg" aria-live="polite"></p>
+      <div class="review" id="drReview"></div>
+      <button class="big ghost" id="drLobby">Bellashuv sahifasi</button>
+    </div>
+  </section>
+
+  <!-- SURATDAN TOPISH -->
+  <section id="scan" class="pad" hidden>
+    <div class="gbar"><button class="xbtn" data-exit aria-label="Bosh menyuga qaytish" data-ico="x"></button><h2 class="gtitle">Suratdan topish</h2></div>
+    <div class="stack">
+      <p class="lead">Qog'ozdagi savolni suratga oling. Ilova matnni telefonning o'zida o'qiydi, savolni bazadan topadi va to'g'ri javobini ko'rsatadi.</p>
+      <div class="row2">
+        <label class="big blue lnk" for="scCam"><span data-ico="camera"></span>Suratga olish</label>
+        <label class="big ghost lnk" for="scGal"><span data-ico="image"></span>Galereyadan</label>
+      </div>
+      <input class="vh" type="file" id="scCam" accept="image/*" capture="environment" tabindex="-1">
+      <input class="vh" type="file" id="scGal" accept="image/*" tabindex="-1">
+      <div class="scanst" id="scState" hidden>
+        <img id="scImg" alt="Tanlangan surat">
+        <div class="col"><p class="hint" id="scMsg" aria-live="polite"></p><div class="prog"><i id="scBar"></i></div></div>
+      </div>
+      <div class="hits" id="scHits"></div>
+      <div class="field">
+        <label for="scText">Matn — suratdan o'qilgan yoki o'zingiz yozing</label>
+        <textarea class="input" id="scText" rows="4" placeholder="Masalan: buldozer surgichining kesish burchagi"></textarea>
+      </div>
+      <button class="big ghost" id="scFind">Matn bo'yicha qidirish</button>
+      <p class="hint">Yaxshi natija uchun: yorug' joyda, telefonni qog'ozga parallel ushlang va kadrga faqat kerakli savol(lar)ni oling. Birinchi marta ishlatilganda internetdan taxminan 7 MB yuklanadi, keyin tezroq ishlaydi.</p>
+    </div>
+  </section>
+</div>
+
+<div class="fb" id="fb" aria-live="polite"><div class="fb-in"><h3 id="fbTitle"></h3><p id="fbText"></p><button class="big" id="fbNext">Davom etish</button></div></div>
+<div id="scrimHost"></div>
+<canvas id="fx"></canvas>
+
+<script>
+const Q = [{"q": "Gidrotexnik beton konstruksiyasining joylashgan o'rniga ko'ra qanday turlarga bo'linadi?", "o": ["Yengil, o'rtacha og'ir va o'ta og'ir qismlarga", "Kislotaga chidamli, ishqoriy va neytral qismlarga", "Yuqori bosimli, past bosimli va bosimsiz qismlarga", "Suv osti, o'zgaruvchan sathda joylashgan va suv usti qismlariga"], "a": 3}, {"q": "Betonning bir jinslilik koeffitsiyenti (K) qanday aniqlanadi?", "o": ["G'ovaklik hajmi va umumiy hajmning nisbati bilan", "Suv va sement miqdorining o'zaro og'irlik nisbati bilan", "Betonning minimal va loyihada ko'rsatilgan mustahkamligi nisbati bilan", "Betonning o'rtacha zichligi va uning hajmi nisbati bilan"], "a": 2}, {"q": "Beton qaysi kuchlanishga cho'zilishga qaraganda kuchliroq qarshilik ko'rsatadi?", "o": ["Buralish kuchlanishiga qarshilik ko'rsatadi", "Egilish kuchlanishiga qarshilik ko meksatadi", "Siljish kuchlanishiga qarshilik ko'rsatadi", "Siqilish kuchlanishiga qarshilik ko'rsatadi"], "a": 3}, {"q": "Gidrotexnik betonning sovuqqa chidamlilik sinovida mustahkamlik kamayishi ko'p bilan qanchagacha ruxsat etiladi?", "o": ["Mustahkamlik kamayishi 25 foizgacha ruxsat etiladi", "Mustahkamlik kamayishi 35 foizgacha ruxsat etiladi", "Mustahkamlik kamayishi 15 foizgacha ruxsat etiladi", "Mustahkamlik kamayishi 5 foizgacha ruxsat etiladi"], "a": 2}, {"q": "Sovuqqa chidamlilik sinovida beton namunasining massasi ko'pi bilan qancha kamayishi lozim?", "o": ["Massa kamayishi 10 foizdan oshmasligi lozim", "Massa kamayishi 15 foizdan oshmasligi lozim", "Massa kamayishi 20 foizdan oshmasligi lozim", "Massa kamayishi 5 foizdan oshmasligi lozim"], "a": 3}, {"q": "Portland-sementli betonning 28 kunlik yoshidagi siqilishga mustahkamligi necha foiz deb qabul qilinadi?", "o": ["70 foiz darajasida qabul qilinadi", "150 foiz darajasida qabul qilinadi", "125 foiz darajasida qabul qilinadi", "100 foiz darajasida qabul qilinadi"], "a": 3}, {"q": "Portland-sementli betonning 90 kunlik yoshida mustahkamlik ko'rsatkichining o'sishi necha foizga yetadi?", "o": ["150 foiz ko'rsatkichga yetadi", "100 foiz ko'rsatkichga yetadi", "125 foiz ko'rsatkichga yetadi", "200 foiz ko'rsatkichga yetadi"], "a": 2}, {"q": "Portland-sementli betonning 180 kunlik yoshidagi siqilishga mustahkamlik ko'rsatkichi necha foizni tashkil etadi?", "o": ["125 foiz ko'rsatkichni tashkil etadi", "225 foiz ko'rsatkichni tashkil etadi", "150 foiz ko'rsatkichni tashkil etadi", "175 foiz ko'rsatkichni tashkil etadi"], "a": 2}, {"q": "Portland-sementli betonning 1 yillik yoshidagi mustahkamlik ko'rsatkichi necha foizga oshadi?", "o": ["175 foiz ko'rsatkichga yetadi", "200 foiz ko'rsatkichga yetadi", "150 foiz ko'rsatkichga yetadi", "250 foiz ko'rsatkichga yetadi"], "a": 0}, {"q": "Portland-sementli betonning 2 yillik yoshidagi siqilishga mustahkamlik darajasi necha foizga tenglashadi?", "o": ["225 foiz ko'rsatkichga tenglashadi", "250 foiz ko'rsatkichga tenglashadi", "200 foiz ko'rsatkichga tenglashadi", "175 foiz ko'rsatkichga tenglashadi"], "a": 2}, {"q": "Beton sovuqqa chidamliligini oshirish uchun qaysi nisbatni kamaytirish talab etiladi?", "o": ["Sement va mineral kukun nisbatini oshirish", "Qum va tosh nisbatini ko'paytirish", "Havo va kimyoviy qo'shimchalar miqdorini kamaytirish", "Suv-sement nisbatini va suv sarfini kamaytirish"], "a": 3}, {"q": "Qattiq muzlatish usulida beton namunasi necha daraja haroratgacha muzlatiladi?", "o": ["Minus 80 daraja haroratgacha muzlatiladi", "Minus 50 daraja haroratgacha muzlatiladi", "Minus 30 daraja haroratgacha muzlatiladi", "Minus 15 daraja haroratgacha muzlatiladi"], "a": 1}, {"q": "Odatdagi usul bo'yicha sovuqqa chidamlilik sinovida beton qanday haroratda muzlatiladi?", "o": ["Minus 5 daraja haroratda muzlatiladi", "Minus 50 daraja haroratda muzlatiladi", "Minus 30 daraja haroratda muzlatiladi", "Minus 15 daraja haroratda muzlatiladi"], "a": 3}, {"q": "Betonning suv o'tkazmaslik ko'rsatkichi qanday o'lchamli silindrik namunalarda sinalladi?", "o": ["Diametri va balandligi 20 sm bo'lgan namunalarda", "Diametri va balandligi 25 sm bo'lgan namunalarda", "Diametri va balandligi 15 sm bo'lgan namunalarda", "Diametri va balandligi 10 sm bo'lgan namunalarda"], "a": 2}, {"q": "Suv o'tkazmaslik sinovida metall qolip va silindr namuna orasiga qanday zichlovchi material quyiladi?", "o": ["Epoksid smolasi va elastik kley", "Gilli loy va ohak pastasi", "Suyuq sement va qum qorishmasi", "Eritilgan bitum va parafin aralashmasi"], "a": 3}, {"q": "Suv o'tkazmaslik ko'rsatkichi bo'yicha beton markalari qanday belgilanadi?", "o": ["W2, W4, W6, W8, W10, W12 va undan yuqori", "F50, F100, F150, F200, F300, F400", "B10, B15, B20, B25, B30, B40", "M100, M150, M200, M300, M400, M500"], "a": 0}, {"q": "Betonning suv ta'sirida yumshalish koeffitsiyenti (k_yum) granitniki kabi nechaga teng olinadi?", "o": ["Bir butun o'ndan ikkiga teng olinadi", "Nolga teng ko'rsatkich deb olinadi", "Birga teng ko'rsatkich deb olinadi", "Nol butun o'ndan beshga teng olinadi"], "a": 2}, {"q": "Gidrotexnik inshootlarda suv oqimi kuchli qismlarda beton zichligini oshirish uchun qaysi tadbir qo'llaniladi?", "o": ["Suv miqdorini ikki baravar oshirish", "Vakuumlash texnologiyasi va yuqori marka sement", "Issiqlik ishlovi berish va quritish", "To'ldiruvchi o'rniga faqat qum ishlatish"], "a": 1}, {"q": "Betondagi ekzotermik hodisaning foydasi qaysi mavsumda yaqqol namoyon bo'ladi?", "o": ["Yozning issiq kunlarida betonlash ishlarida", "Kuzgi nam havo sharoitida betonlashda", "Qish oylarida betonlash ishlarini bajarishda", "Bahorgi yog'ingarchilik mavsumida beton quyishda"], "a": 2}, {"q": "Beton konsistensiyasi (yotqizuvchanlik darajasi) har smenada necha marta tekshiriladi?", "o": ["Haftada bir marta tekshiriladi", "Har smenada uch marta tekshiriladi", "Har smenada bir marta tekshiriladi", "Har smenada ikki marta tekshiriladi"], "a": 3}, {"q": "Beton puxtaligini tekshirish uchun tayyorlanadigan standart kub namunalar o'lchami qanday bo'ladi?", "o": ["5x5x5 sm va 8x8x8 sm o'lchamlarda", "50x50x50 sm va 100x100x100 sm o'lchamlarda", "15x15x15 sm va 20x20x20 sm o'lchamlarda", "30x30x30 sm va 40x40x40 sm o'lchamlarda"], "a": 2}, {"q": "Gidrotexnik betonlarning puxtaligini sinash uchun necha kunlik yosh belgilanadi?", "o": ["60 kunlik yoshi belgilanadi", "14 kunlik yoshi belgilanadi", "180 kunlik yoshi belgilanadi", "45 kunlik yoshi belgilanadi"], "a": 2}, {"q": "Beton o'rtacha mustahkamligini aniqlashda 3 dona kub sinalganda qaysi ko'rsatkich tashlab yuboriladi?", "o": ["Eng kichik ko'rsatkich tashlab yuboriladi", "Eng katta ko'rsatkich tashlab yuboriladi", "O'rtancha ko'rsatkich tashlab yuboriladi", "Tasodifiy bitta ko'rsatkich tashlab yuboriladi"], "a": 0}, {"q": "Impulsli ultratovush usulida betonda ultratovush tarqalish tezligi qanday oraliqda o'lchanadi?", "o": ["3000-5000 m/sek chegarasida o'lchanadi", "400-2500 m/sek chegarasida o'lchanadi", "10000-15000 m/sek chegarasida o'lchanadi", "100-300 m/sek chegarasida o meksatiladi"], "a": 1}, {"q": "Gidrotexnik inshootlarda vertikal yuza beton mustahkamligi qaysi asbob vositasida baholanadi?", "o": ["Po'lat sharikli mayatnik og'ishi bo'yicha", "Lazerli masofa o'lchagich apparati bilan", "Gidravlik domkrat bosimi ko'rsatkichi bilan", "Ultratovushli vaqt o'lchagich sekundomer yordamida"], "a": 0}, {"q": "I pog'onali beton zavodlarida betonqorgichlarning sig'imi qanday hajmda bo'lishi mumkin?", "o": ["250, 500, 1200, 2400 litr hajmlarda", "50, 100, 150, 200 litr hajmlarda", "3000, 4000, 5000 litr hajmlarda", "10, 20, 30, 40 litr hajmlarda"], "a": 0}, {"q": "II pog'onali beton zavodida betonqorgichlarning sig'imi qanday hajmda bo'ladi?", "o": ["1000, 1500 va 2000 litr hajmlarda", "2000, 3000 va 4000 litr hajmlarda", "100, 250 va 500 litr hajmlarda", "10, 25 va 50 litr hajmlarda"], "a": 2}, {"q": "Betonqorgichning bitta sikli (t_sik) qanday tarkibiy vaqtlardan iborat?", "o": ["Faqat aralashtirish va kutish vaqtlaridan", "Tashish, tekislash va qotish vaqtlaridan", "Yuklash, aralashtirish va to'kish vaqtlaridan", "Isitish, bug'lash va sovitish vaqtlaridan"], "a": 2}, {"q": "Beton qorishmasini avtosamosvalga yuklash va to'kish vaqtlari mos ravishda qanchadan olinadi?", "o": ["Yuklash 5 minut va to'kish 10 minut", "Yuklash 10-20 sek va to'kish 10-20 sek", "Yuklash 30 sek va to'kish 60 sek", "Yuklash 2 minut va to'kish 3 minut"], "a": 1}, {"q": "Beton qorishmasini masofaga tashishda avtosamosvalning hajmiy og'irligi (gamma_b) qancha qabul qilinadi?", "o": ["2,2 tonna/m3 dan 2,5 tonna/m3 gacha", "3,0 tonna/m3 dan 4,0 tonna/m3 gacha", "1,0 tonna/m3 dan 1,5 tonna/m3 gacha", "0,5 tonna/m3 dan 0,8 tonna/m3 gacha"], "a": 0}, {"q": "Gidromeliorativ inshootlar montajida yengil tipdagi qaysi kranlardan keng foydalaniladi?", "o": ["Statsionar ko'priksimon kranlardan foydalaniladi", "Faqat og'ir minora kranlaridan foydalaniladi", "Avtomobil va traktor kranlaridan foydalaniladi", "Suzuvchi kemasimon kranlardan foydalaniladi"], "a": 2}, {"q": "Nasos stansiyalari va mashina zallarida og'ir uskunalar montajida qaysi kran qo'llaniladi?", "o": ["Pnevmo-g'ildirakli ko'chma kran qo meksatiladi", "Yengil zanjirli avtokran qo'llaniladi", "Statsionar ko'priksimon kran qo'llaniladi", "Osma minorali qurilish krani qo'llaniladi"], "a": 2}, {"q": "Montajchi tushirilayotgan beton blokni qanday masofa qolganda qabul qilib oladi?", "o": ["Blok va o'rnatish joyi tutashib bo'lgach", "Blok va o'rnatish joyi orasida 1,5 m qolganda", "Blok va o'rnatish joyi orasida 3 m qolganda", "Blok va o'rnatish joyi orasida 30 sm qolganda"], "a": 3}, {"q": "Zvenoli xobotlar yordamida beton qorishmasini erkin tushirish chuqurligi necha metrgacha ruxsat etiladi?", "o": ["15 metrgacha tushirishga ruxsat etiladi", "30 metrgacha tushirishga ruxsat etiladi", "6 metrgacha tushirishga ruxsat etiladi", "50 metrgacha tushirishga ruxsat etiladi"], "a": 2}, {"q": "Vibroxobotlar yordamida beton qorishmasini tushirish chuqurligi necha metrgacha yetishi mumkin?", "o": ["150 metrgacha yetishi mumkin", "80 metrgacha yetishi mumkin", "10 metrgacha yetishi mumkin", "20 metrgacha yetishi mumkin"], "a": 1}, {"q": "Betonlash ishlarida qo'llanilgan mexanizatsiya vositalariga ko'ra qaysi asosiy usullar mavjud?", "o": ["Statsionar va avtomatik usullar mavjud", "Qo'lda va gidravlik usullar mavjud", "Pnevmatik va elektr usullar mavjud", "Traktorli va kranli usullar mavjud"], "a": 3}, {"q": "Qabul qilingan yotqizish tartibiga qarab betonlashning qaysi sxemalari farqlanadi?", "o": ["Diagonal, vertikal va aylana sxemalar", "Tashqi, ichki va aralash sxemalar", "Parallel, kesishuvchi va spiral sxemalar", "Ketma-ket qatlamli, pog'onali va bir qatlamli"], "a": 3}, {"q": "Bir qatlamli betonlash sxemasi asosan qanday balandlikdagi bloklar uchun qo'llaniladi?", "o": ["Balandligi 0,75-1,0 metrli bloklar uchun", "Balandligi 0,1-0,2 metrli bloklar uchun", "Balandligi 15,0-20,0 metrli bloklar uchun", "Balandligi 5,0-10,0 metrli bloklar uchun"], "a": 0}, {"q": "Issiq va quruq iqlim sharoitida beton qotishini sekinlashtirish uchun qorishmaga nima qo'shiladi?", "o": ["Qotishni sekinlashtiruvchi kimyoviy qo'shimchalar", "Qum va yirik shag'al miqdori", "Issiqlik ajratuvchi mineral kukunlar", "Tez qotiruvchi kalsiy xlorid tuzi"], "a": 0}, {"q": "Juda issiq kunlarda (harorat 42-45 darajadan oshganda) betonlash qaysi vaqtda bajarilishi tavsiya etiladi?", "o": ["Faqat tushlik tanaffusi vaqtida", "Kunning ikkinchi yarmida va tungi soatlarda", "Ertalabki quyosh chiqish paytidagi soatlarda", "Kunning qoq tush vaqtidagi soatlarida"], "a": 1}, {"q": "Beton qorishmasini qo'lda shibbalab zichlaganda betonda necha foizgacha bo'shliq qolishi mumkin?", "o": ["25 foizgacha bo'shliq qolishi mumkin", "70 foizgacha bo'shliq qolishi mumkin", "5 foizgacha bo'shliq qolishi mumkin", "50 foizgacha bo'shliq qolishi mumkin"], "a": 0}, {"q": "Vibrator bilan zichlashda qatlamlar o'zaro yaxshi birikishi uchun vibrator pastki qatlamga necha sm kirishi kerak?", "o": ["25-30 sm pastki qatlamga kirishi kerak", "50 sm pastki qatlamga kirishi kerak", "Butunlay pastki qatlam tubiga yetishi kerak", "5-10 sm pastki qatlamga kirishi kerak"], "a": 3}, {"q": "Vibrator bilan bir nuqtada tebrantirib zichlash vaqti odatda necha sekundni tashkil etadi?", "o": ["60 sekunddan 120 sekundgacha vaqtni", "5 minutdan 10 minutgacha vaqtni", "1 sekunddan 3 sekundgacha vaqtni", "15 sekunddan 30 sekundgacha vaqtni"], "a": 3}, {"q": "Pnevmatik vibratorlarga siqilgan havo yuborishda havoning ishchi bosimi qancha bo'lishi kerak?", "o": ["10-15 MPa bosimda bo'lishi kerak", "0,4-0,5 MPa bosimda bo'lishi kerak", "2,0-3,0 MPa bosimda bo'lishi kerak", "0,01-0,05 MPa bosimda bo'lishi kerak"], "a": 1}, {"q": "Yuza vibratorlar (vibroreykalar) yotqizilgan beton bo'ylab qanday tezlikda suriladi?", "o": ["5,0-10,0 metr/minut tezlikda suriladi", "15,0-20,0 metr/minut tezlikda suriladi", "0,01 metr/minut tezlikda suriladi", "0,5-1,0 metr/minut tezlikda suriladi"], "a": 3}, {"q": "Gidroizolatsiya ishlari deb qanday maqsadli ishlarga aytiladi?", "o": ["Inshootning balandligini va hajmini oshirish", "Konstruksiya og'irligini kamaytirish va yengillashtirish", "Inshootlarni suv, namlik va agressiv muhit ta'siridan muhofaza qilish", "Inshootlarning estetika va tashqi ko'rinishini yaxshilash"], "a": 2}, {"q": "Gidroizolatsiyaning ishlanish va surkish usuliga ko'ra qaysi turlari mavjud?", "o": ["Faqat bo'yaladigan va qoplanadigan turlari", "Qizdiriladigan va muzlatiladigan turlari", "Surkaladigan, suvaladigan, yopishtiriladigan va qattiq turlari", "Eritiladigan va bug'lanadigan turlari"], "a": 2}, {"q": "Surkaladigan bitumli emulsion pastalar necha qatlamli va qanday qalinlikda surkaladi?", "o": ["Kamida ikki qatlamli va har biri 2 mm dan oshmaydigan", "Bitta qatlamli va 10 mm qalinlikda", "O'n qatlamli va har biri 1 mm qalinlikda", "Besh qatlamli va har biri 5 mm qalinlikda"], "a": 0}, {"q": "Sovuq asfalt mastikasi bilan gidroizolatsiya qilishda sirt qanday holatda bo'lishi afzal?", "o": ["Sirt Muzlagan va qrov bosgan bo'lishi", "Sirt nam yoki ho'l holatda bo'lishi afzal", "Sirt yog'langan va silliqlangan bo'lishi", "Sirt qizdirilgan va mutlaqo quruq bo'lishi"], "a": 1}, {"q": "Sovuq asfalt mastikasi yuzaga sachratib suvalganda har bir qatlam qalinligi necha mm bo'ladi?", "o": ["15-20 mm qalinlikda bo'lishi mumkin", "1-2 mm qalinlikda bo'lishi mumkin", "5-7 mm qalinlikda bo'lishi mumkin", "25-30 mm qalinlikda bo'lishi mumkin"], "a": 2}, {"q": "Issiq holdagi bitum mastikasi va qorishmalarni tayyorlashda bitum necha darajagacha qizdiriladi?", "o": ["80-90 darajagacha qizdiriladi", "300-400 darajagacha qizdiriladi", "180-200 darajagacha qizdiriladi", "500 darajadan yuqori qizdiriladi"], "a": 2}, {"q": "Issiq mastika vertikal devorlarga surkalayotganda uning harorati kamida necha daraja bo'lishi kerak?", "o": ["250 darajadan kam bo'lmasligi kerak", "100 darajadan kam bo'lmasligi kerak", "50 darajadan kam bo'lmasligi kerak", "180-200 darajadan kam bo'lmasligi kerak"], "a": 3}, {"q": "Issiq mastika gorizontal yuzalarga surkalayotganda uning harorati kamida necha daraja bo'lishi lozim?", "o": ["160-180 darajadan kam bo'lmasligi lozim", "220 darajadan kam bo'lmasligi lozim", "80 darajadan kam bo'lmasligi lozim", "100 darajadan kam bo'lmasligi lozim"], "a": 0}, {"q": "Gidroizol qanday material asosiga bitum shimdirib tayyorlanadi?", "o": ["Oddiy yog'och qog'oz asosiga bitum shimdirib", "Asbest kartoni asosiga bitum shimdirib", "Shisha tolali mato asosiga bitum shimdirib", "Po'lat to'rli karkas asosiga bitum shimdirib"], "a": 1}, {"q": "Izol o'rama gidroizolatsiya materiali tarkibida necha foiz rezina chiqindilari bo'ladi?", "o": ["5 foiz rezina chiqindilari bo'ladi", "50 foiz rezina chiqindilari bo'ladi", "80 foiz rezina chiqindilari bo'ladi", "19 foiz rezina chiqindilari bo'ladi"], "a": 3}, {"q": "Izol materiali tarkibida necha foiz BH-IV markali bitum mavjud?", "o": ["20 foiz bitum mavjud bo'ladi", "5 foiz bitum mavjud bo'ladi", "57 foiz bitum mavjud bo'ladi", "85 foiz bitum mavjud bo'ladi"], "a": 2}, {"q": "Brizol o'rama materiali tarkibiga qaysi asosiy komponentlar kiradi?", "o": ["Epoksid smolasi, gips va yog'och unchi", "Polyizobutilen, gil va suyuq shisha", "Neft bitumlari, asbest, rezina va plastifikator", "Sement, qum, ohak va suv"], "a": 2}, {"q": "Folgoizol materiali qanday tuzilishga ega bo'lgan gidroizolatsiya vositasi?", "o": ["Ruxlangan temir listga emal bo'yoq berilgan", "Alyuminiy listning ikki tomoniga bitum qoplangan", "Polietilen plyonkaga smola qatlam yopishtirilgan", "Mis folgasining bir tomoniga gips surkalgan"], "a": 1}, {"q": "Irrigatsiya kanallarida suv sizishiga qarshi qaysi plyonkalar keng qo'llaniladi?", "o": ["Kauchukli rezina va rezina-mato plyonkalari", "Polietilen va polivinilxlorid plyonkalari", "Karton va qog'ozli pergamin plyonkalari", "Yog'och kapron va tsellyuloza plyonkalari"], "a": 1}, {"q": "Torkretbeton usulida sement-qum gidroizolatsiya suvoq sepishda soplo qanday masofada ushlanadi?", "o": ["3,0-5,0 metr masofada ushlanadi", "10 metr masofada ushlanadi", "0,1-0,2 metr masofada ushlanadi", "0,9-1,2 metr masofada perpendikular ushlanadi"], "a": 3}, {"q": "Torkret suvog'ining bir martalik sepish qalinligi odatda necha mm bo'ladi?", "o": ["1-2 mm qalinlikda bo'ladi", "100 mm qalinlikda bo'ladi", "50-60 mm qalinlikda bo'ladi", "10-15 mm qalinlikda bo'ladi"], "a": 3}, {"q": "Gidromeliorativ qurilishda qo'llaniladigan ustunqoziqlar materiali bo'yicha qaysi turlarga bo'linadi?", "o": ["Plastmassa, oyna, gips va shisha turlariga", "Faqat cho'yan va bronza turlariga", "Gilli tuproq va qumtosh turlariga", "Yog'och, temir-beton, metall va beton turlariga"], "a": 3}, {"q": "Yog'och ustunqoziqlarning standart uzunligi va ingichka uchi diametri qancha?", "o": ["Uzunligi 4-12 m va diametri 18-34 sm", "Uzunligi 20-30 m va diametri 50-80 sm", "Uzunligi 1-2 m va diametri 5-10 sm", "Uzunligi 50 m va diametri 100 sm"], "a": 0}, {"q": "Ustunqoziqlarni yerga kiritishning qaysi asosiy usullari mavjud?", "o": ["Suvda eritib va kuydirib kiritish usullari", "Qoqib, ostini yuvib, titratib, burab kiritish", "Portlatish va muzlatib tushirish usullari", "Faqat qo'lda kavlab o'rnatish usullari"], "a": 1}, {"q": "Gruntda shag'al miqdori necha foizdan oshsa ustunqoziq qoqish o'ta qiyinlashadi?", "o": ["50 foizdan oshganda qiyinlashadi", "20 foizdan oshganda qiyinlashadi", "80 foizdan oshganda qiyinlashadi", "2 foizdan oshganda qiyinlashadi"], "a": 1}, {"q": "Mexanik bolg'alarning og'irligi odatda necha kg bo'ladi?", "o": ["5000 kg dan 10000 kg gacha bo'ladi", "10 kg dan 20 kg gacha bo'ladi", "500 kg dan 1500 kg gacha bo'ladi", "50 kg dan 100 kg gacha bo'ladi"], "a": 2}, {"q": "Dizel-bolg'alarning qanday turlari mavjud?", "o": ["Aylanma va tebranma dizel-bolg'alar", "Elektrli va magnetli dizel-bolg'alar", "Shtangali va trubali dizel-bolg'alar", "Pnevmatik va gidravlik dizel-bolg'alar"], "a": 2}, {"q": "Shtangali dizel-bolg'a silindrlarining massasi necha kg bo'ladi?", "o": ["50, 100 va 150 kg massali", "10, 20 va 30 kg massali", "600, 1200 va 1800 kg massali", "5000, 8000 va 10000 kg massali"], "a": 2}, {"q": "Dizel-bolg'ada yukni tashlab yuborishning maksimal balandligi necha metr bo'ladi?", "o": ["10 metr balandlikda bo'ladi", "2 metr balandlikda bo'ladi", "20 metr balandlikda bo'ladi", "0,2 metr balandlikda bo'ladi"], "a": 1}, {"q": "Ustunqoziq uzunligi 12 metrgacha va zich gruntda bo'lganda to'qmoq og'irligi qanday tanlanadi?", "o": ["Qoziq og'irligining 0,1 qismicha tanlanadi", "Qoziq og'irligiga tengsiz holda tanlanadi", "Qoziq og'irligining 5 barobaricha tanlanadi", "Qoziq og'irligining 1,5 qismicha tanlanadi"], "a": 3}, {"q": "Titratib kiritish (vibratsiyali) usuli asosan qanday gruntlarda yuqori samarali?", "o": ["Muzlagan abadiy toshloq gruntlarda", "Zich va qattiq gilli gruntlarda", "Birikmaydigan qumli va nam gruntlarda", "Qattiq qoyatoshli va granit gruntlarda"], "a": 2}, {"q": "Ustunqoziqlarni ko'tarish va yo'naltirib ushlab turuvchi maxsus qurilma nima deyiladi?", "o": ["Buldozer qurilmasi deb ataladi", "Kopyor qurilmasi deb ataladi", "Gidromonitor qurilmasi deb ataladi", "Ekskavator qurilmasi deb ataladi"], "a": 1}, {"q": "Gruntlarni sementlash usuli qanday maqsadlar uchun qo'llaniladi?", "o": ["Grunt ichida bo'shliqlar hosil qilish", "Grunt mustahkamligini oshirish va suv sizishini kamaytirish", "Gruntning rengini va tarkibini o'zgartirish", "Gruntning namligini oshirish va yumshatish"], "a": 1}, {"q": "Qumli gruntlarni mustahkamlashda silikatlash usulida qaysi kimyoviy moddalar yuboriladi?", "o": ["Bitum emulsiyasi va kerosin", "Amoniy selitrasi va ohak suvi", "Osh tuzi va sulfat kislotasi eritmasi", "Suyuq shisha va kalsiy xlor eritmasi"], "a": 3}, {"q": "Yumshoq va bo'sh gruntlarni bitumlashda qanday materialdan foydalaniladi?", "o": ["Kalsiy karbid va gips", "Muzlatilgan bitum kukunlari va qum", "Eritilgan issiq bitum va bitum emulsiyasi", "Suyuq shisha va sement qorishmasi"], "a": 2}, {"q": "Oquvchan changsimon qumlarni (plivun) vaqtincha mustahkamlashda qaysi usul qo'llaniladi?", "o": ["Sun'iy yo'l bilan muzlatish usuli", "Suv bilan yuvib tashlash usuli", "Gips bilan qotirish usuli", "Yuqori haroratda kuydirish usuli"], "a": 0}, {"q": "Gruntlarni muzlatish usulida trubalarga yuboriladigan suyuqlik harorati qancha bo'ladi?", "o": ["Minus 25 dan minus 45 darajagacha", "Plyus 50 daraja haroratda", "Minus 100 darajadan past haroratda", "Nol darajadan plyus 10 darajagacha"], "a": 0}, {"q": "Damba va to'g'on inshootlarining asosiy farqi nimada?", "o": ["Damba yer ostida, to'g'on esa tog' tepasida joylashadi", "Damba yer ustidagi to'kma, to'g'on esa suv havzasi hosil qiluvchi to'kma", "Damba faqat betondan, to'g meksat faqat yog'ochdan quriladi", "Damba va to'g'on mutlaqo bir xil vazifani bajaradi"], "a": 1}, {"q": "Gidrotexnika inshooti zaminidagi tish yoki qulf nima uchun xizmat qiladi?", "o": ["Suv oqimi tezligini oshirish va yo'naltirish uchun", "To'g'on ustida mashinalar yurishini ta'minlash uchun", "Inshoot og'irligini ikki baravar kamaytirish uchun", "To'g'onning zamin bilan mustahkam birlashib turishi uchun"], "a": 3}, {"q": "Qattiq (qoyatosh) gruntlarning asosiy xususiyati nimadan iborat?", "o": ["Tarkibida faqat organik o'simlik moddalari bo'ladi", "Suvda tez oqib ketadi va doimiy siljiydi", "Yuqori mustahkamlikka ega va oldindan yumshatishni talab qiladi", "Qo'l belkuragi bilan oson qaziladi"], "a": 2}, {"q": "Grunt zarralarining diametri 250 mm dan ortiq bo'lsa u qanday nomlanadi?", "o": ["Soz lyossli grunt deb nomlanadi", "Mayda qumloq grunt deb nomlanadi", "Balchiqli grunt deb nomlanadi", "Xarsang toshli grunt deb nomlanadi"], "a": 3}, {"q": "Zarrachalarining diametri 40 mm dan 200 mm gacha bo'lgan toshli grunt qanday ataladi?", "o": ["Gilli grunt deb ataladi", "Xarsang toshli grunt deb ataladi", "O'rtacha toshli grunt deb ataladi", "Mayda qumloq grunt deb ataladi"], "a": 2}, {"q": "Grunt zarralarining diametri 0,005 mm dan kichik bo'lsa u qanday grunt hisoblanadi?", "o": ["Yirik toshli grunt hisoblanadi", "Gilli grunt hisoblanadi", "Qumli grunt hisoblanadi", "Mayda toshli grunt hisoblanadi"], "a": 1}, {"q": "Grunt zarralari diametri 0,05 mm dan 5 mm gacha bo'lsa u qaysi grunt turiga kiradi?", "o": ["Gilli gruntlar turiga kiradi", "Qumli gruntlar turiga kiradi", "Balchiqli gruntlar turiga kiradi", "Xarsang toshli gruntlar turiga kiradi"], "a": 1}, {"q": "Grunt tarkibida gil zarrachalari miqdori 12 foizdan ortiq bo'lsa u qanday guruhga kiradi?", "o": ["Kam birikuvchan gruntlar guruhiga kiradi", "Birikuvchan gruntlar guruhiga kiradi", "Qoyatoshli gruntlar guruhiga kiradi", "Birikmaydigan gruntlar guruhiga kiradi"], "a": 1}, {"q": "Grunt tarkibida gil zarrachalari miqdori 3 foizdan kam bo'lsa u qanday ataladi?", "o": ["O'ta birikuvchan gilli grunt deb ataladi", "Gidrofil va bo'kadigan grunt deb ataladi", "Plastik va yopishqoq grunt deb ataladi", "Birikmaydigan grunt deb ataladi"], "a": 3}, {"q": "Tabiiy qiyalik burchagi deb qanday burchakka aytiladi?", "o": ["Ekskavator cho'michi va grunt orasidagi kesish burchagi", "Grunt o'z og'irligi ta'sirida to'kilib ketmaydigan qiyalik va gorizont orasidagi burchak", "Kanal tubi va vertikal devor orasidagi to'g'ri burchak", "Quyosh nuri va kanal yuzasi orasidagi burchak"], "a": 1}, {"q": "Nisbiy namlik (suvga to'yinganlik koeffitsiyenti S_r) 0,8 dan 1,0 gacha bo'lganda grunt qanday holatda bo'ladi?", "o": ["Muzlagan grunt holatida bo'ladi", "Quruq grunt holatida bo'ladi", "Ho'l grunt holatida bo'ladi", "Nam grunt holatida bo'ladi"], "a": 2}, {"q": "Nisbiy namlik koeffitsiyenti (S_r) 0,0 dan 0,5 gacha bo'lgan grunt qanday baholanadi?", "o": ["Oquvchan grunt deb baholanadi", "Quruq grunt deb baholanadi", "Ho'l grunt deb baholanadi", "To'yingan grunt deb baholanadi"], "a": 1}, {"q": "Gruntning yumshalish koeffitsiyenti (K_yum) qanday hisoblanadi?", "o": ["Grunt zichligining uning namligiga bo'lingan qiymati bilan", "Quruq grunt massasining suv massasiga nisbati bilan", "Yumshatilgan grunt hajmining tabiiy zichlikdagi hajmga nisbati bilan", "G'ovaklik hajmining qattiq zarralar hajmiga ko'paytmasi bilan"], "a": 2}, {"q": "Yumshalish koeffitsiyenti (K_yum) har doim qanday sonlar orasida bo'ladi?", "o": ["Birdan katta va ikkidan kichik son bo'ladi", "Aksariyat hollarda nolga teng son bo'ladi", "O'ndan katta va yuzdan kichik son bo'ladi", "Noldan kichik manfiy son bo'ladi"], "a": 0}, {"q": "Ekskavator bilan kanal qazilganda loyiha o'lchamlaridan necha sm qoldirib qaziladi?", "o": ["50-100 sm qoldirib qaziladi", "15-20 sm qoldirib qaziladi", "1-2 sm qoldirib qaziladi", "Mutlaqo marja qoldirilmaydi"], "a": 1}, {"q": "Kanal qazishda qoldirilgan 15-20 sm notekis qatlam qanday tekislanadi?", "o": ["Buldozer bilan chuqur haydash orqali", "Gidromonitor bilan yuqori bosimli suv sochib", "Portlatish usulini qo'llagan holda", "Maxsus cho'mich taqib yoki qo'l kuchi yordamida"], "a": 3}, {"q": "Qurilish ishlarini tashkil etishning qaysi uchta asosiy usuli mavjud?", "o": ["Tashqi, ichki va aralash usullar", "Mexanik, elektr va pnevmatik usullar", "Tezkor, sekin va o'rtacha usullar", "Ketma-ket, parallel va oqim usullari"], "a": 3}, {"q": "Qurilishni parallel usulda tashkil etishning asosiy xususiyati nimada?", "o": ["Har bir bino navbatma-navbat ketma-ket quriladi", "Ishchilar soni minimal darajada saqlanadi", "Barcha binolar va obyektlar bir vaqtda quriladi", "Qurilish muddati eng uzun davom etadi"], "a": 2}, {"q": "Qurilishni oqim usulida tashkil etishning afzalligi nimadan iborat?", "o": ["Ishlar tartibsiz va rejasiz olib boriladi", "Davomiyligi ketma-ket usuldan qisqa va resurs sarfi bir maromda bo'ladi", "Resurslar va ishchilar sarfi parallel usuldan ham yuqori bo'ladi", "Ob'ektlar mutlaqo texnikasiz faqat qo'lda quriladi"], "a": 1}, {"q": "\"Grunt qaridagi devor\" (стенка в грунте) usulida poydevor qurishda yer qazish ishlari necha marta qisqaradi?", "o": ["10-12 marta qisqaradi", "O'zgarishsiz bir xil qoladi", "5-6 marta qisqaradi", "2 marta ko'payadi"], "a": 2}, {"q": "\"Grunt qaridagi devor\" usuli o'z og'irligi bilan tushadigan quduqlarga nisbatan necha foiz arzon tushadi?", "o": ["Bir xil qiymatda tushadi", "80 foiz qimmatroq tushadi", "50 foiz arzonroq tushadi", "10 foiz arzonroq tushadi"], "a": 2}, {"q": "Zichlanayotgan gruntning sifatini tekshirish uchun har necha m3 da namunalar olinadi?", "o": ["Har 5 m3 zichlangan gruntdan", "Har 100-200 m3 zichlangan gruntdan", "Faqat ob'ekt to'liq topshirilayotganda", "Har 1000-2000 m3 zichlangan gruntdan"], "a": 1}, {"q": "Komissiya tomonidan yer ishlari sifati necha ballik tizimda baholanadi?", "o": ["Uch ballik tizimda baholanadi", "Yuz ballik tizimda baholanadi", "O'n ballik tizimda baholanadi", "Besh ballik tizimda baholanadi"], "a": 0}, {"q": "Yer ishlarini baholashda uch ballik tizimga qaysi baholar kiradi?", "o": ["\"Yuqori\", \"o'rta\" va \"quyi\" baholari", "\"A'lo\", \"yaxshi\" va \"qoniqarli\" baholari", "\"O'tdi\", \"o'tmadi\" va \"qayta topshirsin\" baholari", "\"Bir\", \"ikki\" va \"uch\" baholari"], "a": 1}, {"q": "To'kma inshootlar qurilishida grunt o'rtacha zichligi va namligini tezkor o'lchashda qaysi usul qo'llaniladi?", "o": ["Suvda oqizib tarozida tortish usuli", "Mikroskop ostida sanab chiqish usuli", "Radioizotop usuli (gamma nurlari va neytronli)", "Kimyoviy erituvchilar bilan eritish usuli"], "a": 2}, {"q": "Beton qorishmasini yotqizish oldidan qolip va armaturani qanday sovitish tavsiya etiladi?", "o": ["Qum va tuproq sochib ko'mib qo'yish bilan", "Siqilgan issiq havo purkash orqali", "Sovuq suv sepib sovitish tavsiya etiladi", "Maxsus kimyoviy moylar surkish bilan"], "a": 2}, {"q": "Qatlamli betonlashda bir qatlamni ikkinchisi bilan yopish uchun ruxsat berilgan maksimal muddat nimaga bog'liq?", "o": ["Ishchilarning tushlik qilish vaqtiga", "Avtosamosvalning sig'imi va hajmiga", "Beton qorishmasi qota boshlanguncha bo'lgan vaqtga", "Kran strelasining burilish tezligiga"], "a": 2}, {"q": "Armaturasiz yoki kam armaturali yaxlit konstruksiyalarni betonlashda qaysi vibratorlar paketi ishlatiladi?", "o": ["Tashqi elektr shchitli vibratorlar", "MB-90 markali ichki vibratorlar paketi", "HB-27 markali kichik qo'l vibratori", "Vibroreyka va yuza tekislovchilar"], "a": 1}, {"q": "Gidroizolatsiyaning qaysi turida materiallar asosi qog'oz-kartondan iborat bo'lgani uchun chiriydi?", "o": ["Po'lat va plastmassa listlarida", "Polietilen va PVX plyonkalarida", "Ruberoid va tol materiallarida", "Folgoizol va temirizol materiallarida"], "a": 2}, {"q": "Polietilen plyonka ustidan kanal ichiga bostirib qo'yish uchun nima yotqiziladi?", "o": ["Quyma yoki yig'ma beton plitalari", "Qalin gisht devor va loy suvoq", "Yog'och taxtalar va xodalar", "Chaqiq tosh va qum qatlami"], "a": 0}, {"q": "Ustunqoziqni qoqib kiritishda birikmaydigan qumli va shag'alli gruntlar qanday guruhga kiradi?", "o": ["Oquvchan balchiq gruntlar guruhiga kiradi", "Yumshoq gilli gruntlar guruhiga kiradi", "Oson va yengil gruntlar guruhiga kiradi", "Og'ir gruntlar guruhiga kiradi"], "a": 3}, {"q": "Kopyorning kerakli balandligi (H_k) qaysi parametrlar yig'indisidan topiladi?", "o": ["Qoziq uzunligi, to'qmoq uzunligi, ko'tarilish balandligi va zaxira masofa", "Faqat qoziq uzunligi va kran balandligi yig'indisidan", "Kanal chuqurligi va kengligi ko'paytmasidan", "Avtosamosval va buldozer balandligi ayirmasidan"], "a": 0}, {"q": "Qoziqlarni avtomobil kranlari bilan ortishda tagliklar qayerga joylashtiriladi?", "o": ["Faqat qoziqning ikkala uchki qismlariga", "Qoziqning to'g'ri o'rtasiga bitta qilib", "Qoziq ustiga bosib qo'yiladi", "Montaj halqalari tagiga joylashtiriladi"], "a": 3}, {"q": "Sementlash ishlarida bir minutda skvajinaning 1 metr uzunligiga shimiladigan suv miqdori nima deyiladi?", "o": ["Solishtirma suv shimilish ko'rsatkichi (q)", "Yumshalish koeffitsiyenti (K_yum)", "Suv o'tkazmaslik markasi (W)", "Filtrlanish koeffitsiyenti (K_f)"], "a": 0}, {"q": "Torkretbeton suvoq qilgandan so'ng uning sifatini saqlash uchun qanday qarov bajariladi?", "o": ["Ustidan darhol og'ir qum to'kiladi", "Atrofini darhol alanga bilan quritiladi", "Hech qanday qarov talab etilmaydi", "Xuddi yangi yotqizilgan betonga qanday qaralsa shunday"], "a": 3}, {"q": "Brizol materialsining yumshash harorati necha darajani tashkil etadi?", "o": ["140 daraja haroratni tashkil etadi", "50 daraja haroratni tashkil etadi", "0 daraja haroratni tashkil etadi", "300 daraja haroratni tashkil etadi"], "a": 0}, {"q": "Brizol materialsining 24 soat davomida suv shimuvchanligi ko'pi bilan necha foiz?", "o": ["10 foizni tashkil etadi", "0,2 foizni tashkil etadi", "25 foizni tashkil etadi", "50 foizni tashkil etadi"], "a": 1}, {"q": "Gidroizolatsiyada qo'llaniladigan Folgoizol alyuminiy listining qalinligi qancha?", "o": ["5-10 mm qalinlikda bo'ladi", "0,2-0,5 mm qalinlikda bo'ladi", "20 mm qalinlikda bo'ladi", "0,01 mm dan kichik bo'ladi"], "a": 1}, {"q": "O'rama gidroizolatsiya plyonkasining standart qalinligi va o'rama uzunligi qancha?", "o": ["Qalinligi 0,01 mm va uzunligi 1000 metr", "Qalinligi 5,0 mm va uzunligi 10 metr", "Qalinligi 0,5 mm va uzunligi 250 metr", "Qalinligi 20 mm va uzunligi 500 metr"], "a": 2}, {"q": "Torkretbeton usulida sement-qum gidroizolatsiya suvoq sepishda havoning bosimi qanday beriladi?", "o": ["Gidravlik suv nasosi yordamida", "Gravitatsion erkin tushish oqimi bilan", "Faqat qo'l cho'tkasi bilan surkash orqali", "Siqilgan havo yordamida sepiladi"], "a": 3}, {"q": "Massiv inshootlarda konstruktiv choklar qanday turlarga bo'linadi?", "o": ["Birinchi, ikkinchi va uchinchi choklar", "Temperatura, deformatsiya va cho'kish choklari", "Vertikal, diagonal va ko'ndalang choklar", "Ichki, tashqi va chekka choklar"], "a": 1}, {"q": "Metall ustunqoziqlarning diametri odatda qanday oraliqda bo'ladi?", "o": ["25 sm dan 100 sm gacha bo'ladi", "5 sm dan 10 sm gacha bo'ladi", "300 sm dan ortiq bo'ladi", "150 sm dan 200 sm gacha bo'ladi"], "a": 0}, {"q": "Vibroqoqgichlar qanday gruntlarga qoziq qoqishda juda samarali hisoblanadi?", "o": ["Muzlagan va muz bilan qoplangan yerlarga", "Qattiq qoyatosh va granit gruntlarga", "Qattiq va pishgan gilli gruntlarga", "Nam qumli gruntlarga qoziq qoqishda"], "a": 3}, {"q": "Vibrobolg'alarning ishlash prinsipi nimaga asoslangan?", "o": ["Vibratsiya va zarbiy ta'sirni birgalikda qo'llashga", "Faqat yuqori harorat berib eritishga", "Qoziqni aylanma burash harakatiga", "Suv purkab gruntni oqizib ketishga"], "a": 0}, {"q": "Kopyor qurilmasining qaysi qismi uning asosiy ishchi qismi hisoblanadi?", "o": ["Kopyorning strelasi asosiy qismdir", "Kopyorning yon chiroqlari asosiy qismdir", "Kopyorning g'ildiraklari asosiy qismdir", "Kopyorning kabinasi asosiy qismdir"], "a": 0}, {"q": "Sementlashda quduq atrofida haydalgan material yetib boradigan masofa nima deyiladi?", "o": ["Shimilish chuqurligi deb ataladi", "Muzlash radiusi deb ataladi", "Mustahkamlanish radiusi deb ataladi", "Filtrlanish masofasi deb ataladi"], "a": 2}, {"q": "Bitumlash usulida kotlovan atrofiga bitum qanday haydaladi?", "o": ["Yer yuzasiga paqir bilan quyib chiqiladi", "Skvajinalarga ma'lum bosim ostida yuboriladi", "Kanal bo'ylab ariqda oqiziladi", "Yog'och belkurak bilan surkaladi"], "a": 1}, {"q": "Organik gruntlarga qaysi tuproq turlari kiradi?", "o": ["Kvars qumi va gil kukunlari", "Qora tuproq, fosforitlar va botqoq gruntlari", "Granit, bazalt va marmar jinslari", "Qum, shag'al va chaqiq toshlar"], "a": 1}, {"q": "Mineral gruntlar nurash va yemirilish bo'yicha qanday xillarga ajratiladi?", "o": ["Suvli, gazli va neftli xillarga", "Toshloq, sementlangan konglomeratlar va toshloq bo'lmagan", "Yengil, og'ir va o'ta og'ir xillarga", "Quruq, ho'l va nam xillarga"], "a": 1}, {"q": "Qattiq gruntlar (qoyatoshlar) qaysi guruhlarga mansub hisoblanadi?", "o": ["V-XI guruhlarga mansub hisoblanadi", "I-IV guruhlarga mansub hisoblanadi", "I guruhga mansub hisoblanadi", "XII-XV guruhlarga mansub hisoblanadi"], "a": 0}, {"q": "Mayda qumloq va gil nam holatda qanday xususiyatga ega bo'ladi?", "o": ["Juda yopishqoq bo'lib suvda tez bo'kadi", "Suvni umuman o'ziga shimib olmaydi", "Mutlaqo yopishmaydi va uvalanib ketadi", "Quriganda hajmi hech qachon o'zgarmaydi"], "a": 0}, {"q": "Dala sharoitida gilli grunt namunasidan shar yumaloqlab bosilganda chetlari yorilmasa u qaysi grunt?", "o": ["Gilli grunt hisoblanadi", "Sho'rxok grunt hisoblanadi", "Chaqiq toshli grunt hisoblanadi", "Qumli grunt hisoblanadi"], "a": 0}, {"q": "Dala sharoitida kaftga ishqalanganda kaft toza qolsa u qaysi grunt hisoblanadi?", "o": ["Mayda soz lyoss grunti hisoblanadi", "Toza qum grunti hisoblanadi", "Sho'rtob botqoq grunti hisoblanadi", "O'ta yopishqoq gil grunti hisoblanadi"], "a": 1}, {"q": "Gruntning o'rtacha zichligi (gamma_o'r) qanday formula bilan topiladi?", "o": ["Massaning hajmga nisbati P / V bilan", "Hajmning massaga ko'paytmasi V * P bilan", "Balandlikning eniga ko'paytmasi bilan", "Namlikning haroratga bo'lingani bilan"], "a": 0}, {"q": "Gruntning bog'lanuvchanligi deb qanday qobiliyatiga aytiladi?", "o": ["Issiqlikni o'zidan o'tkazish qobiliyatiga", "Suvda oson erib suyuqlanib ketish qobiliyatiga", "Muzlaganda hajmini kamaytirish qobiliyatiga", "Grunt zarralarini bir-biridan ajratishga qarshi turish qobiliyatiga"], "a": 3}, {"q": "Kanal ko'ndalang kesimining solishtirma hajmi (W) trapetsiya uchun qanday hisoblanadi?", "o": ["W = b * b * h formula bilan", "W = (b + h) / 2 formula bilan", "W = (b + m_k * h) * h * 1m_u formula bilan", "W = b * h * L formula bilan"], "a": 2}, {"q": "Traktorli usulda betonlashda nima uchun pog'onali betonlash sxemasi qo'llanilmaydi?", "o": ["Traktor tezligi juda yuqori bo'lganligi uchun", "Pog'onali betonlashda beton qotmay qolgani uchun", "Traktor faqat suv ostida ishlagani uchun", "Traktorning bir pog'onadan ikkinchisiga o'tishi qiyinligi uchun"], "a": 3}, {"q": "Beton qorishmasini zichlashda vakuumlash usuli qanday qo'llaniladi?", "o": ["Mustaqil yagona zichlash usuli sifatida", "Vibratsiyalab zichlashga qo'shimcha tadbir sifatida", "Faqat suv osti betonlash ishlarida", "Faqat yog'och konstruksiyalarni qurishda"], "a": 1}, {"q": "Beton yuzida paydo bo'lgan yirik bo'shliqlarga sement suyuqligi qanday yuboriladi?", "o": ["Yog'och belkurak bilan surkash orqali", "Temir trubalar orqali bosim ostida", "Ochiq chelakda ustidan quyish orqali", "Purkagichsiz shlangdan oqizish orqali"], "a": 1}, {"q": "To'g'onlar va dambalarni qurishda grunt zichligini oshirish nima uchun zarur?", "o": ["Suv o'tkazmaslik va mustahkamlikni ta'minlash uchun", "To meksat balandligini kamaytirish uchun", "To'g'on rangi chiroyli bo'lishi uchun", "Grunt og'irligini yo'qotish uchun"], "a": 0}, {"q": "Ekskavator cho'michi sig'imi va grunt guruhiga qarab nima aniqlanadi?", "o": ["Kopyor strelasining og'ish burchagi", "Beton zavodining qozonlari soni", "Ekskavatorning ish unumdorligi va vaqt me'yori", "Avtosamosvalning g'ildiraklari diametri"], "a": 2}, {"q": "Gidrotexnik beton uchun mustahkamlikdan tashqari qaysi asosiy talablar qo'yiladi?", "o": ["Yengillik, suvdada suzuvchanlik va egiluvchanlik", "Kislotalarda oson eruvchanlik talablari", "Egiklik, shaffoflik va rangdorlik talablari", "Sovuqqa chidamlilik, suv o'tkazmaslik va suvga chidamlilik"], "a": 3}, {"q": "O'ziyurar betonyotqizgich bir to'xtash joyidan necha metr radiusda beton uzata oladi?", "o": ["20 metr radius doirasida uzata oladi", "500 metr radius doirasida uzata oladi", "2 metr radius doirasida uzata oladi", "100 metr radius doirasida uzata oladi"], "a": 0}, {"q": "Gidroizolatsiya ishlarini bajarishda xavfsizlik nuqtai nazaridan nimaga e'tibor beriladi?", "o": ["Materiallarning juda sovuqligiga va muzlashiga", "Materiallarning elektr toqini o'tkazishiga", "Materiallarning rangsiz va hidsiz ekanligiga", "Materiallar qizdirib ishlatilishi va tez alovlanuvchanligiga"], "a": 3}, {"q": "Kanal yonlari qiyalik koeffitsiyenti (m_k) odatda qanday oraliqda o'zgaradi?", "o": ["0,01 dan 0,05 gacha chegarada o'zgaradi", "50 dan 100 gacha chegarada o'zgaradi", "10 dan 20 gacha chegarada o'zgaradi", "0,5 dan 2,5 gacha chegarada o'zgaradi"], "a": 3}, {"q": "Pnevmodvigatelligi vibroqo'zg'atgichlar qanday energiya bilan ishlaydi?", "o": ["Siqilgan havo energiyasi bilan ishlaydi", "Elektr toki va batareya energiyasi bilan", "Dizel yonilg'isi yonishi energiyasi bilan", "Quyosh batareyasi energiyasi bilan"], "a": 0}, {"q": "Ichdan chuqur zichlaydigan HB-78 vibratorining tebranishlar chastotasi necha min^-1?", "o": ["11000 min^-1 tebranishlar chastotasi", "100 min^-1 tebranishlar chastotasi", "50000 min^-1 tebranishlar chastotasi", "10 min^-1 tebranishlar chastotasi"], "a": 0}, {"q": "Brizol materialsida bitum miqdori ko'pi bilan necha foizni tashkil etadi?", "o": ["5 foizgacha bitum miqdorini tashkil etadi", "90 foizgacha bitum miqdorini tashkil etadi", "34 foizgacha bitum miqdorini tashkil etadi", "0 foiz bitum miqdorini tashkil etadi"], "a": 2}, {"q": "Gruntlarning namligi bo'yicha ho'l gruntda suv miqdori (omega) qancha bo'ladi?", "o": ["0 foizga teng bo'ladi", "30 foizdan yuqori bo'ladi", "5 foizdan kichik bo'ladi", "100 foiz sof suvdan iborat bo'ladi"], "a": 1}, {"q": "Suvaladigan gidroizolatsiyada gruntovka qanday moslama bilan sepilishi mumkin?", "o": ["Forsunka sepgich yordamida sepilishi mumkin", "Yog'och kurakcha bilan surkaladi", "Vibroreyka yordamida tebrantiriladi", "Ekskavator cho'michi bilan to'kiladi"], "a": 0}, {"q": "Beton qorishmasini suvash va zichlash ishlarida sifatni buzmaslik uchun nima taqiqlanadi?", "o": ["Indiferent kechikishlar va bekor turib qolishlar", "Sirtni sovuq suv bilan sovitib turish", "Suv-sement nisbatini me'yorda saqlash", "Vibratorlardan uzluksiz foydalanish"], "a": 0}];
+const CH = [
+  {name:"Beton xossalari va sinovi", from:1, to:25, c:"var(--c0)", ico:"b_cube"},
+  {name:"Qorish va yotqizish", from:26, to:45, c:"var(--c1)", ico:"b_mixer"},
+  {name:"Gidroizolatsiya", from:46, to:61, c:"var(--c2)", ico:"b_umb"},
+  {name:"Ustunqoziqlar", from:62, to:72, c:"var(--c3)", ico:"b_pile"},
+  {name:"Gruntni mustahkamlash", from:73, to:79, c:"var(--c4)", ico:"b_layers"},
+  {name:"Gruntlar va yer ishlari", from:80, to:93, c:"var(--c5)", ico:"b_shovel"},
+  {name:"Tashkil etish va sifat", from:94, to:117, c:"var(--c6)", ico:"b_flow"},
+  {name:"Aralash mavzular", from:118, to:148, c:"var(--c7)", ico:"b_mix"}
+];
+const ICO = {
+  b_cube:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>',
+  b_mixer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="6"/><path d="M15 12h4l2 4M4 20h16M9 9v6M6 12h6"/></svg>',
+  b_umb:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v6a2 2 0 0 0 4 0"/></svg>',
+  b_pile:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4H9zM10 7h4v11l-2 3-2-3z"/><path d="M3 14h18"/></svg>',
+  b_layers:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>',
+  b_shovel:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4l6 6M17 7L9 15"/><path d="M9 15l-3-1-3 3 4 4 3-3-1-3z"/></svg>',
+  b_flow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="6" height="5" rx="1"/><rect x="15" y="4" width="6" height="5" rx="1"/><rect x="9" y="15" width="6" height="5" rx="1"/><path d="M6 9v3h12V9M12 12v3"/></svg>',
+  b_mix:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h4l8 10h4M4 17h4l2.5-3M14 10l2-3h4"/><path d="M18 5l2 2-2 2M18 15l2 2-2 2"/></svg>',
+
+  trophy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3.5 4M16 6h3a3 3 0 0 1-3.5 4"/><path d="M12 13v4M8.5 20.5h7M10 17h4"/></svg>',
+  camera:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2.5h6L16.5 7h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+  image:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="M20.5 16l-5-5-8.5 8.5"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/></svg>',
+  copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5C4.7 19 4 18.3 4 17.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5-.7 1.5-1.5z"/></svg>',
+  dozer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="8" height="6" rx="1"/><rect x="5" y="14" width="13" height="5" rx="2.5"/><path d="M18 10l3-1v10"/><path d="M10 7V5h4"/></svg>',
+  level:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="9" width="18" height="7" rx="3.5"/><circle cx="12" cy="12.5" r="1.6"/><path d="M9.5 9v7M14.5 9v7"/></svg>',
+  soil:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7c3-2 6 2 9 0s6-2 9 0"/><path d="M3 12c3-2 6 2 9 0s6-2 9 0"/><path d="M3 17c3-2 6 2 9 0s6-2 9 0"/></svg>',
+  digger:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="15" width="10" height="4" rx="2"/><path d="M5 15v-4h5l1 4"/><path d="M10 11l5-6 4 3"/><path d="M19 8l1 5h-4z"/></svg>',
+  pipe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9h14a4 4 0 0 1 4 4v2"/><path d="M2 14h11a2 2 0 0 1 2 2"/><path d="M20 19c0 1-.7 2-1.5 2S17 20 17 19s1.5-3 1.5-3S20 18 20 19z"/></svg>',
+  trough:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6c0 7 3 10 8 10s8-3 8-10"/><path d="M7 11c2 1 3-1 5 0s3 1 5 0"/><path d="M8 16l-1 5M16 16l1 5"/></svg>',
+  quiz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5v.7"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg>',
+  cards:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="13" height="16" rx="2.5"/><path d="M4 7v11.5A2.5 2.5 0 0 0 6.5 21H15"/></svg>',
+  bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>',
+  wrench:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8a2.8 2.8 0 0 1-4-4l8-8z" transform="translate(-2 -1)"/><path d="M15 3a4 4 0 0 1 5.6 5.6"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  soundOn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>',
+  soundOff:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>',
+  tap:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>',
+  star:'<svg viewBox="0 0 24 24"><path class="s" d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>'
+};
+const $ = s => document.querySelector(s);
+document.querySelectorAll('[data-ico]').forEach(el => el.innerHTML = ICO[el.dataset.ico]);
+
+function drop(size, mood){
+  return `<svg class="drop ${mood||'idle'}" width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true">
+    <path d="M18 34 L32 20 H84 L70 34 Z" fill="#E3DFD8" stroke="#2B2A28" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M70 34 L84 20 V72 L70 86 Z" fill="#A9A398" stroke="#2B2A28" stroke-width="3" stroke-linejoin="round"/>
+    <rect x="18" y="34" width="52" height="52" rx="3" fill="#CBC6BD" stroke="#2B2A28" stroke-width="3"/>
+    <circle cx="26" cy="78" r="1.6" fill="#8E887D"/><circle cx="62" cy="42" r="1.4" fill="#8E887D"/><circle cx="60" cy="79" r="1.8" fill="#8E887D"/><circle cx="25" cy="44" r="1.2" fill="#8E887D"/><circle cx="76" cy="48" r="1.4" fill="#7E786D"/><circle cx="78" cy="66" r="1.2" fill="#7E786D"/>
+    <circle cx="35" cy="56" r="4.2" fill="#2B2A28"/><circle cx="53" cy="56" r="4.2" fill="#2B2A28"/>
+    <circle cx="36.4" cy="54.6" r="1.3" fill="#fff"/><circle cx="54.4" cy="54.6" r="1.3" fill="#fff"/>
+    <circle cx="28" cy="65" r="3.4" fill="#F29C8C" opacity=".5"/><circle cx="60" cy="65" r="3.4" fill="#F29C8C" opacity=".5"/>
+    <path class="m m-idle" d="M38 67 Q44 72 50 67" fill="none" stroke="#2B2A28" stroke-width="3" stroke-linecap="round"/>
+    <path class="m m-happy" d="M36 65 Q44 78 52 65 Z" fill="#2B2A28" stroke="#2B2A28" stroke-width="2.4" stroke-linejoin="round"/>
+    <path class="m m-sad" d="M38 71 Q44 65 50 71" fill="none" stroke="#2B2A28" stroke-width="3" stroke-linecap="round"/>
+    <path d="M86 8 C86 8 93 16 93 21 a7 7 0 0 1-14 0 C79 16 86 8 86 8z" fill="#2A9D8F" stroke="#2B2A28" stroke-width="2.4"/>
+  </svg>`;
+}
+function setMood(host, mood){ const s = host.querySelector('svg'); if(!s) return; s.classList.remove('idle','happy','sad'); void s.offsetWidth; s.classList.add(mood); }
+
+/* ---------- state ---------- */
+const KEY = 'betonchi.v1';
+let S = {xp:0, prog:{}, best:0, streak:0, last:'', sound:true};
+try { const raw = localStorage.getItem(KEY); if(raw) S = Object.assign(S, JSON.parse(raw)); } catch(e){}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+const dayStr = d => d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+function touchStreak(){
+  const t = dayStr(new Date()); if(S.last === t) return;
+  const y = new Date(); y.setDate(y.getDate()-1);
+  S.streak = (S.last === dayStr(y)) ? S.streak + 1 : 1; S.last = t;
+}
+function P(n){ return S.prog[n] || (S.prog[n] = {c:0,w:0,m:0,s:0}); }
+function status(n){ const p = S.prog[n]; if(!p) return 'new'; if(p.m) return 'mistake'; if(p.c >= 2) return 'mastered'; return p.s ? 'seen' : 'new'; }
+function record(n, ok){ const p = P(n); p.s = 1; if(ok){ p.c++; p.m = 0; } else { p.c = 0; p.w++; p.m = 1; } touchStreak(); save(); }
+const chOf = n => CH.find(c => n >= c.from && n <= c.to);
+const chIdx = n => CH.indexOf(chOf(n));
+const range = (a,b) => Array.from({length:b-a+1}, (_,i) => a+i);
+const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const LET = ['A','B','C','D'];
+const pick = arr => arr[Math.floor(Math.random()*arr.length)];
+
+/* ---------- levels ---------- */
+const LV = [[0,"Laborant"],[100,"Betonchi"],[300,"Armaturachi"],[700,"Brigadir"],[1500,"Texnolog"],[3000,"Bosh muhandis"],[6000,"Gidrotexnika ustasi"]];
+function level(xp){ let i=0; while(i<LV.length-1 && xp>=LV[i+1][0]) i++; const nx=LV[i+1]; return {name:LV[i][1], next:nx?nx[1]:null, pct:nx?(xp-LV[i][0])/(nx[0]-LV[i][0]):1, need:nx?nx[0]-xp:0}; }
+
+/* ---------- sound & fx ---------- */
+let AC;
+function tone(f,d,type,v,delay){ if(!S.sound) return; try{ AC = AC || new (window.AudioContext||window.webkitAudioContext)(); const t=AC.currentTime+(delay||0); const o=AC.createOscillator(), g=AC.createGain(); o.type=type||'triangle'; o.frequency.value=f; g.gain.setValueAtTime(v||.08,t); g.gain.exponentialRampToValueAtTime(.0001,t+d); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t+d+.02);}catch(e){} }
+const sfx = {
+  ok(){ tone(660,.12); tone(990,.2,'triangle',.08,.09); buzz(20); },
+  bad(){ tone(240,.22,'sawtooth',.045); tone(180,.25,'sawtooth',.04,.1); buzz([40,40,40]); },
+  flip(){ tone(520,.08,'sine',.05); },
+  win(){ [523,659,784,1047].forEach((f,i)=>tone(f,.22,'triangle',.08,i*.11)); }
+};
+function buzz(p){ try{ navigator.vibrate && navigator.vibrate(p); }catch(e){} }
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fx = $('#fx'), ctx = fx.getContext('2d'); let parts = [], raf = 0;
+function sizeFx(){ fx.width = innerWidth*devicePixelRatio; fx.height = innerHeight*devicePixelRatio; }
+sizeFx(); addEventListener('resize', sizeFx);
+function burst(x, y, count){
+  if(reduce) return;
+  const cs = getComputedStyle(document.documentElement);
+  const cols = ['--sun','--water2','--field','--clay','--c6','--c0'].map(v => cs.getPropertyValue(v).trim());
+  for(let i=0;i<count;i++){ const a=Math.random()*Math.PI*2, sp=3+Math.random()*7;
+    parts.push({x:x*devicePixelRatio,y:y*devicePixelRatio,vx:Math.cos(a)*sp*devicePixelRatio,vy:(Math.sin(a)*sp-5)*devicePixelRatio,r:(3+Math.random()*4)*devicePixelRatio,c:pick(cols),life:70+Math.random()*30,rot:Math.random()*6,drop:Math.random()<.4}); }
+  if(!raf) raf = requestAnimationFrame(tick);
+}
+function tick(){
+  ctx.clearRect(0,0,fx.width,fx.height);
+  parts = parts.filter(p => p.life-- > 0);
+  for(const p of parts){ p.vy += .25*devicePixelRatio; p.x += p.vx; p.y += p.vy; p.vx *= .98; p.rot += .15;
+    ctx.globalAlpha = Math.min(1, p.life/30); ctx.fillStyle = p.c; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+    if(p.drop){ ctx.beginPath(); ctx.arc(0,0,p.r,0,Math.PI*2); ctx.fill(); } else ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r); ctx.restore(); }
+  ctx.globalAlpha = 1;
+  raf = parts.length ? requestAnimationFrame(tick) : 0;
+}
+function burstFrom(el, n){ const r = el.getBoundingClientRect(); burst(r.left + r.width/2, r.top + r.height/2, n); }
+
+/* ---------- navigation ---------- */
+const SCREENS = ['home','quiz','cards','blitz','result','duel','duelplay','duelres','scan'];
+function show(id){ if(id !== 'duelplay') stopDuel(); SCREENS.forEach(s => $('#'+s).hidden = s !== id); hideFb(); scrollTo(0,0); if(id==='home') renderHome(); }
+document.querySelectorAll('[data-exit]').forEach(b => b.addEventListener('click', () => { stopBlitz(); clearHash(); show('home'); }));
+
+/* ---------- home ---------- */
+const greet = ["Salom, betonchi! Bugun qaysi blokni quyamiz?","Beton 28 kunda 100% bo'ladi, bilim esa har kuni o'sadi!","Xato — bu bo'shliq. Vibratsiya qilib, zichlaymiz!","W, F, B — markalarni yodlang, inshoot mustahkam bo'ladi!","Har kuni 10 ta savol — 180 kunda to'liq mustahkamlik!"];
+$('#heroDrop').innerHTML = drop(92);
+$('#heroBubble').textContent = pick(greet);
+function renderSound(){ $('#soundBtn').innerHTML = S.sound ? ICO.soundOn : ICO.soundOff; $('#soundBtn').setAttribute('aria-pressed', S.sound); }
+$('#soundBtn').addEventListener('click', () => { S.sound = !S.sound; save(); renderSound(); if(S.sound) sfx.ok(); });
+renderSound();
+
+let filterCh = -1;
+function buildList(){
+  $('#qlist').innerHTML = Q.map((q,i) => { const n=i+1, c=chOf(n);
+    return `<button class="qrow" data-n="${n}" style="--cc:${c.c}"><span class="qnum">${n}</span><span class="qtxt">${esc(q.q)}</span><i class="dot" data-dot="${n}"></i></button>`; }).join('');
+  $('#qlist').addEventListener('click', e => { const b = e.target.closest('.qrow'); if(b) openDetail(+b.dataset.n); });
+  const fl = [{name:'Hammasi', i:-1}].concat(CH.map((c,i)=>({name:c.name, i})));
+  $('#filters').innerHTML = fl.map(f => `<button class="fbtn" data-f="${f.i}" aria-pressed="${f.i===-1}">${f.name}</button>`).join('');
+  $('#filters').addEventListener('click', e => { const b=e.target.closest('.fbtn'); if(!b) return; filterCh=+b.dataset.f; $('#filters').querySelectorAll('.fbtn').forEach(x=>x.setAttribute('aria-pressed', x===b)); applyFilter(); });
+  $('#q').addEventListener('input', applyFilter);
+}
+function applyFilter(){
+  const s = $('#q').value.trim().toLowerCase(); let shown = 0;
+  $('#qlist').querySelectorAll('.qrow').forEach(r => { const n=+r.dataset.n, q=Q[n-1];
+    const okCh = filterCh === -1 || chIdx(n) === filterCh;
+    const okS = !s || String(n) === s || q.q.toLowerCase().includes(s) || q.o[q.a].toLowerCase().includes(s);
+    r.hidden = !(okCh && okS); if(!r.hidden) shown++; });
+  $('#listCount').textContent = shown + ' ta'; $('#listEmpty').hidden = shown > 0;
+}
+function renderHome(){
+  const L = level(S.xp);
+  $('#lvlName').textContent = L.name; $('#lvlXp').textContent = S.xp + ' XP';
+  $('#lvlBar').style.width = Math.round(L.pct*100) + '%';
+  $('#lvlNext').textContent = L.next ? `"${L.next}" darajasigacha ${L.need} XP qoldi` : 'Eng yuqori daraja! Inshootingiz asrlar turadi.';
+  let mastered = 0, mistakes = 0;
+  for(let n=1;n<=Q.length;n++){ const st = status(n); if(st==='mastered') mastered++; if(st==='mistake') mistakes++;
+    const d = document.querySelector(`[data-dot="${n}"]`); if(d) d.className = 'dot ' + (st==='new'?'':st); }
+  $('#stMastered').textContent = mastered; $('#stMistakes').textContent = mistakes;
+  const y = new Date(); y.setDate(y.getDate()-1);
+  $('#stStreak').textContent = (S.last === dayStr(new Date()) || S.last === dayStr(y)) ? S.streak : 0;
+  $('#fixBadge').hidden = !mistakes; $('#fixBadge').textContent = mistakes;
+  $('#chs').innerHTML = CH.map((c,i) => { const ids = range(c.from,c.to); const m = ids.filter(n=>status(n)==='mastered').length; const pct = m/ids.length; const C = 2*Math.PI*16;
+    return `<button class="ch" data-ch="${i}" style="--cc:${c.c}"><div class="ch-top"><span class="ch-ico">${ICO[c.ico]}</span>
+      <svg class="ring" viewBox="0 0 40 40"><circle class="bgc" cx="20" cy="20" r="16"/><circle class="fgc" cx="20" cy="20" r="16" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}"/><text x="20" y="20">${Math.round(pct*100)}%</text></svg></div>
+      <h3>${c.name}</h3><small>${c.from}–${c.to} · ${ids.length} savol</small></button>`; }).join('');
+}
+$('#chs').addEventListener('click', e => { const b = e.target.closest('.ch'); if(b) setupSheet('quiz', +b.dataset.ch); });
+
+/* ---------- sheets ---------- */
+function openSheet(html, onMount){
+  $('#scrimHost').innerHTML = `<div class="scrim" id="scrim"><div class="sheet" role="dialog" aria-modal="true"><div class="grab"></div>${html}</div></div>`;
+  $('#scrim').addEventListener('click', e => { if(e.target.id === 'scrim') closeSheet(); });
+  onMount && onMount($('#scrim .sheet'));
+}
+function closeSheet(){ $('#scrimHost').innerHTML = ''; }
+addEventListener('keydown', e => { if(e.key === 'Escape') closeSheet(); });
+
+function openDetail(n){
+  const q = Q[n-1], c = chOf(n), st = status(n), p = S.prog[n];
+  const stTxt = {new:'Hali o\'ynalmagan', seen:'Ko\'rilgan, hali yodlanmagan', mastered:'Yodlangan — 2 marta ketma-ket to\'g\'ri topilgan', mistake:'Oxirgi safar xato topilgan'}[st];
+  openSheet(`<span class="tag" style="--cc:${c.c}">${ICO[c.ico].replace('<svg','<svg width="16" height="16"')} ${c.name}</span>
+    <div class="dq"><b>${n}.</b> ${esc(q.q)}</div>
+    <div class="dopts">${q.o.map((o,i)=>`<div class="dopt ${i===q.a?'right':''}"><span class="L">${LET[i]}</span><span>${i===q.a?`<span class="mark">${esc(o)}</span>`:esc(o)}</span>${i===q.a?ICO.check:'<span></span>'}</div>`).join('')}</div>
+    <div class="statusline"><i class="dot ${st==='new'?'':st}"></i>${stTxt}${p&&p.w?` · ${p.w} marta xato`:''}</div>
+    <div class="navrow"><button class="big ghost" id="dPrev" ${n===1?'disabled':''}>← ${n>1?n-1:''}</button><button class="big ghost" id="dNext" ${n===Q.length?'disabled':''}>${n<Q.length?n+1:''} →</button></div>
+    <div class="btns" style="margin-top:12px"><button class="big blue" id="dPlay">"${c.name}" bobini o'ynash</button></div>`,
+    () => {
+      $('#dPrev').onclick = () => n>1 && openDetail(n-1);
+      $('#dNext').onclick = () => n<Q.length && openDetail(n+1);
+      $('#dPlay').onclick = () => { closeSheet(); setupSheet('quiz', CH.indexOf(c)); };
+      const pp = S.prog[n] || {}; if(!pp.s){ P(n).s = 1; save(); renderHome(); }
+    });
+}
+
+function setupSheet(mode, ch){
+  let sel = ch === undefined ? -1 : ch, len = 10;
+  const title = mode === 'quiz' ? 'Viktorina' : 'Kartochkalar';
+  const sub = mode === 'quiz' ? 'Bobni va savollar sonini tanlang. Variantlar har safar aralashtiriladi.' : 'Kartani bosing — orqasida to\'g\'ri javob. Bilmaganlaringiz yana chiqadi.';
+  const opts = [{i:-1,name:'Hammasi aralash',sub:'1–148',ico:'quiz',c:'var(--water)'}].concat(CH.map((c,i)=>({i,name:c.name,sub:`${c.from}–${c.to}`,ico:c.ico,c:c.c})));
+  openSheet(`<h2>${title}</h2><p class="sub">${sub}</p>
+    <div class="pick" id="pk">${opts.map(o=>`<button data-i="${o.i}" style="--cc:${o.c}" aria-pressed="${o.i===sel}"><span class="ch-ico">${ICO[o.ico]}</span><span>${o.name}</span><small>${o.sub}</small></button>`).join('')}</div>
+    <div class="seg" id="sg"><button data-l="10" aria-pressed="true">10 ta</button><button data-l="20" aria-pressed="false">20 ta</button><button data-l="0" aria-pressed="false">Hammasi</button></div>
+    <button class="big blue" id="go">Boshlash</button>`, () => {
+      $('#pk').onclick = e => { const b=e.target.closest('button'); if(!b) return; sel=+b.dataset.i; $('#pk').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); };
+      $('#sg').onclick = e => { const b=e.target.closest('button'); if(!b) return; len=+b.dataset.l; $('#sg').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed', x===b)); };
+      $('#go').onclick = () => { closeSheet(); const ids = sel===-1 ? range(1,Q.length) : range(CH[sel].from, CH[sel].to);
+        let pool = shuffle(ids); if(len) pool = pool.slice(0,len);
+        mode === 'quiz' ? startQuiz(pool, {kind:'quiz', sel, len}) : startCards(pool, {sel, len}); };
+    });
+}
+$('#gQuiz').onclick = () => setupSheet('quiz');
+$('#gCards').onclick = () => setupSheet('cards');
+$('#gBlitz').onclick = () => openBlitz();
+$('#gFix').onclick = () => {
+  const ids = range(1,Q.length).filter(n => status(n)==='mistake');
+  if(!ids.length){ openSheet(`<div class="center">${drop(90,'happy')}<h2>Xato savollar yo'q!</h2><p>Viktorina yoki "Rostmi?" o'ynang. Adashgan savollaringiz shu yerga yig'iladi va siz ularni qayta yechasiz.</p><div class="btns"><button class="big blue" id="toQuiz">Viktorina boshlash</button></div></div>`, () => { $('#toQuiz').onclick = () => { closeSheet(); setupSheet('quiz'); }; }); return; }
+  startQuiz(shuffle(ids), {kind:'fix'});
+};
+
+/* ---------- quiz ---------- */
+let G = null;
+const goodMsg = ['Barakalla!','Zo\'r!','To\'ppa-to\'g\'ri!','Ajoyib, usta!','Suvdek oqib ketyapsiz!','Qoyil!'];
+const badMsg = ['Hechqisi yo\'q!','Eslab qoling!','Keyingisi chiqadi!','Biroz adashdik'];
+function startQuiz(ids, opt){
+  G = {mode:'quiz', ids, pos:0, ok:0, combo:0, best:0, xp:0, wrong:[], opt};
+  $('#qDrop').innerHTML = drop(68); show('quiz'); renderQ();
+}
+function renderQ(){
+  const n = G.ids[G.pos], q = Q[n-1], c = chOf(n);
+  G.order = shuffle([0,1,2,3]); G.locked = false;
+  $('#qProg').style.width = (G.pos / G.ids.length * 100) + '%';
+  $('#qCount').textContent = (G.pos+1) + '/' + G.ids.length;
+  const tag = $('#qTag'); tag.style.setProperty('--cc', c.c); tag.innerHTML = ICO[c.ico].replace('<svg','<svg width="16" height="16"') + ' ' + c.name;
+  $('#qNum').textContent = 'Savol № ' + n;
+  $('#qText').textContent = q.q;
+  $('#qOpts').innerHTML = G.order.map((oi,k) => `<button class="opt" data-k="${k}"><span class="L">${LET[k]}</span><span>${esc(q.o[oi])}</span></button>`).join('');
+  setMood($('#qDrop'), 'idle');
+}
+$('#qOpts').addEventListener('click', e => { const b = e.target.closest('.opt'); if(b) answerQ(+b.dataset.k); });
+function answerQ(k){
+  if(!G || G.mode!=='quiz' || G.locked) return; G.locked = true;
+  const n = G.ids[G.pos], q = Q[n-1], ok = G.order[k] === q.a;
+  const btns = [...$('#qOpts').children];
+  btns.forEach((b,i) => { const oi = G.order[i];
+    if(oi === q.a){ b.classList.add('ok'); b.lastElementChild.innerHTML = `<span class="mark">${esc(q.o[oi])}</span>`; }
+    else if(i === k) b.classList.add('bad'); else b.classList.add('dim'); });
+  record(n, ok);
+  if(ok){
+    G.ok++; G.combo++; G.best = Math.max(G.best, G.combo);
+    const mult = G.combo >= 6 ? 3 : G.combo >= 3 ? 2 : 1; const gain = 10*mult; G.xp += gain; S.xp += gain; save();
+    sfx.ok(); burstFrom(btns[k], 28 + G.combo*4); setMood($('#qDrop'),'happy');
+    showFb(true, pick(goodMsg), `+${gain} XP` + (mult>1 ? ` · x${mult} kombo!` : ''));
+  } else {
+    G.combo = 0; G.wrong.push(n); sfx.bad(); setMood($('#qDrop'),'sad');
+    showFb(false, pick(badMsg), 'To\'g\'ri javob: ' + q.o[q.a]);
+  }
+  const cb = $('#qCombo'); const m = G.combo >= 6 ? 3 : G.combo >= 3 ? 2 : 0;
+  cb.textContent = m ? `x${m} kombo · ${G.combo} ketma-ket` : ''; cb.classList.toggle('on', !!m);
+}
+function showFb(ok, title, text){
+  const fb = $('#fb'); fb.classList.toggle('badfb', !ok);
+  $('#fbTitle').textContent = title; $('#fbText').textContent = text;
+  $('#fbNext').className = 'big' + (ok ? '' : ' red');
+  fb.classList.add('show'); setTimeout(() => $('#fbNext').focus({preventScroll:true}), 50);
+}
+function hideFb(){ $('#fb').classList.remove('show'); }
+$('#fbNext').addEventListener('click', nextQ);
+function nextQ(){
+  if(!G || G.mode!=='quiz') return; hideFb();
+  G.pos++; if(G.pos >= G.ids.length) return finishQuiz();
+  renderQ(); scrollTo({top:0, behavior: reduce?'auto':'smooth'});
+}
+addEventListener('keydown', e => {
+  if($('#quiz').hidden || !G || G.mode!=='quiz') return;
+  if(!G.locked && /^[1-4]$/.test(e.key)) answerQ(+e.key-1);
+  else if(G.locked && e.key === 'Enter'){ e.preventDefault(); nextQ(); }
+});
+function finishQuiz(){
+  const total = G.ids.length, acc = G.ok/total;
+  const stars = acc >= .9 ? 3 : acc >= .7 ? 2 : acc >= .4 ? 1 : 0;
+  const titles = ['Mashq davom etadi!','Yaxshi boshlanish!','Zo\'r natija!','Mukammal, betonchi!'];
+  showResult({stars, title: titles[stars], sub: `${total} ta savoldan ${G.ok} tasini topdingiz.`,
+    stats: [[G.ok+'/'+total,'to\'g\'ri'],['+'+G.xp,'XP'],[G.best,'eng uzun kombo']],
+    wrong: G.wrong, again: () => G.opt.kind==='fix' ? $('#gFix').click() : startQuiz(shuffle(G.ids), G.opt)});
+}
+
+/* ---------- result ---------- */
+function showResult(r){
+  show('result');
+  $('#rDrop').innerHTML = drop(100, r.stars >= 2 ? 'happy' : 'idle');
+  $('#rStars').innerHTML = [0,1,2].map(i => ICO.star.replace('class="s"', `class="s ${i<r.stars?'on':''}" style="animation-delay:${.2+i*.18}s"`)).join('');
+  $('#rTitle').textContent = r.title; $('#rSub').textContent = r.sub;
+  $('#rStats').innerHTML = r.stats.map(s => `<div class="rstat"><b>${s[0]}</b><span>${s[1]}</span></div>`).join('');
+  const w = [...new Set(r.wrong)];
+  $('#rReview').innerHTML = w.length ? `<h3 style="font-size:19px">Eslab qoling (${w.length})</h3>` + w.map(n => `<div class="rv"><div class="n">Savol № ${n}</div><p>${esc(Q[n-1].q)}</p><span class="mark">${esc(Q[n-1].o[Q[n-1].a])}</span></div>`).join('') : '';
+  $('#rAgain').onclick = r.again;
+  if(r.stars >= 2){ sfx.win(); setTimeout(() => burst(innerWidth/2, innerHeight*.28, 140), 250); }
+}
+
+/* ---------- flashcards ---------- */
+function startCards(ids, opt){ G = {mode:'cards', ids:ids.slice(), total:ids.length, done:0, know:0, again:{}, opt}; show('cards'); renderCard(); }
+function renderCard(){
+  const n = G.ids[0], q = Q[n-1], c = chOf(n);
+  $('#flip').classList.remove('on'); $('#flip').style.setProperty('--cc', c.c);
+  $('#cProg').style.width = (G.done/G.total*100) + '%';
+  $('#cCount').textContent = Math.min(G.done+1, G.total) + '/' + G.total;
+  setTimeout(() => {
+    $('#cFront').innerHTML = `<span class="tag" style="--cc:${c.c}">${c.name}</span><div class="n" style="margin-top:12px">Savol № ${n}</div><div class="qq">${esc(q.q)}</div><div class="hint">${ICO.tap} Javobni ko'rish uchun bosing</div>`;
+    $('#cBack').innerHTML = `<div class="n">To'g'ri javob · № ${n}</div><div class="small-q">${esc(q.q)}</div><div class="ans"><span class="mark">${esc(q.o[q.a])}</span></div><div class="hint">${G.again[n]?'Bu kartani '+(G.again[n])+' marta qaytardingiz':'Bilsangiz — "Bilaman" ni bosing'}</div>`;
+  }, 120);
+}
+function flip(){ $('#flip').classList.toggle('on'); sfx.flip(); }
+$('#flip').addEventListener('click', flip);
+$('#flip').addEventListener('keydown', e => { if(e.key===' '||e.key==='Enter'){ e.preventDefault(); flip(); } });
+$('#cKnow').addEventListener('click', () => {
+  const n = G.ids.shift(); record(n, true); S.xp += 5; save(); G.done++; G.know++; sfx.ok(); burstFrom($('#cKnow'), 22);
+  if(!G.ids.length) return finishCards(); renderCard();
+});
+$('#cAgain').addEventListener('click', () => {
+  const n = G.ids.shift(); P(n).s = 1; save(); G.again[n] = (G.again[n]||0)+1;
+  const at = Math.min(G.ids.length, 3 + Math.floor(Math.random()*3)); G.ids.splice(at, 0, n); sfx.flip(); renderCard();
+});
+function finishCards(){
+  const rep = Object.values(G.again).reduce((a,b)=>a+b,0);
+  const stars = rep === 0 ? 3 : rep <= G.total*.3 ? 2 : 1;
+  showResult({stars, title: stars===3 ? 'Hammasini bilasiz!' : 'Kartalar tugadi!', sub: `${G.total} ta karta ko'rildi, ${rep} marta qayta ko'rildi.`,
+    stats: [[G.total,'karta'],['+'+G.total*5,'XP'],[rep,'qaytarish']], wrong: Object.keys(G.again).map(Number),
+    again: () => startCards(shuffle(Object.keys(G.again).length ? Object.keys(G.again).map(Number) : G.opt && G.opt.sel>=0 ? range(CH[G.opt.sel].from,CH[G.opt.sel].to) : range(1,Q.length)).slice(0, G.total), G.opt)});
+}
+
+/* ---------- blitz ---------- */
+let BT = null;
+function openBlitz(){ G = {mode:'blitz'}; $('#bDrop').innerHTML = drop(96); $('#bIntro').hidden = false; $('#bPlay').hidden = true;
+  $('#bBest').textContent = S.best ? `Eng yaxshi natijangiz: ${S.best} ball` : ''; $('#bTime').style.transform = 'scaleX(1)'; $('#bSec').textContent = '60'; show('blitz'); }
+$('#bStart').addEventListener('click', () => {
+  G = {mode:'blitz', score:0, combo:0, ends: Date.now()+60000, wrong:[], seen:0, lock:false};
+  $('#bIntro').hidden = true; $('#bPlay').hidden = false; $('#bScore').textContent = '0'; $('#bToast').textContent = '';
+  nextBlitz(); clearInterval(BT);
+  BT = setInterval(() => { const left = Math.max(0, G.ends - Date.now());
+    $('#bTime').style.transform = `scaleX(${left/60000})`; $('#bSec').textContent = Math.ceil(left/1000);
+    if(!left) endBlitz(); }, 100);
+});
+function nextBlitz(){
+  const n = 1 + Math.floor(Math.random()*Q.length), q = Q[n-1], c = chOf(n);
+  const truth = Math.random() < .5; const shown = truth ? q.a : pick([0,1,2,3].filter(i => i !== q.a));
+  Object.assign(G, {n, truth, lock:false});
+  const tag = $('#bTag'); tag.style.setProperty('--cc', c.c); tag.textContent = `№ ${n} · ${c.name}`;
+  $('#bQ').textContent = q.q; $('#bA').textContent = q.o[shown]; $('#bCard').className = 'bcard';
+}
+function answerBlitz(yes){
+  if(!G || G.mode!=='blitz' || G.lock || !BT) return; G.lock = true;
+  const ok = yes === G.truth, q = Q[G.n-1]; G.seen++;
+  record(G.n, ok);
+  $('#bCard').classList.add(ok ? 'flash-ok' : 'flash-bad');
+  if(ok){ G.combo++; const add = G.combo >= 5 ? 2 : 1; G.score += add; S.xp += 3*add; sfx.ok(); burstFrom($('#bScore'), 14);
+    $('#bToast').innerHTML = `<b style="color:var(--good)">To'g'ri!</b> ${add>1?'Kombo: +2 ball':''}`; setTimeout(nextBlitz, 280); }
+  else { G.combo = 0; G.wrong.push(G.n); sfx.bad();
+    $('#bToast').innerHTML = `<b style="color:var(--bad)">Adashdingiz.</b> To'g'ri javob: <span class="mark">${esc(q.o[q.a])}</span>`; setTimeout(nextBlitz, 1300); }
+  save(); $('#bScore').textContent = G.score;
+  const cb = $('#bCombo'); cb.textContent = G.combo >= 5 ? `x2 · ${G.combo} ketma-ket` : ''; cb.classList.toggle('on', G.combo >= 5);
+}
+$('#bYes').addEventListener('click', () => answerBlitz(true));
+$('#bNo').addEventListener('click', () => answerBlitz(false));
+addEventListener('keydown', e => { if($('#blitz').hidden || !BT) return; if(e.key==='ArrowRight') answerBlitz(true); if(e.key==='ArrowLeft') answerBlitz(false); });
+function stopBlitz(){ clearInterval(BT); BT = null; }
+function endBlitz(){
+  stopBlitz(); const rec = G.score > S.best; if(rec) S.best = G.score; save();
+  const stars = G.score >= 25 ? 3 : G.score >= 15 ? 2 : G.score >= 6 ? 1 : 0;
+  showResult({stars, title: rec ? 'Yangi rekord!' : 'Vaqt tugadi!', sub: `${G.seen} ta savolga javob berdingiz. Eng yaxshi natija: ${S.best} ball.`,
+    stats: [[G.score,'ball'],['+'+G.score*3,'XP'],[G.seen - G.wrong.length + '/' + G.seen,'to\'g\'ri']], wrong: G.wrong, again: () => { openBlitz(); $('#bStart').click(); }});
+}
+
+
+/* ======================= BELLASHUV ======================= */
+const APP = {id:'B', name:'Betonchi', url:'https://claude.ai/artifact/8PgZZvbiRJCehPUNKezQLP'};
+const B32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+const NOPTS = [5,10,15,20,30];
+const normCode = s => String(s || '').toUpperCase().replace(/O/g,'0').replace(/[IL]/g,'1').replace(/U/g,'V').replace(/[^0-9A-Z]/g,'');
+function encodeDuel(ch, nIdx, seed){ let v = (ch * 8 + nIdx) * 8388608 + seed, s = ''; for(let i = 0; i < 6; i++){ s = B32[v % 32] + s; v = Math.floor(v / 32); } return APP.id + s; }
+function decodeDuel(raw){
+  let code = normCode(raw); if(code.length === 6) code = APP.id + code;
+  if(code.length !== 7 || code[0] !== APP.id) return null;
+  let v = 0; for(const c of code.slice(1)){ const k = B32.indexOf(c); if(k < 0) return null; v = v * 32 + k; }
+  const seed = v % 8388608; v = Math.floor(v / 8388608);
+  const nIdx = v % 8, ch = Math.floor(v / 8);
+  if(nIdx >= NOPTS.length || ch > CH.length) return null;
+  return {code, ch, n: NOPTS[nIdx], seed};
+}
+function rng(a){ return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function sShuffle(arr, r){ const a = arr.slice(); for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const duelPool = ch => ch ? range(CH[ch-1].from, CH[ch-1].to) : range(1, Q.length);
+const qChars = n => Q[n-1].q.length + Q[n-1].o.join('').length;
+function autoTime(ids){ const avg = ids.reduce((s, n) => s + 4 + qChars(n) / 20, 0) / ids.length; return Math.max(10, Math.min(25, Math.round(avg))); }
+function duelSet(d){ const r = rng((Math.imul(d.seed, 2654435761) ^ (d.ch * 131 + d.n)) >>> 0); const ids = sShuffle(duelPool(d.ch), r).slice(0, d.n); return {ids, orders: ids.map(() => sShuffle([0,1,2,3], r)), T: autoTime(ids)}; }
+function newSeed(){ try { return crypto.getRandomValues(new Uint32Array(1))[0] % 8388608; } catch(e){ return Math.floor(Math.random() * 8388608); } }
+const fmtT = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+function sig(s){ let h = 0x811c9dc5; for(let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } h >>>= 0; let o = ''; for(let i = 0; i < 5; i++){ o += B32[h % 32]; h = Math.floor(h / 32); } return o.toLowerCase(); }
+const cleanName = s => String(s || '').replace(/[|#\r\n\t]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 24);
+const resBody = r => `Bellashuv ${r.code} | ${r.name} | ${r.correct}/${r.n} | ${r.points} ball | ${fmtT(r.secs)}`;
+const resLine = r => resBody(r) + ' | #' + sig(APP.id + '|' + resBody(r));
+const RES_RE = /Bellashuv\s+([0-9A-Za-z]{7})\s*\|\s*([^|\r\n]{1,40}?)\s*\|\s*(\d{1,3})\s*\/\s*(\d{1,3})\s*\|\s*(\d{1,6})\s*ball\s*\|\s*(\d{1,3}):(\d{2})\s*\|\s*#([0-9A-Za-z]{5})/g;
+function parseResults(text, code){
+  const out = []; let bad = 0, other = 0, m; RES_RE.lastIndex = 0;
+  while((m = RES_RE.exec(text))){
+    const r = {code: m[1].toUpperCase(), name: cleanName(m[2]), correct: +m[3], n: +m[4], points: +m[5], secs: +m[6] * 60 + +m[7]};
+    if(r.code !== code){ other++; continue; }
+    if(!r.name || r.correct > r.n || r.points > r.n * 1000 || sig(APP.id + '|' + resBody(r)) !== m[8].toLowerCase()){ bad++; continue; }
+    out.push(r);
+  }
+  return {out, bad, other};
+}
+function duelRec(code){ S.duels = S.duels || {}; return S.duels[code] || (S.duels[code] = {mine: null, others: [], at: Date.now()}); }
+function pruneDuels(){ const ks = Object.keys(S.duels || {}); if(ks.length <= 30) return; ks.sort((a, b) => S.duels[a].at - S.duels[b].at).slice(0, ks.length - 30).forEach(k => delete S.duels[k]); }
+/* Qayerda ochilgan: claude.ai sahifasi, oddiy sayt (GitHub Pages va h.k.) yoki telefondagi fayl */
+const RUN = /^https?:$/.test(location.protocol) ? (/claude|anthropic/i.test(location.hostname) ? 'claude' : 'web') : 'file';
+const duelLink = code => RUN === 'web' ? location.origin + location.pathname + '#b-' + code : RUN === 'claude' ? APP.url + '#b-' + code : '';
+const tgShare = (url, text) => url ? 'https://t.me/share/url?url=' + encodeURIComponent(url) + '&text=' + encodeURIComponent(text) : 'https://t.me/share/url?url=' + encodeURIComponent(text);
+const joinHow = code => `"${APP.name}" ilovasini oching → Bellashuv → "Kod bilan qo'shilish" → ${code}`;
+function clearHash(){ try { if(location.hash) history.replaceState(null, '', location.pathname + location.search); } catch(e){} }
+async function copyText(text, out){
+  let ok = false;
+  try { await navigator.clipboard.writeText(text); ok = true; }
+  catch(e){ try { const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); ok = document.execCommand('copy'); ta.remove(); } catch(_){} }
+  if(out) out.textContent = ok ? 'Nusxalandi — endi kerakli joyga joylang.' : "Nusxalab bo'lmadi. Matnni bosib turib, qo'lda nusxalang.";
+}
+
+function duelSheet(){
+  let ch = 0, nIdx = 1; const seed = newSeed();
+  const opts = [{i:0, name:'Barcha boblar', sub:`1–${Q.length}`, ico:'quiz', c:'var(--water)'}].concat(CH.map((c, i) => ({i: i + 1, name: c.name, sub: `${c.from}–${c.to}`, ico: c.ico, c: c.c})));
+  const recent = Object.entries(S.duels || {}).sort((a, b) => b[1].at - a[1].at).slice(0, 5);
+  openSheet(`<h2>Bellashuv</h2><p class="sub">Do'stlaringiz bilan bir xil savollarni yeching. Har savolga vaqt savollar uzunligiga qarab avtomatik belgilanadi; tez va to'g'ri javob ko'proq ball beradi.</p>
+    <div class="pick" id="bpk">${opts.map(o => `<button data-i="${o.i}" style="--cc:${o.c}" aria-pressed="${o.i === 0}"><span class="ch-ico">${ICO[o.ico]}</span><span>${o.name}</span><small>${o.sub}</small></button>`).join('')}</div>
+    <div class="seg seg5" id="bsg">${NOPTS.map((n, i) => `<button data-n="${i}" aria-pressed="${i === nIdx}">${n} ta</button>`).join('')}</div>
+    <p class="sub" id="bInfo" style="margin-top:0"></p>
+    <button class="big blue" id="bGo">Bellashuv yaratish</button>
+    <p class="hint" style="margin-top:8px">${RUN === 'file' ? "Ilova fayldan ochilgan: do'stlaringizga shu HTML faylni yuboring, ular kod bilan qo'shiladi." : RUN === 'claude' ? "Claude hisobi yo'q do'stlar uchun ilovani fayl yoki oddiy sayt sifatida ulashing." : "Havolani ochgan har kim hisobsiz o'ynay oladi."}</p>
+    <div class="field" style="margin-top:18px"><label for="bCode">Do'stingiz yuborgan kod bilan qo'shilish</label><div class="joinrow"><input class="input" id="bCode" maxlength="10" placeholder="${APP.id}XXXXXX" autocomplete="off" autocapitalize="characters" spellcheck="false"><button class="big ghost" id="bJoin">Qo'shilish</button></div></div>
+    <p class="hint err" id="bErr" aria-live="polite"></p>
+    ${recent.length ? `<h3 style="font-size:18px;margin-top:16px">Oxirgi bellashuvlar</h3><div class="pick" id="brc" style="margin-top:8px">${recent.map(([k, v]) => `<button data-code="${k}" style="--cc:var(--c0)"><span class="ch-ico">${ICO.trophy}</span><span>${k}</span><small>${v.mine ? `${v.mine.correct}/${v.mine.n} · ${v.mine.points} ball` : "o'ynalmagan"}</small></button>`).join('')}</div>` : ''}`,
+    () => {
+      const info = () => { const set = duelSet({ch, n: NOPTS[nIdx], seed}); $('#bInfo').textContent = `${set.ids.length} ta savol · har biriga ${set.T} soniya · jami taxminan ${fmtT(set.ids.length * set.T)}`; };
+      $('#bpk').onclick = e => { const b = e.target.closest('button'); if(!b) return; ch = +b.dataset.i; $('#bpk').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); info(); };
+      $('#bsg').onclick = e => { const b = e.target.closest('button'); if(!b) return; nIdx = +b.dataset.n; $('#bsg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); info(); };
+      $('#bGo').onclick = () => { const code = encodeDuel(ch, nIdx, seed); closeSheet(); openDuel(code); };
+      const join = () => {
+        const raw = $('#bCode').value, d = decodeDuel(raw);
+        if(!d){ const c = normCode(raw); $('#bErr').textContent = c.length === 7 && c[0] !== APP.id ? 'Bu kod boshqa ilova uchun yaratilgan.' : "Kod noto'g'ri. 7 belgidan iborat kodni tekshiring."; return; }
+        closeSheet(); openDuel(d.code);
+      };
+      $('#bJoin').onclick = join; $('#bCode').onkeydown = e => { if(e.key === 'Enter') join(); };
+      const rc = $('#brc'); if(rc) rc.onclick = e => { const b = e.target.closest('button'); if(!b) return; closeSheet(); const v = S.duels[b.dataset.code]; v && v.mine ? openDuelRes(b.dataset.code) : openDuel(b.dataset.code); };
+      info();
+    });
+}
+$('#gDuel').onclick = () => duelSheet();
+
+let DUEL = null;
+function openDuel(code){
+  const d = decodeDuel(code); if(!d) return;
+  const set = duelSet(d); DUEL = {d, set};
+  const chName = d.ch ? CH[d.ch-1].name : 'Barcha boblar';
+  $('#dCode').textContent = d.code;
+  $('#dInfo').innerHTML = [chName, `${set.ids.length} ta savol`, `har biriga ${set.T} soniya`, `jami ~${fmtT(set.ids.length * set.T)}`].map(t => `<span class="dchip">${esc(t)}</span>`).join('');
+  const invite = `"${APP.name}" bellashuvi (${chName}): ${set.ids.length} ta savol, har biriga ${set.T} soniya. Kod: ${d.code}.`;
+  $('#dShareTg').href = duelLink(d.code)
+    ? tgShare(duelLink(d.code), invite + " Havolani ochib o'ynang va natijangizni shu yerga yuboring!")
+    : tgShare('', invite + '\nQanday qo\'shilish: ' + joinHow(d.code) + '. Natijangizni shu yerga yuboring!');
+  $('#dCopy').lastChild.textContent = duelLink(d.code) ? 'Havolani nusxalash' : 'Kodni nusxalash';
+  $('#dFileNote').hidden = RUN !== 'file';
+  $('#dCopyMsg').textContent = ''; $('#dNameErr').textContent = '';
+  $('#dName').value = S.dname || '';
+  const rec = S.duels && S.duels[d.code], mine = rec && rec.mine;
+  $('#dPlayed').hidden = !mine;
+  if(mine) $('#dPlayed').textContent = `Siz bu bellashuvda qatnashgansiz: ${mine.correct}/${mine.n}, ${mine.points} ball. Qayta o'ynasangiz, bu mashq hisoblanadi va reytingga kirmaydi.`;
+  $('#dStart').textContent = mine ? "Mashq sifatida qayta o'ynash" : 'Boshlash';
+  $('#dBoard').hidden = !rec;
+  show('duel');
+}
+$('#dCopy').onclick = () => copyText(duelLink(DUEL.d.code) || DUEL.d.code, $('#dCopyMsg'));
+$('#dName').addEventListener('input', () => { $('#dNameErr').textContent = ''; });
+$('#dBoard').onclick = () => openDuelRes(DUEL.d.code);
+$('#dStart').onclick = () => {
+  const name = cleanName($('#dName').value);
+  if(!name){ $('#dNameErr').textContent = "Ismingizni yozing — u natijada ko'rinadi."; $('#dName').focus(); return; }
+  S.dname = name; save();
+  const rec = S.duels && S.duels[DUEL.d.code];
+  startDuel(name, !!(rec && rec.mine));
+};
+
+function startDuel(name, practice){
+  G = {mode:'duel', d: DUEL.d, set: DUEL.set, pos: 0, answered: 0, points: 0, correct: 0, ms: 0, wrong: [], name, practice, locked: true};
+  $('#dpScore').textContent = '0 ball'; $('#dpOpts').innerHTML = ''; $('#dpText').textContent = ''; $('#dpNum').textContent = '';
+  $('#dpCount').textContent = `1/${G.set.ids.length}`;
+  $('#dpTime').style.transform = 'scaleX(1)'; $('#dpTime').classList.remove('low'); $('#dpSec').textContent = G.set.T;
+  show('duelplay');
+  let k = 3; const cd = $('#dpCd'), num = $('#dpCdN'); cd.hidden = false;
+  const tick = () => {
+    if(!G || G.mode !== 'duel'){ cd.hidden = true; return; }
+    if(k === 0){ cd.hidden = true; renderDQ(); return; }
+    num.textContent = k; num.style.animation = 'none'; void num.offsetWidth; num.style.animation = '';
+    tone(520 + (3 - k) * 140, .12, 'sine', .06); k--; G.cdT = setTimeout(tick, 750);
+  };
+  tick();
+}
+function stopDuel(){
+  if(G && G.mode === 'duel'){ clearTimeout(G.cdT); clearTimeout(G.nextT); clearTimeout(G.toT); cancelAnimationFrame(G.raf); G.mode = 'duel-stopped'; }
+  const cd = $('#dpCd'); if(cd) cd.hidden = true;
+}
+function renderDQ(){
+  const n = G.set.ids[G.pos], q = Q[n-1], ord = G.set.orders[G.pos], c = chOf(n);
+  const tag = $('#dpCount'); tag.style.setProperty('--cc', c.c); tag.textContent = `${G.pos + 1}/${G.set.ids.length}`;
+  $('#dpNum').textContent = 'Savol № ' + n;
+  $('#dpText').textContent = q.q;
+  $('#dpOpts').innerHTML = ord.map((oi, k) => `<button class="opt" data-k="${k}"><span class="L">${LET[k]}</span><span>${esc(q.o[oi])}</span></button>`).join('');
+  $('#dpTime').classList.remove('low');
+  G.locked = false; G.t0 = performance.now(); G.tEnd = G.t0 + G.set.T * 1000;
+  clearTimeout(G.toT); G.toT = setTimeout(() => answerDuel(-1), G.set.T * 1000 + 120);
+  scrollTo(0, 0); tickDuel();
+}
+function tickDuel(){
+  if(!G || G.mode !== 'duel' || G.locked) return;
+  const T = G.set.T * 1000, left = G.tEnd - performance.now();
+  $('#dpTime').style.transform = `scaleX(${Math.max(0, left) / T})`;
+  if(left < T * 0.3) $('#dpTime').classList.add('low');
+  const s = String(Math.max(0, Math.ceil(left / 1000)));
+  if($('#dpSec').textContent !== s){ $('#dpSec').textContent = s; if(+s <= 3 && +s > 0) tone(880, .05, 'square', .03); }
+  if(left <= 0) return answerDuel(-1);
+  G.raf = requestAnimationFrame(tickDuel);
+}
+$('#dpOpts').addEventListener('click', e => { const b = e.target.closest('.opt'); if(b) answerDuel(+b.dataset.k); });
+addEventListener('keydown', e => { if($('#duelplay').hidden || !G || G.mode !== 'duel' || G.locked) return; if(/^[1-4]$/.test(e.key)) answerDuel(+e.key - 1); });
+function answerDuel(k){
+  if(!G || G.mode !== 'duel' || G.locked) return; G.locked = true;
+  cancelAnimationFrame(G.raf); clearTimeout(G.toT);
+  const T = G.set.T * 1000, n = G.set.ids[G.pos], q = Q[n-1], ord = G.set.orders[G.pos];
+  const el = Math.min(performance.now() - G.t0, T), ok = k >= 0 && ord[k] === q.a;
+  const pts = ok ? 500 + Math.round(500 * (1 - el / T)) : 0;
+  G.points += pts; G.ms += el; G.answered++; if(ok) G.correct++; else G.wrong.push(n);
+  record(n, ok); if(ok){ S.xp += 5; save(); }
+  [...$('#dpOpts').children].forEach((b, i) => { const oi = ord[i];
+    if(oi === q.a){ b.classList.add('ok'); b.lastElementChild.innerHTML = `<span class="mark">${esc(q.o[oi])}</span>`; }
+    else if(i === k) b.classList.add('bad'); else b.classList.add('dim'); });
+  $('#dpScore').textContent = G.points + ' ball';
+  if(ok){ sfx.ok(); floatPts('+' + pts); } else { sfx.bad(); floatPts(k < 0 ? 'Vaqt tugadi' : '0 ball', true); }
+  G.nextT = setTimeout(nextDuel, ok ? 850 : 1700);
+}
+function floatPts(t, bad){ if(reduce) return; const el = document.createElement('div'); el.className = 'pts' + (bad ? ' bad' : ''); el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 950); }
+function nextDuel(){ if(!G || G.mode !== 'duel') return; G.pos++; if(G.pos >= G.set.ids.length) return finishDuel(); renderDQ(); }
+function finishDuel(){
+  const r = {code: G.d.code, name: G.name, correct: G.correct, n: G.set.ids.length, points: G.points, secs: Math.round(G.ms / 1000)};
+  const rec = duelRec(r.code); rec.at = Date.now();
+  const practice = G.practice || !!rec.mine;
+  if(!practice) rec.mine = r;
+  pruneDuels(); save();
+  const wrong = G.wrong.slice(); G.mode = 'duel-done';
+  openDuelRes(r.code, practice ? r : null, wrong);
+}
+$('#dpExit').onclick = () => openSheet(`<h2>Bellashuvni to'xtatasizmi?</h2><p class="sub">Javob berilmagan savollar 0 ball bo'ladi va natijangiz shu holatda saqlanadi.</p><div class="btns"><button class="big" id="xCont">Davom etish</button><button class="big red" id="xStop">To'xtatish</button></div>`, () => {
+  $('#xCont').onclick = closeSheet;
+  $('#xStop').onclick = () => {
+    closeSheet(); if(!G || G.mode !== 'duel') return;
+    cancelAnimationFrame(G.raf); clearTimeout(G.toT); clearTimeout(G.nextT); clearTimeout(G.cdT); $('#dpCd').hidden = true;
+    if(!G.locked) G.ms += Math.min(performance.now() - G.t0, G.set.T * 1000);
+    G.wrong.push(...G.set.ids.slice(G.answered)); G.locked = true;
+    finishDuel();
+  };
+});
+
+function openDuelRes(code, practiceRes, wrong){
+  const d = decodeDuel(code); if(!d){ show('home'); return; }
+  if(!DUEL || DUEL.d.code !== d.code) DUEL = {d, set: duelSet(d)};
+  const rec = duelRec(d.code), mine = rec.mine, shown = practiceRes || mine;
+  $('#drCode').textContent = d.code;
+  $('#drMine').hidden = !shown;
+  if(shown) $('#drNums').innerHTML = `<div><b>${shown.correct}/${shown.n}</b><span>to'g'ri</span></div><div><b>${shown.points}</b><span>ball</span></div><div><b>${fmtT(shown.secs)}</b><span>vaqt</span></div>`;
+  $('#drPractice').hidden = !practiceRes;
+  $('#drShareBox').hidden = !mine;
+  if(mine){ const line = resLine(mine); $('#drLine').textContent = line; $('#drShareTg').href = duelLink(d.code) ? tgShare(duelLink(d.code), line + "\nSiz ham o'ynab ko'ring:") : tgShare('', line + '\nSiz ham o\'ynab ko\'ring: ' + joinHow(d.code)); }
+  $('#drCopyMsg').textContent = ''; $('#drMsg').textContent = ''; $('#drPaste').value = '';
+  const w = [...new Set(wrong || [])];
+  $('#drReview').innerHTML = w.length ? `<h3 style="font-size:19px">Eslab qoling (${w.length})</h3>` + w.map(n => `<div class="rv"><div class="n">Savol № ${n}</div><p>${esc(Q[n-1].q)}</p><span class="mark">${esc(Q[n-1].o[Q[n-1].a])}</span></div>`).join('') : '';
+  renderBoard(d.code);
+  show('duelres');
+  if(shown && shown.n && shown.correct / shown.n >= 0.7 && wrong){ sfx.win(); setTimeout(() => burst(innerWidth / 2, innerHeight * .25, 120), 200); }
+}
+function renderBoard(code){
+  const rec = duelRec(code), seen = new Set(), rows = [];
+  for(const r of (rec.mine ? [Object.assign({me: true}, rec.mine)] : []).concat(rec.others)){ const k = r.name.toLowerCase(); if(seen.has(k)) continue; seen.add(k); rows.push(r); }
+  rows.sort((a, b) => b.points - a.points || b.correct - a.correct || a.secs - b.secs);
+  $('#drBoard').innerHTML = rows.length ? rows.map((r, i) => `<div class="lbrow${r.me ? ' me' : ''}"><span class="lbrank">${i + 1}</span><span class="lbname">${esc(r.name)}${r.me ? '<em>siz</em>' : ''}<small>${r.correct}/${r.n} to'g'ri</small></span><span class="lbpts">${r.points}</span><span class="lbtime">${fmtT(r.secs)}</span></div>`).join('') : `<p class="hint">Hali natija yo'q. Do'stlaringiz o'ynab, natijani guruhga yuborgach, ularni pastga joylang.</p>`;
+  $('#drCount').textContent = rows.length ? `${rows.length} ishtirokchi` : '';
+}
+$('#drCopy').onclick = () => { const rec = duelRec($('#drCode').textContent); if(rec.mine) copyText(resLine(rec.mine) + '\n' + (duelLink(rec.mine.code) || joinHow(rec.mine.code)), $('#drCopyMsg')); };
+$('#drLobby').onclick = () => openDuel($('#drCode').textContent);
+$('#drAdd').onclick = () => {
+  const code = $('#drCode').textContent, {out, bad, other} = parseResults($('#drPaste').value, code);
+  const rec = duelRec(code); let added = 0;
+  const names = new Set([...(rec.mine ? [rec.mine.name] : []), ...rec.others.map(r => r.name)].map(s => s.toLowerCase()));
+  for(const r of out){ const k = r.name.toLowerCase(); if(names.has(k)) continue; names.add(k); rec.others.push(r); added++; }
+  rec.at = Date.now(); save(); renderBoard(code);
+  const msg = [added ? `${added} ta natija qo'shildi.` : 'Yangi natija topilmadi.'];
+  if(bad) msg.push(`${bad} tasi tekshiruvdan o'tmadi (matni o'zgartirilgan).`);
+  if(other) msg.push(`${other} tasi boshqa bellashuvga tegishli.`);
+  $('#drMsg').textContent = msg.join(' '); if(added) $('#drPaste').value = '';
+};
+function routeHash(){ const m = (location.hash || '').match(/^#b-([0-9A-Za-z]{7})$/); if(m && decodeDuel(m[1])) openDuel(m[1]); }
+addEventListener('hashchange', routeHash);
+
+/* ======================= SURATDAN TOPISH ======================= */
+$('#gScan').onclick = () => show('scan');
+const OCRV = {tjs:'6.0.1', core:'6.0.0'};
+const OCR_ST = {'loading tesseract core':'OCR dvigateli yuklanmoqda','initializing tesseract':'OCR ishga tushmoqda','loading language traineddata':"O'zbek tili ma'lumotlari tayyorlanmoqda",'initializing api':'Tayyorlanmoqda','recognizing text':"Matn o'qilmoqda"};
+let OCRW = null, OCRP = null, scanBusy = false;
+function setScan(msg, p){ $('#scMsg').textContent = msg; if(p != null) $('#scBar').style.width = Math.round(Math.max(0, Math.min(1, p)) * 100) + '%'; }
+function loadScript(src){ return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = () => res(); s.onerror = () => rej(new Error('script ' + src)); document.head.appendChild(s); }); }
+async function wasmOk(){ try { if(typeof WebAssembly !== 'object') return false; await WebAssembly.instantiate(new Uint8Array([0,97,115,109,1,0,0,0])); return true; } catch(e){ return false; } }
+async function hasLocalOcr(){ try { const r = await fetch('ocr/ok.txt', {cache: 'no-store'}); return r.ok; } catch(e){ return false; } }
+function b64bytes(s){ const bin = atob(s), out = new Uint8Array(bin.length); for(let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i); return out; }
+function getOcr(){
+  if(OCRW) return Promise.resolve(OCRW);
+  if(OCRP) return OCRP;
+  OCRP = (async () => {
+    if(!(await wasmOk())){ const e = new Error('wasm'); e.code = 'wasm'; throw e; }
+    const local = await hasLocalOcr(), cdn = 'https://cdn.jsdelivr.net/npm/', abs = p => new URL(p, location.href).href;
+    const logger = m => { if(!m || !m.status || !scanBusy) return; const p = m.status === 'recognizing text' ? 0.4 + 0.6 * (m.progress || 0) : 0.1 + 0.28 * (m.progress || 0); setScan((OCR_ST[m.status] || m.status) + '…', p); };
+    if(!window.Tesseract) await loadScript(local ? 'ocr/tesseract.min.js' : `${cdn}tesseract.js@${OCRV.tjs}/dist/tesseract.min.js`);
+    let langs = 'uzb', opts;
+    if(local){
+      setScan("O'zbek tili ma'lumotlari yuklanmoqda…", 0.06);
+      await loadScript('ocr/uzb-traineddata.js');
+      langs = [{code: 'uzb', data: b64bytes(window.OCR_UZB_B64)}]; window.OCR_UZB_B64 = null;
+      opts = {workerPath: abs('ocr/worker.min.js'), corePath: abs('ocr/core'), workerBlobURL: false, cacheMethod: 'none', logger};
+    } else {
+      opts = {workerPath: `${cdn}tesseract.js@${OCRV.tjs}/dist/worker.min.js`, corePath: `${cdn}tesseract.js-core@${OCRV.core}`, langPath: `${cdn}@tesseract.js-data/uzb/4.0.0_best_int`, logger};
+    }
+    let w;
+    try { w = await Tesseract.createWorker(langs, 1, opts); }
+    catch(e){ if(!local) throw e; w = await Tesseract.createWorker(langs, 1, Object.assign({}, opts, {workerBlobURL: true})); }
+    OCRW = w; return w;
+  })();
+  OCRP.catch(() => { OCRP = null; });
+  return OCRP;
+}
+async function prepImage(file){
+  const url = URL.createObjectURL(file);
+  try {
+    const img = new Image(); img.src = url; await img.decode();
+    let w = img.naturalWidth, h = img.naturalHeight; const k = Math.min(2, 2000 / Math.max(w, h)); w = Math.round(w * k); h = Math.round(h * k);
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const x = c.getContext('2d', {willReadFrequently: true}); x.drawImage(img, 0, 0, w, h);
+    const im = x.getImageData(0, 0, w, h), p = im.data, hist = new Uint32Array(256);
+    for(let i = 0; i < p.length; i += 4){ const g = (p[i] * 77 + p[i+1] * 150 + p[i+2] * 29) >> 8; p[i] = g; hist[g]++; }
+    const tot = w * h; let lo = 0, hi = 255, a = 0;
+    for(let v = 0; v < 256; v++){ a += hist[v]; if(a > tot * 0.01){ lo = v; break; } }
+    a = 0; for(let v = 255; v >= 0; v--){ a += hist[v]; if(a > tot * 0.01){ hi = v; break; } }
+    const span = Math.max(24, hi - lo);
+    for(let i = 0; i < p.length; i += 4){ let g = (p[i] - lo) * 255 / span; g = g < 0 ? 0 : g > 255 ? 255 : g; p[i] = p[i+1] = p[i+2] = g; }
+    x.putImageData(im, 0, 0);
+    return c;
+  } finally { URL.revokeObjectURL(url); }
+}
+let scanNext = null;
+async function runScan(file){
+  if(!file) return;
+  if(scanBusy){ scanNext = file; setScan("Avvalgi surat o'qilmoqda, keyingisi navbatda…", null); return; }
+  scanBusy = true;
+  $('#scState').hidden = false; $('#scHits').innerHTML = '';
+  const img = $('#scImg'); if(img.dataset.url) URL.revokeObjectURL(img.dataset.url);
+  const url = URL.createObjectURL(file); img.src = url; img.dataset.url = url;
+  setScan('Surat tayyorlanmoqda…', 0.03);
+  try {
+    const canvas = await prepImage(file);
+    const w = await getOcr();
+    setScan("Matn o'qilmoqda…", 0.4);
+    const res = await w.recognize(canvas);
+    const text = ((res && res.data && res.data.text) || '').trim();
+    $('#scText').value = text;
+    const hits = searchText(text);
+    renderHits(hits, text);
+    setScan(hits.length ? `Tayyor: ${hits.length} ta savol topildi` : (text ? 'Matn o\'qildi, lekin mos savol topilmadi' : 'Suratda matn topilmadi'), 1);
+    if(hits.length) sfx.ok();
+  } catch(e){
+    setScan(e && e.code === 'wasm' ? "Bu brauzerda surat o'qish ishlamadi (xavfsizlik cheklovi). Savoldan bir necha so'zni pastdagi maydonga yozib qidiring." : "Suratni o'qib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring yoki savoldan bir necha so'zni yozing.", 0);
+  } finally {
+    scanBusy = false; $('#scCam').value = ''; $('#scGal').value = '';
+    if(scanNext){ const f = scanNext; scanNext = null; runScan(f); }
+  }
+}
+$('#scCam').addEventListener('change', e => runScan(e.target.files && e.target.files[0]));
+$('#scGal').addEventListener('change', e => runScan(e.target.files && e.target.files[0]));
+$('#scFind').onclick = () => { const t = $('#scText').value; renderHits(searchText(t), t); };
+function renderHits(hits, text){
+  const box = $('#scHits');
+  if(!hits.length){ box.innerHTML = String(text || '').trim() ? `<div class="note">Bazadan mos savol topilmadi. Suratni aniqroq oling (yorug' joyda, tekis, faqat savol qismi) yoki pastdagi matnni tuzatib, "Matn bo'yicha qidirish"ni bosing.</div>` : ''; return; }
+  box.innerHTML = `<h3>${hits.length} ta savol topildi</h3>` + hits.map(h => { const q = Q[h.n-1], c = chOf(h.n);
+    return `<button class="hit" data-n="${h.n}" style="--cc:${c.c}"><span class="hit-top"><span class="qn">№ ${h.n} · ${esc(c.name)}</span><span class="pct">${Math.round(h.score * 100)}% mos</span></span><p>${esc(q.q)}</p><span class="ans">Javob: <span class="mark">${esc(q.o[q.a])}</span></span></button>`; }).join('');
+}
+$('#scHits').addEventListener('click', e => { const b = e.target.closest('.hit'); if(b) openDetail(+b.dataset.n); });
+
+/* matn bo'yicha moslash: OCR xatolariga chidamli qidiruv */
+let IDX = null;
+const normTxt = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[\u02bb\u02bc\u2018\u2019`\u00b4'\u02b9\u2032]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+const toksOf = s => normTxt(s).split(' ').filter(t => t.length > 1 || /\d/.test(t));
+const tolFor = len => len >= 8 ? 2 : len >= 4 ? 1 : 0;
+function lev(a, b, max){
+  const la = a.length, lb = b.length; if(Math.abs(la - lb) > max) return max + 1;
+  let prev = new Array(lb + 1); for(let j = 0; j <= lb; j++) prev[j] = j;
+  for(let i = 1; i <= la; i++){ const cur = [i]; let best = i;
+    for(let j = 1; j <= lb; j++){ const v = Math.min(prev[j] + 1, cur[j-1] + 1, prev[j-1] + (a[i-1] === b[j-1] ? 0 : 1)); cur[j] = v; if(v < best) best = v; }
+    if(best > max) return max + 1; prev = cur; }
+  return prev[lb];
+}
+function buildIdx(){
+  const docs = Q.map((q, i) => ({n: i + 1, toks: [...new Set(toksOf(q.q))], all: new Set(toksOf(q.q + ' ' + q.o.join(' ')))}));
+  const df = new Map(); docs.forEach(d => d.all.forEach(t => df.set(t, (df.get(t) || 0) + 1)));
+  const N = docs.length, idf = t => Math.log(1 + N / (df.get(t) || 0.5));
+  docs.forEach(d => { d.w = d.toks.map(idf); d.W = d.w.reduce((a, b) => a + b, 0); });
+  IDX = {docs, idf};
+}
+function searchText(text){
+  if(!IDX) buildIdx();
+  const toks = normTxt(text).split(' ').filter(Boolean);
+  if(!toks.length) return [];
+  let res = toks.length >= 8 ? findInText(toks) : [];
+  if(!res.length) res = findTyped(toks);
+  return res;
+}
+function findInText(toks){
+  const pos = new Map(); toks.forEach((t, i) => { if(!pos.has(t)) pos.set(t, []); pos.get(t).push(i); });
+  const uniq = [...pos.keys()].filter(u => u.length >= 3), cache = new Map();
+  const where = qt => { let out = cache.get(qt); if(out) return out; out = [];
+    const ex = pos.get(qt);
+    if(ex) ex.forEach(p => out.push([p, 1]));
+    else { const tol = tolFor(qt.length); if(tol) for(const u of uniq){ if(Math.abs(u.length - qt.length) <= tol && lev(qt, u, tol) <= tol) pos.get(u).forEach(p => out.push([p, 0.85])); } }
+    cache.set(qt, out); return out; };
+  const cands = [];
+  for(const d of IDX.docs){
+    const hits = [];
+    d.toks.forEach((qt, ti) => { for(const [p, m] of where(qt)) hits.push([p, ti, m * d.w[ti]]); });
+    if(hits.length < 3) continue;
+    hits.sort((a, b) => a[0] - b[0]);
+    const L = d.toks.length * 2 + 8;
+    let best = 0, bestPos = 0, bestCnt = 0;
+    for(let l = 0; l < hits.length; l++){
+      if(l && hits[l][0] === hits[l-1][0]) continue;
+      const got = new Map(); let sum = 0;
+      for(let r = l; r < hits.length && hits[r][0] - hits[l][0] <= L; r++){ const ti = hits[r][1], w = hits[r][2], pv = got.get(ti) || 0; if(w > pv){ sum += w - pv; got.set(ti, w); } }
+      if(sum > best){ best = sum; bestPos = hits[l][0]; bestCnt = got.size; }
+    }
+    const score = best / d.W;
+    if(score >= 0.5 && bestCnt >= Math.min(4, d.toks.length)) cands.push({n: d.n, score, pos: bestPos, len: d.toks.length});
+  }
+  cands.sort((a, b) => b.score - a.score);
+  const out = [];
+  for(const c of cands){
+    const clash = out.find(o => Math.abs(o.pos - c.pos) < Math.max(o.len, c.len));
+    if(clash && clash.score - c.score > 0.08) continue;
+    out.push(c); if(out.length >= 12) break;
+  }
+  return out.sort((a, b) => a.pos - b.pos);
+}
+function findTyped(toks){
+  const qt = [...new Set(toks.filter(t => t.length > 1 || /\d/.test(t)))]; if(!qt.length) return [];
+  const res = [];
+  for(const d of IDX.docs){
+    let got = 0, tot = 0;
+    for(const t of qt){
+      const w = IDX.idf(t); tot += w;
+      if(d.all.has(t)){ got += w; continue; }
+      if(t.length >= 3){ const tol = tolFor(t.length); for(const u of d.all){ if(u.startsWith(t) || (tol && Math.abs(u.length - t.length) <= tol && lev(t, u, tol) <= tol)){ got += w * 0.8; break; } } }
+    }
+    const s = got / tot; if(s >= 0.55) res.push({n: d.n, score: s});
+  }
+  return res.sort((a, b) => b.score - a.score).slice(0, 8);
+}
+
+buildList(); renderHome(); routeHash();
+</script>
